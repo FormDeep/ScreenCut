@@ -1,0 +1,15 @@
+{
+  "originHash" : "14b07b02a448f9e48024b48807efa461413f25e08735863304b3c45ac6aeac11",
+  "pins" : [
+    {
+      "identity" : "filekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nvzqz/FileKit",
+      "state" : {
+        "revision" : "9006d2888025fbe893c3c396327b2fe45a8c177b",
+        "version" : "6.1.0"
+      }
+    }
+  ],
+  "version" : 3
+}
