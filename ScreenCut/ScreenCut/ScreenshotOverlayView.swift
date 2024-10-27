@@ -103,6 +103,10 @@ class ScreenshotOverlayView: NSView {
                                           userInfo: nil)
         self.addTrackingArea(trackingArea)
         selectionRect = NSRect(x: (self.frame.width - size.width) / 2, y: (self.frame.height - size.height) / 2, width: size.width, height:size.height)
+        
+        if self.window != nil {
+            ScreenCut.screenArea = selectionRect
+        }
     }
     
     override func draw(_ dirtyRect: NSRect) {
@@ -287,6 +291,9 @@ class ScreenshotOverlayView: NSView {
         activeHandle = .none
         dragIng = false
         needsDisplay = true
+        if let rect = selectionRect {
+            ScreenCut.screenArea = rect
+        }
         
         self.showEditCutBottomView()
     }
