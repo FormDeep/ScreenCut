@@ -131,7 +131,7 @@ struct AreaSelector: View {
         // 翻转 Y 坐标
         let flippedY = CGFloat(display.height) - ScreenCut.screenArea!.origin.y - ScreenCut.screenArea!.size.height
         configuration.sourceRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
-        configuration.destinationRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
+//        configuration.destinationRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
         
         SCScreenshotManager.captureImage(contentFilter: contentFilter, configuration: configuration) { image, error in
             print("lt -- image : eror : %@", error.debugDescription)
@@ -139,6 +139,7 @@ struct AreaSelector: View {
                 print(" : %@", error.debugDescription)
                 return
             }
+            ScreenCut.copyImageToPasteboard(img)
             ScreenCut.saveImageToFile(img)
         }
     }

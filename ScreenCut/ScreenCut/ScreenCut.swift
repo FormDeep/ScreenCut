@@ -52,7 +52,6 @@ class ScreenCut {
             }
             
             ScreenCut.availableContent = content
-//            self.saveImage(content)
         }
     }
     
@@ -72,6 +71,7 @@ class ScreenCut {
                 print(" : %@", error.debugDescription)
                 return
             }
+            copyImageToPasteboard(img)
             ScreenCut.saveImageToFile(img)
         }
     }
@@ -93,6 +93,33 @@ class ScreenCut {
             print("保存失败")
         }
     }
+
+   static  func copyImageToPasteboard(_ img: CGImage) {
+       let image: NSImage = cgImageToNSImage(img)
+       
+       
+        // 创建粘贴板
+        let pasteboard = NSPasteboard.general
+        
+        // 清空当前粘贴板
+        pasteboard.clearContents()
+        
+        // 将图片数据转换为 PNG 数据
+        if let tiffData = image.tiffRepresentation,
+           let bitmapRep = NSBitmapImageRep(data: tiffData),
+           let pngData = bitmapRep.representation(using: .png, properties: [:]) {
+            // 将 PNG 数据写入粘贴板
+            pasteboard.setData(pngData, forType: .png)
+        }
+    }
+    
+    static func cgImageToNSImage(_ cgImage: CGImage) -> NSImage {
+        // 创建 NSImage
+        let nsImage = NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
+        return nsImage
+    }
+
+
 }
 
 
