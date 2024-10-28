@@ -8,15 +8,13 @@
 import Foundation
 import AppKit
 
-class ScreenshotWindow: NSPanel {
+// 使用NSPanel报错，会出现不弹出来的问题，以后少用子类处理
+class ScreenshotWindow: NSWindow {
     
     var parentView:ScreenshotOverlayView?
     
     init(_ contentRect: NSRect = NSScreen.main!.frame, backing bufferingType: NSWindow.BackingStoreType = .buffered, defer flag: Bool = false, size: NSSize = NSSize.zero) {
         let overlayView = ScreenshotOverlayView(frame: contentRect, size:size)
-//        styleMask 设置影响到keywindow
-//        super.init(contentRect: contentRect, styleMask: [.borderless, .nonactivatingPanel], backing: bufferingType, defer: flag)
-//         有时间再测试一下这个内容
         super.init(contentRect: contentRect, styleMask: [  .closable, .borderless,.resizable], backing: bufferingType, defer: flag)
         self.isOpaque = false
         self.hasShadow = false

@@ -29,12 +29,25 @@ struct ScreenCutApp: App {
             .keyboardShortcut("c", modifiers: [.control])
             .padding()
             Button("选择截屏") {
-                let frame = NSScreen.main!.frame
-                let screenshotWindow = ScreenshotWindow(frame, backing: .buffered, defer: false, size: NSZeroSize)
+//                let overlayWindow = ScreenshotOverlayWindowController()
+//                overlayWindow.showWindow(nil)
+
+                let screenshotWindow = ScreenshotWindow()
                 screenshotWindow.makeKeyAndOrderFront(nil)
-//                rootWindow = ScreenshotWindow()
-//                rootWindow!.makeKeyAndOrderFront(nil)
-//                AppDelegate.showAreaSelector()
+                
+//                let window = NSWindow()
+////                window.frame = NSScreen.main!.frame
+//                window.setFrame(NSMakeRect(0, 0, NSScreen.main!.frame.width, NSScreen.main!.frame.height), display: true)
+//                window.backgroundColor = NSColor.red
+//                window.setFrameAutosaveName("overlay")
+//                window.title = kAreaSelector
+//                window.level = .screenSaver - 1
+//                window.styleMask = [.borderless];
+//
+//                window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+//                window.isOpaque = true
+//                window.makeKeyAndOrderFront(nil)
+
             }
             .keyboardShortcut("x", modifiers: [.control])
             .padding()

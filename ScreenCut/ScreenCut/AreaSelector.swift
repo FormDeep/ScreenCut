@@ -61,16 +61,6 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         return nil
     }
     
-    
-    func showAreaSelector(size: NSSize = NSSize.zero, noPanel: Bool = false) {
-//        真实环境
-//        guard let scDisplay = AppDelegate.getSCDisplayWithMouse() else { return }
-//        guard let screen = scDisplay.nsScreen else { return }
-        let frame = NSScreen.main!.frame
-        let screenshotWindow = ScreenshotWindow(frame, backing: .buffered, defer: false, size: size)
-        screenshotWindow.makeKeyAndOrderFront(nil)
-    }
-    
 }
 
 struct AreaSelector: View {

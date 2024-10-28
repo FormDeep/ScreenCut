@@ -17,7 +17,6 @@ class EditCutBottomShareModel {
     var selectColor: SelectedColorHandle = .red // 使用什么样的颜色
 }
 
-
 class EditCutSecondShowModel: ObservableObject {
     @Published var isEditCutSecondShow: Bool = false
 }

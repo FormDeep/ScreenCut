@@ -3,6 +3,50 @@ import SwiftUI
 import ScreenCaptureKit
 import AppKit
 
+
+class OverlayWindow: NSWindow {
+    override var canBecomeKey: Bool {
+       return true
+    }
+}
+
+class ScreenshotOverlayWindowController: NSWindowController {
+    
+    convenience init() {
+    
+        let windowFrame = CGRectMake(0, 0, NSScreen.main!.frame.size.width, NSScreen.main!.frame.size.height + 100)
+        let window = OverlayWindow()
+        window.setFrame(windowFrame, display: true)
+        window.styleMask = [.borderless];
+
+        let overlayView = ScreenshotOverlayView(frame: windowFrame)
+        
+        window.center()
+        window.backgroundColor = NSColor.clear
+        window.setFrameAutosaveName("overlay")
+        window.title = kAreaSelector
+        window.level = .screenSaver - 1
+        window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        window.isOpaque = true
+
+//        window.contentView = overlayView
+        window.contentView?.addSubview(overlayView)
+        
+        self.init(window: window)
+    }
+
+    override func showWindow(_ sender: Any?) {
+        super.showWindow(sender)
+    }
+    
+    override func windowDidLoad() {
+        super.windowDidLoad()
+        
+        self.window!.toggleFullScreen(nil)
+    }
+}
+
+
 class ScreenshotOverlayView: NSView {
     
     var selectionRect: NSRect?
@@ -20,7 +64,7 @@ class ScreenshotOverlayView: NSView {
 
    
     
-    init(frame: CGRect, size: NSSize, _ editCutSecondItem : EditCutSecondShowModel = EditCutSecondShowModel()) {
+    init(frame: CGRect, size: NSSize = NSSize.zero, _ editCutSecondItem : EditCutSecondShowModel = EditCutSecondShowModel()) {
         self.size = size
         self.editCutSecondItem = editCutSecondItem;
         super.init(frame: frame)

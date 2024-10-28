@@ -19,7 +19,6 @@ struct ContentView: View {
             
             Button("显示蒙版") {
                 Task {
-//                    AppDelegate.shared.showAreaSelector(size: NSSize(width: 600, height: 450))
                 }
             }
         }
