@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import KeyboardShortcuts
 
 struct PreferenceSettingsView: View {
     
@@ -29,11 +30,9 @@ struct PreferenceSettingsView: View {
                 .foregroundColor(.white)
             VStack {
                 HStack {
-                    Text("截屏快捷键:")
-                    Button("输入快捷键") {
-                                  
-                   }
-                   .keyboardShortcut("P", modifiers: [.command]) // Command + P
+//                    Form {
+                        KeyboardShortcuts.Recorder("选择区域截图", name: .selectedAreaCut)
+//                    }
                 }
                 HStack(alignment: .top) {
                     Text("截屏时:")

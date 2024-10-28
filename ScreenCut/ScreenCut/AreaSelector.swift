@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import ScreenCaptureKit
 import AppKit
+import KeyboardShortcuts
 
 let kAreaWith:String = "areaWidth"
 let kAreaHeight:String = "areaHeight"
@@ -38,6 +39,11 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         Task {
             await  ScreenCut.updateScreenContent()
+        }
+        
+        
+        KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[self] in
+            ScreenshotWindow.shared.makeKeyAndOrderFront(nil)
         }
     }
 

@@ -8,6 +8,7 @@ import AppKit
 class ScreenshotWindow: NSWindow {
     
     var parentView:ScreenshotOverlayView?
+    static let shared = ScreenshotWindow()
     
     init(_ contentRect: NSRect = NSScreen.main!.frame, backing bufferingType: NSWindow.BackingStoreType = .buffered, defer flag: Bool = false, size: NSSize = NSSize.zero) {
         let overlayView = ScreenshotOverlayView(frame: contentRect, size:size)

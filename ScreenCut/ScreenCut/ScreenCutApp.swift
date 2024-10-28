@@ -7,6 +7,13 @@
 
 import SwiftUI
 import AppKit
+import KeyboardShortcuts
+
+extension KeyboardShortcuts.Name {
+    static let selectedAreaCut = Self("selectedAreaCut")
+    static let fullScreenCut = Self("fullScreenCut")
+}
+
 
 @main
 struct ScreenCutApp: App {
@@ -16,6 +23,7 @@ struct ScreenCutApp: App {
     init() {
         // 设置激活策略为 accessory
         NSApplication.shared.setActivationPolicy(.accessory)
+        print("lt --  启动的时候调用了")
     }
     
     var body: some Scene {
@@ -24,22 +32,22 @@ struct ScreenCutApp: App {
             Button("截屏") {
                 ScreenCut.saveScreenFullImage()
             }
-            .keyboardShortcut("c", modifiers: [.control])
+//            .keyboardShortcut("c", modifiers: [.control])
             .padding()
             Button("选择截屏") {
-                let screenshotWindow = ScreenshotWindow()
-                screenshotWindow.makeKeyAndOrderFront(nil)
-
+//                let screenshotWindow = ScreenshotWindow()
+//                screenshotWindow.makeKeyAndOrderFront(nil)
+                ScreenshotWindow.shared.makeKeyAndOrderFront(nil)
             }
-            .keyboardShortcut("x", modifiers: [.control])
-            .padding()
+//            .keyboardShortcut("x", modifiers: [.control])
+//            .padding()
             Divider()
             Button("偏好设置") {
                 let aboutWindowController = PreferenceSettingsViewController()
                 aboutWindowController.showWindow(nil)
             }
             .padding()
-            Button("关于") {
+            Button("关于"){ 
                 let aboutWindowController = AboutWindowController()
                 aboutWindowController.showWindow(nil)
             }

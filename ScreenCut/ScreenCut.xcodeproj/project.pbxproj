@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4A898D7E2CCFF20C00CFB857 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */; };
+		4A898D812CD0027300CFB857 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 4A898D802CD0027300CFB857 /* KeyboardShortcuts */; };
 		4AFAF2722CCBE4FA005E7DA7 /* FileKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4AFAF2712CCBE4FA005E7DA7 /* FileKit */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,7 @@
 			files = (
 				4A898D7E2CCFF20C00CFB857 /* ComposableArchitecture in Frameworks */,
 				4AFAF2722CCBE4FA005E7DA7 /* FileKit in Frameworks */,
+				4A898D812CD0027300CFB857 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +76,7 @@
 			packageProductDependencies = (
 				4AFAF2712CCBE4FA005E7DA7 /* FileKit */,
 				4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */,
+				4A898D802CD0027300CFB857 /* KeyboardShortcuts */,
 			);
 			productName = ScreenCut;
 			productReference = 4AFAF2542CCBE4C5005E7DA7 /* ScreenCut.app */;
@@ -106,6 +109,7 @@
 			packageReferences = (
 				4AFAF2702CCBE4FA005E7DA7 /* XCRemoteSwiftPackageReference "FileKit" */,
 				4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				4A898D7F2CD0027300CFB857 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4AFAF2552CCBE4C5005E7DA7 /* Products */;
@@ -344,6 +348,14 @@
 				minimumVersion = 1.15.2;
 			};
 		};
+		4A898D7F2CD0027300CFB857 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.1;
+			};
+		};
 		4AFAF2702CCBE4FA005E7DA7 /* XCRemoteSwiftPackageReference "FileKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nvzqz/FileKit";
@@ -359,6 +371,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		4A898D802CD0027300CFB857 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A898D7F2CD0027300CFB857 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
 		};
 		4AFAF2712CCBE4FA005E7DA7 /* FileKit */ = {
 			isa = XCSwiftPackageProductDependency;
