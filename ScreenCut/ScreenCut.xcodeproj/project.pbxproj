@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A898D7E2CCFF20C00CFB857 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */; };
 		4AFAF2722CCBE4FA005E7DA7 /* FileKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4AFAF2712CCBE4FA005E7DA7 /* FileKit */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A898D7E2CCFF20C00CFB857 /* ComposableArchitecture in Frameworks */,
 				4AFAF2722CCBE4FA005E7DA7 /* FileKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,6 +73,7 @@
 			name = ScreenCut;
 			packageProductDependencies = (
 				4AFAF2712CCBE4FA005E7DA7 /* FileKit */,
+				4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */,
 			);
 			productName = ScreenCut;
 			productReference = 4AFAF2542CCBE4C5005E7DA7 /* ScreenCut.app */;
@@ -102,6 +105,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				4AFAF2702CCBE4FA005E7DA7 /* XCRemoteSwiftPackageReference "FileKit" */,
+				4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4AFAF2552CCBE4C5005E7DA7 /* Products */;
@@ -332,6 +336,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.15.2;
+			};
+		};
 		4AFAF2702CCBE4FA005E7DA7 /* XCRemoteSwiftPackageReference "FileKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nvzqz/FileKit";
@@ -343,6 +355,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
 		4AFAF2712CCBE4FA005E7DA7 /* FileKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4AFAF2702CCBE4FA005E7DA7 /* XCRemoteSwiftPackageReference "FileKit" */;

@@ -14,7 +14,7 @@ class ScreenshotWindow: NSWindow {
         super.init(contentRect: contentRect, styleMask: [  .closable, .borderless,.resizable], backing: bufferingType, defer: flag)
         self.isOpaque = false
         self.hasShadow = false
-        self.level = .popUpMenu
+        self.level = .screenSaver - 1
         self.title = kAreaSelector
         self.backgroundColor = NSColor.clear
         self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
@@ -28,7 +28,9 @@ class ScreenshotWindow: NSWindow {
         fatalError("init(coder:) has not been implemented")
     }
     
+//     这个地方编程了key之后，这个window应该是捕获了。
     override var canBecomeKey: Bool {
+        print("lt -- window can become key")
        return true
     }
 }
@@ -39,6 +41,7 @@ class OverlayWindow: NSWindow {
     }
 }
 
+// 这个是没有覆盖屏幕上方的菜单栏
 class ScreenshotOverlayWindowController: NSWindowController {
     
     convenience init() {
@@ -90,8 +93,12 @@ class ScreenshotOverlayView: NSView {
     var fillOverLayeralpha: CGFloat = 0.5 // 默认值
     var editViewFinshed: Bool = false // 默认是编辑当前的页面
     var cutSelectedItem : EditCutBottomShareModel = EditCutBottomShareModel()
-
-   
+    
+    
+    override var canBecomeKeyView: Bool {
+        print("lt -- overlay window can become key")
+        return true
+    }
     
     init(frame: CGRect, size: NSSize = NSSize.zero, _ editCutSecondItem : EditCutSecondShowModel = EditCutSecondShowModel()) {
         self.size = size
@@ -111,7 +118,6 @@ class ScreenshotOverlayView: NSView {
         print("Received notification: \(notification.name)")
         let item :EditCutBottomShareModel = notification.object as! EditCutBottomShareModel
         cutSelectedItem.cutType = item.cutType
-        self.editViewFinshed = true
         editViewFinshed = true
         needsDisplay = true
         self.addCustomSubviews()
@@ -331,6 +337,7 @@ class ScreenshotOverlayView: NSView {
     
 //     点击按钮下去的时候
     override func mouseDown(with event: NSEvent) {
+        print("lt --- mouse down")
 //        1、首先判断是否在已经的框框上面了
 //        1.0 没有子view 就做有关的框框
 //        1.1、有： 就可以聚焦扩展
@@ -400,7 +407,7 @@ class ScreenshotOverlayView: NSView {
     }
     
     
-    var areaPannel: NSPanel?
+    var areaPannel: NSPanel? //底部的内容
     @ObservedObject var editCutSecondItem : EditCutSecondShowModel
 
     var EditCutHeight: Int {
