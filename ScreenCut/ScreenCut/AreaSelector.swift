@@ -43,7 +43,7 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         
         
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[self] in
-            ScreenshotWindow.shared.makeKeyAndOrderFront(nil)
+            ScreenshotWindow().makeKeyAndOrderFront(nil)
         }
     }
 

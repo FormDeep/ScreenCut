@@ -32,14 +32,12 @@ struct ScreenCutApp: App {
             Button("截屏") {
                 ScreenCut.saveScreenFullImage()
             }
-//            .keyboardShortcut("c", modifiers: [.control])
             .padding()
             Button("选择截屏") {
-//                let screenshotWindow = ScreenshotWindow()
-//                screenshotWindow.makeKeyAndOrderFront(nil)
-                ScreenshotWindow.shared.makeKeyAndOrderFront(nil)
+                ScreenshotWindow().makeKeyAndOrderFront(nil)
             }
 //            .keyboardShortcut("x", modifiers: [.control])
+//            内部快捷键
 //            .padding()
             Divider()
             Button("偏好设置") {
@@ -47,7 +45,7 @@ struct ScreenCutApp: App {
                 aboutWindowController.showWindow(nil)
             }
             .padding()
-            Button("关于"){ 
+            Button("关于"){
                 let aboutWindowController = AboutWindowController()
                 aboutWindowController.showWindow(nil)
             }
