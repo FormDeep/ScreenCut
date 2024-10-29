@@ -2,6 +2,7 @@ import ScreenCaptureKit
 import Cocoa
 import FileKit
 import SwiftUI
+import Vision
 
 class ScreenCut {
     
@@ -77,6 +78,9 @@ class ScreenCut {
     }
 
     @MainActor static func saveImageToFile(_ image: CGImage) {
+//         测试代码， 直接在这里翻译
+        performOCR(image)
+        
         let imgName = Date.getNameByDate()
         let curPath = "file://" + VarExtension.createTargetDirIfNotExit() + "/" + imgName + ".png"
         let destinationURL: CFURL = URL(string: curPath)! as CFURL
@@ -93,6 +97,29 @@ class ScreenCut {
             print("保存失败")
         }
     }
+    
+    static func performOCR(_ image: CGImage?) {
+        guard let cgImage = image else {
+            print("get image error ")
+            return
+        }
+        
+        let request = VNRecognizeTextRequest { request, error in
+            guard let results = request.results as? [VNRecognizedTextObservation] else { return }
+            for observation in results {
+                if let topCandidate = observation.topCandidates(1).first {
+                    print("Recognized text: \(topCandidate.string)")
+                }
+            }
+        }
+        
+        request.recognitionLevel = .accurate
+        request.recognitionLanguages = ["zh-Hans"] // 支持简体中文
+        
+        let handler = VNImageRequestHandler(cgImage: cgImage , options: [:])
+        try? handler.perform([request])
+    }
+
 
    static  func copyImageToPasteboard(_ img: CGImage) {
        let image: NSImage = cgImageToNSImage(img)
