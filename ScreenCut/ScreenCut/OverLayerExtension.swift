@@ -77,7 +77,6 @@ enum EditCutBottmType: CaseIterable,Identifiable {
             return ""
         }
     }
-    
 }
 
 enum LineWidthType: Int, CaseIterable, Identifiable {

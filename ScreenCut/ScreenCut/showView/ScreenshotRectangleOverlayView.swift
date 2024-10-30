@@ -53,6 +53,10 @@ class ScreenshotRectangleOverlayView: NSView, OverlayProtocol {
             return
         }
         
+// 更新填充内容
+        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
+        selectedColor = EditCutBottomShareModel.shared.selectColor.value
+        
         if let rect = selectionRect {
             
             // 绘制边框
@@ -203,10 +207,6 @@ class ScreenshotRectangleOverlayView: NSView, OverlayProtocol {
         dragIng = false
         needsDisplay = true
         self.addSubviewFromSuperView()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//            print("lt --- frame: \(self.frame)  bounds: \(self.bounds) layer :\(String(describing: self.layer))")
-        }
     }
     
     func addSubviewFromSuperView() {

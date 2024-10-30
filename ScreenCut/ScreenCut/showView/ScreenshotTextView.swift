@@ -55,6 +55,8 @@ class ScreenshotTextView: NSView , NSTextViewDelegate, OverlayProtocol{
         if (selectionRect!.size.equalTo(CGSize.zero)) {
             return
         }
+        lineWidth = CGFloat(EditCutBottomShareModel.shared.lineSize)
+        selectedColor = EditCutBottomShareModel.shared.selectColor.value
         
         if let rect = selectionRect {
             let mousePoint: NSPoint = lastMouseLocation!
@@ -210,6 +212,13 @@ class ScreenshotTextView: NSView , NSTextViewDelegate, OverlayProtocol{
             self.textView.frame = NSMakeRect(location.x, location.y, 70, 20)
             self.textView.delegate = self;
             self.window?.makeFirstResponder(self.textView)
+            self.textView.font = .systemFont(ofSize: CGFloat(EditCutBottomShareModel.shared.lineSize))
+            self.textView.textColor = EditCutBottomShareModel.shared.selectColor.value
+            self.textView.layer?.cornerRadius = 4.0
+            self.textView.wantsLayer = true
+            self.textView.layer?.borderWidth = 2.0
+            self.textView.layer?.borderColor = NSColor.gray.cgColor
+            self.textView.layer?.masksToBounds = true
         }
         else {
             self.window?.makeFirstResponder(nil)

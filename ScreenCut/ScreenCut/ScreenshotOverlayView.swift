@@ -91,61 +91,42 @@ class ScreenshotOverlayView: NSView {
     let controlPointDiameter: CGFloat = 8.0
     let controlPointColor: NSColor = NSColor.white
     var fillOverLayeralpha: CGFloat = 0.5 // 默认值
-    var editViewFinshed: Bool = false // 默认是编辑当前的页面
-    var cutSelectedItem : EditCutBottomShareModel = EditCutBottomShareModel()
-    
+    let bottomEditItem : EditCutBottomShareModel = EditCutBottomShareModel.shared
+    var bottomAreaWindow: NSWindow? //底部的内容
     
     override var canBecomeKeyView: Bool {
         print("lt -- overlay window can become key")
         return true
     }
     
-    init(frame: CGRect, size: NSSize = NSSize.zero, _ editCutSecondItem : EditCutSecondShowModel = EditCutSecondShowModel()) {
+    init(frame: CGRect, size: NSSize = NSSize.zero) {
         self.size = size
-        self.editCutSecondItem = editCutSecondItem;
         super.init(frame: frame)
         
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleTypeNotification), name: NSNotification.Name("firstEditType"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleColorNotification), name: NSNotification.Name("secondEditColor"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleSizeNotification), name: NSNotification.Name("secondEditSize"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(cutTypeChange), name: Notification.Name(kCutTypeChange), object: nil)
         
         self.wantsLayer = true
         self.layer?.masksToBounds = true
     }
     
-    @objc func handleTypeNotification(_ notification: Notification) {
-        print("Received notification: \(notification.name)")
-        let item :EditCutBottomShareModel = notification.object as! EditCutBottomShareModel
-        cutSelectedItem.cutType = item.cutType
-        editViewFinshed = true
-        needsDisplay = true
+    @objc func cutTypeChange(_ notification: Notification) {
+        print("lt - cutomtyep change : \(String(describing: notification.object))")
+        
         self.addCustomSubviews()
+        needsDisplay = true
     }
-    
-    @objc func handleColorNotification(_ notification: Notification) {
-        print("Received notification: \(notification.name)")
-        let item = notification.object as! EditCutBottomShareModel
-        self.cutSelectedItem.selectColor = item.selectColor
-        self.configSubViewAttr(self.subviews.last!)
-    }
-    
-    @objc func handleSizeNotification(_ notification: Notification) {
-        print("Received notification: \(notification.name)")
-        let item = notification.object as! EditCutBottomShareModel
-        self.cutSelectedItem.sizeValue = item.sizeValue
-        self.configSubViewAttr(self.subviews.last!)
-    }
-    
+
     func configSubViewAttr(_ view: NSView) {
         var subView:OverlayProtocol = view as! OverlayProtocol
-        subView.selectedColor = self.cutSelectedItem.selectColor.value
-        subView.lineWidth = self.cutSelectedItem.sizeValue
+        subView.selectedColor = self.bottomEditItem.selectColor.value
+        subView.lineWidth = CGFloat(self.bottomEditItem.sizeType.rawValue)
+        print("lt --  configSubViewAttr subview : \(String(describing: subView)), cutType:\(self.bottomEditItem.cutType), \(EditCutBottomShareModel.shared.cutType)")
+        print("lt -- color : \(self.bottomEditItem.selectColor) ,  lineWidth: \(self.bottomEditItem.sizeType)")
     }
     
     func addCustomSubviews() {
         var subView: OverlayProtocol?
-        switch self.cutSelectedItem.cutType {
+        switch self.bottomEditItem.cutType {
         case .square:
             subView = ScreenshotRectangleOverlayView(frame: self.selectionRect!, size:NSSize.zero)
         case .circle:
@@ -162,12 +143,14 @@ class ScreenshotOverlayView: NSView {
         guard subView != nil else {
             return
         }
+        
+//        print("lt -- add subview : \(String(describing: subView)), cutType:\(self.bottomEditItem.cutType), \(EditCutBottomShareModel.shared.cutType)")
 
         let curView:NSView = subView as! NSView
         self.addSubview(curView)
         curView.wantsLayer = true;
         curView.layer?.masksToBounds = true
-        self.configSubViewAttr(curView)
+//        self.configSubViewAttr(curView)
     }
     
     required init?(coder: NSCoder) {
@@ -176,16 +159,23 @@ class ScreenshotOverlayView: NSView {
     
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-        let trackingArea = NSTrackingArea(rect: self.bounds,
-                                          options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeInActiveApp],
-                                          owner: self,
-                                          userInfo: nil)
-        self.addTrackingArea(trackingArea)
-        selectionRect = NSRect(x: (self.frame.width - size.width) / 2, y: (self.frame.height - size.height) / 2, width: size.width, height:size.height)
-        
         if self.window != nil {
-            ScreenCut.screenArea = selectionRect
-        }
+            let trackingArea = NSTrackingArea(rect: self.bounds,
+                                              options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeInActiveApp],
+                                              owner: self,
+                                              userInfo: nil)
+            self.addTrackingArea(trackingArea)
+            selectionRect = NSRect(x: (self.frame.width - size.width) / 2, y: (self.frame.height - size.height) / 2, width: size.width, height:size.height)
+            
+            if self.window != nil {
+                ScreenCut.screenArea = selectionRect
+            }
+       } else {
+           print("View did move from window")
+           bottomEditItem.cutType = .none
+           bottomEditItem.selectColor = .red
+           bottomEditItem.sizeType = .Two
+       }
     }
     
     override func draw(_ dirtyRect: NSRect) {
@@ -355,7 +345,7 @@ class ScreenshotOverlayView: NSView {
         }
         needsDisplay = true
         
-        if let pannel = self.areaPannel {
+        if let pannel = self.bottomAreaWindow {
             pannel.orderBack(nil)
             pannel.setIsVisible(false)
         }
@@ -406,21 +396,24 @@ class ScreenshotOverlayView: NSView {
         }
     }
     
-    
-    var areaPannel: NSWindow? //底部的内容
-    @ObservedObject var editCutSecondItem : EditCutSecondShowModel
-
     var EditCutHeight: Int {
-        if (editCutSecondItem.isEditCutSecondShow) {
-            return 85
+        if (bottomEditItem.cutType != .none) {
+            return 90
         }
         else {
             return 45
         }
     }
     
+    var editViewFinshed: Bool {
+        if bottomEditItem.cutType == EditCutBottmType.none {
+            return false
+        }
+        return true
+    }
+    
     func showEditCutBottomView() {
-        if (areaPannel == nil) {
+        if (bottomAreaWindow == nil) {
             let contentView = NSHostingView(rootView: EditCutBottomView())
             contentView.frame = NSRect(x: selectionRect!.origin.x + selectionRect!.size.width - 340 , y:selectionRect!.origin.y - CGFloat(self.EditCutHeight), width: contentView.frame.size.width, height: contentView.frame.size.height)
             contentView.focusRingType = .none
@@ -436,13 +429,13 @@ class ScreenshotOverlayView: NSView {
             areaPanel.titlebarAppearsTransparent = true
             areaPanel.isMovableByWindowBackground = true
             areaPanel.orderFront(nil)
-            self.areaPannel =  areaPanel
+            self.bottomAreaWindow =  areaPanel
         }
         else {
-            self.areaPannel!.setFrameOrigin(NSMakePoint(selectionRect!.origin.x + selectionRect!.size.width - 340 , selectionRect!.origin.y - CGFloat(self.EditCutHeight)))
-            self.areaPannel!.orderFront(self)
+            self.bottomAreaWindow!.setFrameOrigin(NSMakePoint(selectionRect!.origin.x + selectionRect!.size.width - 340 , selectionRect!.origin.y - CGFloat(self.EditCutHeight)))
+            self.bottomAreaWindow!.orderFront(self)
         }
-        self.areaPannel!.setIsVisible(true)
+        self.bottomAreaWindow!.setIsVisible(true)
     }
 }
 

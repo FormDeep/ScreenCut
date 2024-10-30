@@ -23,30 +23,15 @@ class EditCutBottomPanel: NSWindow {
 
 struct EditCutBottomView: View {
     
-    @State private var editType:EditCutBottmType = .none
-    
-    @StateObject private var editCutSecondItem = EditCutSecondShowModel()
+    @StateObject private var bottomEditItem = EditCutBottomShareModel.shared
 
-    func onEditClicked(_ type: EditCutBottmType) {
-        
-        editCutSecondItem.isEditCutSecondShow = true
-        if (self.editType == type) {
-            return
-        }
-        
-        self.editType = type
-        let item = EditCutBottomShareModel()
-        item.cutType = type
-        NotificationCenter.default.post(name: NSNotification.Name("firstEditType"), object: item)
-    }
-    
     private func createShapeImageView(for type: EditCutBottmType) -> some View {
         Image(nsImage: NSImage(systemSymbolName: type.imgName, accessibilityDescription: nil) ?? NSImage())
             .resizable()
             .scaledToFit()
             .frame(width: 20, height: 20)
-            .foregroundColor(editType == type ? Color.black : Color.white)
-            .background(editType == type ? Color.white : Color.black)
+            .foregroundColor(bottomEditItem.cutType == type ? Color.black : Color.white)
+            .background(bottomEditItem.cutType == type ? Color.white : Color.black)
             .padding(10)
             .cornerRadius(3)
             .tag(type.imgName)
@@ -58,7 +43,7 @@ struct EditCutBottomView: View {
                 ForEach(EditCutBottmType.allCases) { type in
                     createShapeImageView(for: type)
                         .onTapGesture {
-                            onEditClicked(type)
+                            bottomEditItem.cutType = type
                         }
                 }
                 Divider()
@@ -91,7 +76,7 @@ struct EditCutBottomView: View {
                 }
                 
             }.frame(height: 40.0)
-            if editCutSecondItem.isEditCutSecondShow {
+            if bottomEditItem.cutType != .none {
                 SecondEditView()
             }
         }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -103,27 +88,9 @@ struct EditCutBottomView: View {
 
 struct SecondEditView: View {
     var isText: Bool = false
-    @AppStorage("text-font-size") var selectedNumber: Int = 12
-    @AppStorage("text-line-width") var lineWidth: Int = 2
-    @AppStorage("text-color") var selectedColor: SelectedColorHandle = .red
     
-    func onSecondEditSizeClicked(_ lineWidth: Int) {
-        print("lt -- lineWidth click : \(lineWidth)")
-        self.lineWidth = lineWidth
-        let item = EditCutBottomShareModel()
-        item.sizeValue = CGFloat(self.lineWidth)
-        NotificationCenter.default.post(name: NSNotification.Name("secondEditSize"), object: item)
-    }
-    
-    func onSecondEditColorClicked(_ selectedColor: SelectedColorHandle) {
-        print("lt -- selectedColor click : \(selectedColor)")
-        
-        self.selectedColor = selectedColor
-        let item = EditCutBottomShareModel()
-        item.selectColor = selectedColor
-        NotificationCenter.default.post(name: NSNotification.Name("secondEditColor"), object: item)
-    }
-    
+    @StateObject private var bottomEditItem = EditCutBottomShareModel.shared
+
     private func createLineWidthImageView(for type: LineWidthType) -> some View {
         HStack {
             Image(nsImage: NSImage(systemSymbolName: "circlebadge.fill", accessibilityDescription: nil) ?? NSImage())
@@ -132,7 +99,7 @@ struct SecondEditView: View {
                 .frame(width: CGFloat(type.rawValue) * 4, height: CGFloat(type.rawValue) * 4)
                 .foregroundColor(.white)
                 .padding(10)
-                .background(lineWidth == type.rawValue ? Color.white.opacity(0.3) : Color.black)
+                .background(bottomEditItem.sizeType == type ? Color.white.opacity(0.3) : Color.black)
                 
         }.frame(width: 25, height: 25).cornerRadius(3, antialiased: true)
     }
@@ -140,14 +107,14 @@ struct SecondEditView: View {
     private func createColorView(for type: SelectedColorHandle) -> some View {
         type.swiftColor
             .frame(height: 30.0)
-            .border(type.swiftColor == selectedColor.swiftColor ? Color.purple: Color.clear, width: 2)
+            .border(type == bottomEditItem.selectColor ? Color.purple: Color.clear, width: 2)
     }
     
     var body: some View {
         HStack {
-            if isText {
+            if bottomEditItem.cutType == .text {
                 HStack {
-                    Stepper("文字: \(selectedNumber)", value: $selectedNumber, in: 14...100)
+                    Stepper("文字: \(Int(bottomEditItem.lineSize))", value: $bottomEditItem.lineSize, in: 12...100)
                         .padding()
                         .foregroundColor(.white)
                 }.frame(width: 140.0)
@@ -157,7 +124,7 @@ struct SecondEditView: View {
                     ForEach(LineWidthType.allCases) { type in
                         createLineWidthImageView(for: type)
                             .onTapGesture {
-                                onSecondEditSizeClicked(type.rawValue)
+                                self.bottomEditItem.sizeType = type
                             }
                     }
                 }.frame(width: 150.0)
@@ -167,7 +134,7 @@ struct SecondEditView: View {
                 ForEach(SelectedColorHandle.allCases) { type in
                     createColorView(for: type)
                         .onTapGesture {
-                        self.onSecondEditColorClicked(type)
+                            self.bottomEditItem.selectColor = type
                     }
                 }
             }.frame(width: 200.0)
@@ -186,9 +153,3 @@ struct SecondEditView: View {
     EditCutBottomView()
 }
 
-
-//struct EditCutBottomView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EditCutBottomView()
-//    }
-//}

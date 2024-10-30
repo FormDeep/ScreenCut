@@ -45,12 +45,16 @@ class ScreenshotCircleOverlayView: NSView, OverlayProtocol {
         super.draw(dirtyRect)
         maxFrame = dirtyRect
         
+        
         NSColor.red.withAlphaComponent(fillOverLayeralpha).setFill()
         dirtyRect.fill()
         
         if (selectionRect!.size.equalTo(CGSize.zero)) {
             return
         }
+        
+        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
+        selectedColor = EditCutBottomShareModel.shared.selectColor.value
         
         if let rect = selectionRect {
             // 绘制椭圆
