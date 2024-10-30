@@ -407,7 +407,7 @@ class ScreenshotOverlayView: NSView {
     }
     
     
-    var areaPannel: NSPanel? //底部的内容
+    var areaPannel: NSWindow? //底部的内容
     @ObservedObject var editCutSecondItem : EditCutSecondShowModel
 
     var EditCutHeight: Int {

@@ -23,7 +23,6 @@ struct ScreenCutApp: App {
     init() {
         // 设置激活策略为 accessory
         NSApplication.shared.setActivationPolicy(.accessory)
-        print("lt --  启动的时候调用了")
     }
     
     var body: some Scene {
@@ -36,9 +35,6 @@ struct ScreenCutApp: App {
             Button("选择截屏") {
                 ScreenshotWindow().makeKeyAndOrderFront(nil)
             }
-//            .keyboardShortcut("x", modifiers: [.control])
-//            内部快捷键
-//            .padding()
             Divider()
             Button("偏好设置") {
                 let aboutWindowController = PreferenceSettingsViewController()

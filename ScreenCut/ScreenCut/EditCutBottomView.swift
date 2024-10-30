@@ -9,7 +9,13 @@ import SwiftUI
 
 let kAreaSelector: String = "Area Selector"
 
-class EditCutBottomPanel: NSPanel {
+class EditCutBottomPanel: NSWindow {
+
+    override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
+        super.init(contentRect: contentRect, styleMask: style, backing: backingStoreType, defer: flag)
+        isMovable = false
+    }
+
     override func mouseDown(with event: NSEvent) {
         return
     }
@@ -18,13 +24,11 @@ class EditCutBottomPanel: NSPanel {
 struct EditCutBottomView: View {
     
     @State private var editType:EditCutBottmType = .none
-
-//    @AppStorage("isEditCutSecondShow") var isEditCutSecondShow:Bool = false
     
     @StateObject private var editCutSecondItem = EditCutSecondShowModel()
 
     func onEditClicked(_ type: EditCutBottmType) {
-        print("lt -- type click : \(type)")
+        
         editCutSecondItem.isEditCutSecondShow = true
         if (self.editType == type) {
             return
