@@ -387,11 +387,21 @@ class ScreenshotOverlayView: NSView {
             }
         }
         else {
-            if (self.selectionRect!.contains(curlocation)) {
-                NSCursor.closedHand.set()
+            if self.editViewFinshed {
+                if self.selectionRect!.contains(curlocation) {
+                    NSCursor.crosshair.set()
+                }
+                else {
+                    NSCursor.arrow.set()
+                }
             }
             else {
-                NSCursor.crosshair.set()
+                if self.selectionRect!.contains(curlocation) {
+                    NSCursor.closedHand.set()
+                }
+                else {
+                    NSCursor.crosshair.set()
+                }
             }
         }
     }

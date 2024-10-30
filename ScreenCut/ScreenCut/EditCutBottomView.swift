@@ -69,7 +69,7 @@ struct EditCutBottomView: View {
                         .foregroundColor(.white)
                         .padding(10)
                         .onTapGesture {
-                                    AreaSelector.cutImage()
+                            ScreenCut.cutImage()
                             for w in NSApplication.shared.windows.filter({ $0.title == kAreaSelector || $0.title == "Start Recording" || $0.title == "编辑图片"}) { w.close() }
                                                         AppDelegate.stopGlobalMouseMonitor()
                         }
@@ -114,9 +114,17 @@ struct SecondEditView: View {
         HStack {
             if bottomEditItem.cutType == .text {
                 HStack {
-                    Stepper("文字: \(Int(bottomEditItem.lineSize))", value: $bottomEditItem.lineSize, in: 12...100)
-                        .padding()
-                        .foregroundColor(.white)
+                    Picker("  文字:", selection: $bottomEditItem.lineSize) {
+                        ForEach(12...100, id: \.self) { value in
+                            Text("\(value)").tag(value)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle()) // 使用下拉菜单样式
+                    .frame(width: 120)
+                    .background(.clear)
+                    .cornerRadius(5)
+                    .foregroundColor(.white)
+                    .padding()
                 }.frame(width: 140.0)
             }
             else {

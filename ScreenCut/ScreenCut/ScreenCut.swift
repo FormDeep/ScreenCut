@@ -182,6 +182,30 @@ class ScreenCut {
         task.resume()
     }
 
+    
+    static func cutImage() {
+        guard let displays = ScreenCut.availableContent?.displays else {
+            return
+        }
+        let display: SCDisplay = displays.first!
+        let contentFilter = SCContentFilter(display: display, excludingWindows: [])
+        let configuration = SCStreamConfiguration()
+        
+        // 翻转 Y 坐标
+        let flippedY = CGFloat(display.height) - ScreenCut.screenArea!.origin.y - ScreenCut.screenArea!.size.height
+        configuration.sourceRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
+//        configuration.destinationRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
+        
+        SCScreenshotManager.captureImage(contentFilter: contentFilter, configuration: configuration) { image, error in
+            print("lt -- image : eror : %@", error.debugDescription)
+            guard let img = image else {
+                print(" : %@", error.debugDescription)
+                return
+            }
+            ScreenCut.copyImageToPasteboard(img)
+            ScreenCut.saveImageToFile(img)
+        }
+    }
 
 }
 

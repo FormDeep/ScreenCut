@@ -230,12 +230,12 @@ class ScreenshotCircleOverlayView: NSView, OverlayProtocol {
             }
         }
         else {
-            if (self.selectionRect!.contains(curlocation)) {
-                NSCursor.closedHand.set()
-            }
-            else {
-                NSCursor.crosshair.set()
-            }
+//            if (self.selectionRect!.contains(curlocation)) {
+//                NSCursor.closedHand.set()
+//            }
+//            else {
+//                NSCursor.crosshair.set()
+//            }
         }
     }
 }
