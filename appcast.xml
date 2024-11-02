@@ -3,6 +3,14 @@
     <channel>
         <title>ScreenCut</title>
          <item>
+            <title>1.0.3</title>
+            <pubDate>Sat, 02 Nov 2024 15:21:30 GMT</pubDate>
+            <sparkle:version>103</sparkle:version>
+            <sparkle:shortVersionString>1.0.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.5</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/VCBSstudio/ScreenCut/releases/download/1.0.3/ScreenCut.1.0.3.dmg" length="4624888" type="application/octet-stream" />
+        </item>
+         <item>
             <title>1.0.2</title>
             <pubDate>Sat, 02 Nov 2024 12:20:37 GMT</pubDate>
             <sparkle:version>101</sparkle:version>

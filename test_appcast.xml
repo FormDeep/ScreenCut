@@ -2,11 +2,11 @@
 <rss xmlns="http://www.andymatuschak.org/xml-namespaces/sparkle">
     <channel>
         <item>
-            <title>ScreenCut 1.0.2</title>
-            <sparkle:version>1.0.2</sparkle:version>
-            <sparkle:releaseNotesLink>https://github.com/VCBSstudio/ScreenCut/releases/tag/1.0.2</sparkle:releaseNotesLink>
-            <pubDate>Sat, 02 Nov 2024 15:04:09 GMT</pubDate>
-            <enclosure url="https://github.com/VCBSstudio/ScreenCut/releases/download/1.0.2/ScreenCut.1.0.2.dmg" sparkle:version="1.0.2" length="4625071" type="application/octet-stream" />
+            <title>ScreenCut 1.0.3</title>
+            <sparkle:version>1.0.3</sparkle:version>
+            <sparkle:releaseNotesLink>https://github.com/VCBSstudio/ScreenCut/releases/tag/1.0.3</sparkle:releaseNotesLink>
+            <pubDate>Sat, 02 Nov 2024 15:21:30 GMT</pubDate>
+            <enclosure url="https://github.com/VCBSstudio/ScreenCut/releases/download/1.0.3/ScreenCut.1.0.3.dmg" sparkle:version="1.0.3" length="4624888" type="application/octet-stream" />
         </item>
     </channel>
 </rss>
