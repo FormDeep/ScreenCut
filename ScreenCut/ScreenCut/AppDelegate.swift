@@ -11,6 +11,7 @@ import SwiftUI
 import ScreenCaptureKit
 import AppKit
 import KeyboardShortcuts
+import Sparkle
 
 let mousePointer = NSWindow(contentRect: NSRect(x: -70, y: -70, width: 70, height: 70), styleMask: [.borderless], backing: .buffered, defer: false)
 var keyMonitor: Any? // key监视器
@@ -31,6 +32,7 @@ extension SCDisplay {
 class AppDelegate : NSObject, NSApplicationDelegate {
     var isResizing = false
     static let shared = AppDelegate()
+    var updater: SUUpdater!
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         Task {
@@ -40,6 +42,11 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[self] in
             ScreenshotWindow().makeKeyAndOrderFront(nil)
         }
+        
+        updater = SUUpdater.shared()
+        updater.automaticallyChecksForUpdates = true
+        updater.updateCheckInterval = 1 // 检查间隔（小时）
+        updater.checkForUpdatesInBackground()
     }
 
     
