@@ -78,9 +78,6 @@ class ScreenCut {
     }
 
     @MainActor static func saveImageToFile(_ image: CGImage) {
-//         测试代码， 直接在这里翻译
-        performOCR(image)
-        
         let imgName = Date.getNameByDate()
         let curPath = "file://" + VarExtension.createTargetDirIfNotExit() + "/" + imgName + ".png"
         let destinationURL: CFURL = URL(string: curPath)! as CFURL
@@ -97,6 +94,30 @@ class ScreenCut {
             print("保存失败")
         }
     }
+
+//    显示识别的内容
+    static func showOCR() {
+        guard let displays = ScreenCut.availableContent?.displays else {
+            return
+        }
+        let display: SCDisplay = displays.first!
+        let contentFilter = SCContentFilter(display: display, excludingWindows: [])
+        let configuration = SCStreamConfiguration()
+        
+        // 翻转 Y 坐标
+        let flippedY = CGFloat(display.height) - ScreenCut.screenArea!.origin.y - ScreenCut.screenArea!.size.height
+        configuration.sourceRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
+        
+        print("获取图片")
+        SCScreenshotManager.captureImage(contentFilter: contentFilter, configuration: configuration) { image, error in
+            print("lt -- image : eror : %@", error.debugDescription)
+            guard let img = image else {
+                print(" : %@", error.debugDescription)
+                return
+            }
+            performOCR(img)
+        }
+    }
     
     static func performOCR(_ image: CGImage?) {
         guard let cgImage = image else {
@@ -106,10 +127,16 @@ class ScreenCut {
         
         let request = VNRecognizeTextRequest { request, error in
             guard let results = request.results as? [VNRecognizedTextObservation] else { return }
+            var resultText = ""
             for observation in results {
                 if let topCandidate = observation.topCandidates(1).first {
                     print("Recognized text: \(topCandidate.string)")
+                    resultText += topCandidate.string
+                    resultText += "\n"
                 }
+            }
+            DispatchQueue.main.async {
+                OCRViewWindowController(transText: resultText).showWindow(nil)
             }
         }
         
@@ -146,7 +173,55 @@ class ScreenCut {
         return nsImage
     }
     
-    func transforRequest(_ text: String, then: @escaping (String?, Bool) -> Void)  {
+//     识别并且翻译
+    static func ocrThenTransRequest()  {
+        guard let displays = ScreenCut.availableContent?.displays else {
+            return
+        }
+        let display: SCDisplay = displays.first!
+        let contentFilter = SCContentFilter(display: display, excludingWindows: [])
+        let configuration = SCStreamConfiguration()
+        
+        // 翻转 Y 坐标
+        let flippedY = CGFloat(display.height) - ScreenCut.screenArea!.origin.y - ScreenCut.screenArea!.size.height
+        configuration.sourceRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
+        
+        print("获取图片")
+        SCScreenshotManager.captureImage(contentFilter: contentFilter, configuration: configuration) { image, error in
+            print("lt -- image : eror : %@", error.debugDescription)
+            guard let cgImage = image else {
+                print("get image error ")
+                return
+            }
+            
+            let request = VNRecognizeTextRequest { request, error in
+                guard let results = request.results as? [VNRecognizedTextObservation] else { return }
+                var resultText = ""
+                for observation in results {
+                    if let topCandidate = observation.topCandidates(1).first {
+                        print("Recognized text: \(topCandidate.string)")
+                        resultText += topCandidate.string
+                        resultText += "\n"
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.transforRequest(resultText) { text, flag in
+                        DispatchQueue.main.async {
+                            TranslatorViewWindowController(transText: text).showWindow(nil)
+                        }
+                    }
+                }
+            }
+            
+            request.recognitionLevel = .accurate
+            request.recognitionLanguages = ["zh-Hans"] // 支持简体中文
+            
+            let handler = VNImageRequestHandler(cgImage: cgImage , options: [:])
+            try? handler.perform([request])
+        }
+    }
+    
+    static func transforRequest(_ text: String, then: @escaping (String?, Bool) -> Void)  {
         let urlString = "http://127.0.0.1:5000/translate" // 应该是本地没有解析localhost，要使用127.0.0.1
         guard let url = URL(string: urlString) else { return }
         
@@ -194,7 +269,6 @@ class ScreenCut {
         // 翻转 Y 坐标
         let flippedY = CGFloat(display.height) - ScreenCut.screenArea!.origin.y - ScreenCut.screenArea!.size.height
         configuration.sourceRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
-//        configuration.destinationRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
         
         SCScreenshotManager.captureImage(contentFilter: contentFilter, configuration: configuration) { image, error in
             print("lt -- image : eror : %@", error.debugDescription)

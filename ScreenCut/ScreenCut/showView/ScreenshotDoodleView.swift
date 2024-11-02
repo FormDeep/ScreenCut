@@ -36,9 +36,16 @@ class ScreenshotDoodleView: NSView, OverlayProtocol {
             lines.append(currentLine)
             currentLine = []
             needsDisplay = true
+            self.addSubviewFromSuperView()
         }
+        
     }
 
+    func addSubviewFromSuperView() {
+        let superView: ScreenshotOverlayView = self.superview as! ScreenshotOverlayView
+        superView.addCustomSubviews()
+    }
+    
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 

@@ -110,7 +110,7 @@ class ScreenshotOverlayView: NSView {
     }
     
     @objc func cutTypeChange(_ notification: Notification) {
-        print("lt - cutomtyep change : \(String(describing: notification.object))")
+//        print("lt - cutomtyep change : \(String(describing: notification.object))")
         
         self.addCustomSubviews()
         needsDisplay = true
@@ -120,8 +120,8 @@ class ScreenshotOverlayView: NSView {
         var subView:OverlayProtocol = view as! OverlayProtocol
         subView.selectedColor = self.bottomEditItem.selectColor.value
         subView.lineWidth = CGFloat(self.bottomEditItem.sizeType.rawValue)
-        print("lt --  configSubViewAttr subview : \(String(describing: subView)), cutType:\(self.bottomEditItem.cutType), \(EditCutBottomShareModel.shared.cutType)")
-        print("lt -- color : \(self.bottomEditItem.selectColor) ,  lineWidth: \(self.bottomEditItem.sizeType)")
+//        print("lt --  configSubViewAttr subview : \(String(describing: subView)), cutType:\(self.bottomEditItem.cutType), \(EditCutBottomShareModel.shared.cutType)")
+//        print("lt -- color : \(self.bottomEditItem.selectColor) ,  lineWidth: \(self.bottomEditItem.sizeType)")
     }
     
     func addCustomSubviews() {
@@ -425,7 +425,7 @@ class ScreenshotOverlayView: NSView {
     func showEditCutBottomView() {
         if (bottomAreaWindow == nil) {
             let contentView = NSHostingView(rootView: EditCutBottomView())
-            contentView.frame = NSRect(x: selectionRect!.origin.x + selectionRect!.size.width - 340 , y:selectionRect!.origin.y - CGFloat(self.EditCutHeight), width: contentView.frame.size.width, height: contentView.frame.size.height)
+            contentView.frame = NSRect(x: self.getBottomFrameOrigin().x, y:self.getBottomFrameOrigin().y, width: contentView.frame.size.width, height: contentView.frame.size.height)
             contentView.focusRingType = .none
             let areaPanel = EditCutBottomPanel(contentRect: contentView.frame, styleMask: [.fullSizeContentView], backing: .buffered, defer: false)
             areaPanel.collectionBehavior = [.canJoinAllSpaces]
@@ -442,10 +442,19 @@ class ScreenshotOverlayView: NSView {
             self.bottomAreaWindow =  areaPanel
         }
         else {
-            self.bottomAreaWindow!.setFrameOrigin(NSMakePoint(selectionRect!.origin.x + selectionRect!.size.width - 340 , selectionRect!.origin.y - CGFloat(self.EditCutHeight)))
+            self.bottomAreaWindow!.setFrameOrigin(self.getBottomFrameOrigin())
             self.bottomAreaWindow!.orderFront(self)
         }
         self.bottomAreaWindow!.setIsVisible(true)
+    }
+    
+    func getBottomFrameOrigin() -> NSPoint {
+        let originX: CGFloat = selectionRect!.origin.x + selectionRect!.size.width - 340
+        var originY: CGFloat = selectionRect!.origin.y - CGFloat(self.EditCutHeight)
+        if originY < 45 {
+            originY = 45;
+        }
+        return NSMakePoint(originX, originY)
     }
 }
 

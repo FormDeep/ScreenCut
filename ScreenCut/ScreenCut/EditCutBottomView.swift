@@ -21,6 +21,9 @@ class EditCutBottomPanel: NSWindow {
     }
 }
 
+let FirstIconLength: CGFloat = 15
+let FirstIconPadding: CGFloat = 5
+
 struct EditCutBottomView: View {
     
     @StateObject private var bottomEditItem = EditCutBottomShareModel.shared
@@ -29,10 +32,10 @@ struct EditCutBottomView: View {
         Image(nsImage: NSImage(systemSymbolName: type.imgName, accessibilityDescription: nil) ?? NSImage())
             .resizable()
             .scaledToFit()
-            .frame(width: 20, height: 20)
+            .frame(width: FirstIconLength, height: FirstIconLength)
             .foregroundColor(bottomEditItem.cutType == type ? Color.black : Color.white)
             .background(bottomEditItem.cutType == type ? Color.white : Color.black)
-            .padding(10)
+            .padding(FirstIconPadding)
             .cornerRadius(3)
             .tag(type.imgName)
     }
@@ -53,9 +56,9 @@ struct EditCutBottomView: View {
                     Image(nsImage: xImg)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 20, height: 20)
+                        .frame(width: FirstIconLength, height: FirstIconLength)
                         .foregroundColor(.white)
-                        .padding(10)
+                        .padding(FirstIconPadding)
                         .onTapGesture {
                             for w in NSApplication.shared.windows.filter({ $0.title == kAreaSelector || $0.title == "Start Recording" || $0.title == "编辑图片"}) { w.close() }
                                                         AppDelegate.stopGlobalMouseMonitor()
@@ -65,13 +68,37 @@ struct EditCutBottomView: View {
                     Image(nsImage: downloadImg)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 20, height: 20)
+                        .frame(width: FirstIconLength, height: FirstIconLength)
                         .foregroundColor(.white)
-                        .padding(10)
+                        .padding(FirstIconPadding)
                         .onTapGesture {
                             ScreenCut.cutImage()
                             for w in NSApplication.shared.windows.filter({ $0.title == kAreaSelector || $0.title == "Start Recording" || $0.title == "编辑图片"}) { w.close() }
                                                         AppDelegate.stopGlobalMouseMonitor()
+                        }
+                }
+                
+                if let translateImg = NSImage(systemSymbolName: "text.document", accessibilityDescription: nil) {
+                    Image(nsImage: translateImg)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: FirstIconLength, height: FirstIconLength)
+                        .foregroundColor(.white)
+                        .padding(FirstIconPadding)
+                        .onTapGesture {
+                            ScreenCut.showOCR()
+                        }
+                }
+                if let translateImg = NSImage(systemSymbolName: "translate", accessibilityDescription: nil) {
+                    Image(nsImage: translateImg)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: FirstIconLength, height: FirstIconLength)
+                        .foregroundColor(.white)
+                        .padding(FirstIconPadding)
+                        .onTapGesture {
+//                            ScreenCut.showOCR()
+                            ScreenCut.ocrThenTransRequest()
                         }
                 }
                 
