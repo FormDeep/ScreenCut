@@ -30,7 +30,7 @@ class ScreenshotWindow: NSWindow {
     
 //     这个地方编程了key之后，这个window应该是捕获了。
     override var canBecomeKey: Bool {
-        print("lt -- window can become key")
+//        print("lt -- window can become key")
        return true
     }
 }
@@ -95,7 +95,7 @@ class ScreenshotOverlayView: NSView {
     var bottomAreaWindow: NSWindow? //底部的内容
     
     override var canBecomeKeyView: Bool {
-        print("lt -- overlay window can become key")
+//        print("lt -- overlay window can become key")
         return true
     }
     
@@ -118,13 +118,14 @@ class ScreenshotOverlayView: NSView {
 
     func configSubViewAttr(_ view: NSView) {
         var subView:OverlayProtocol = view as! OverlayProtocol
-        subView.selectedColor = self.bottomEditItem.selectColor.value
+        subView.selectedColor = self.bottomEditItem.selectColor.nsColor
         subView.lineWidth = CGFloat(self.bottomEditItem.sizeType.rawValue)
 //        print("lt --  configSubViewAttr subview : \(String(describing: subView)), cutType:\(self.bottomEditItem.cutType), \(EditCutBottomShareModel.shared.cutType)")
 //        print("lt -- color : \(self.bottomEditItem.selectColor) ,  lineWidth: \(self.bottomEditItem.sizeType)")
     }
     
     func addCustomSubviews() {
+        print("lt -- add subviews ")
         var subView: OverlayProtocol?
         switch self.bottomEditItem.cutType {
         case .square:
@@ -327,7 +328,7 @@ class ScreenshotOverlayView: NSView {
     
 //     点击按钮下去的时候
     override func mouseDown(with event: NSEvent) {
-        print("lt --- mouse down")
+//        print("lt --- mouse down")
 //        1、首先判断是否在已经的框框上面了
 //        1.0 没有子view 就做有关的框框
 //        1.1、有： 就可以聚焦扩展
@@ -352,6 +353,7 @@ class ScreenshotOverlayView: NSView {
     }
     
     override func mouseUp(with event: NSEvent) {
+        print("super view mouseup")
         if self.editViewFinshed {
             self.addCustomSubviews()
             return

@@ -54,7 +54,7 @@ class ScreenshotCircleOverlayView: NSView, OverlayProtocol {
         }
         
         lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.value
+        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
         
         if let rect = selectionRect {
             // 绘制椭圆

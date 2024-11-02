@@ -97,7 +97,6 @@ struct EditCutBottomView: View {
                         .foregroundColor(.white)
                         .padding(FirstIconPadding)
                         .onTapGesture {
-//                            ScreenCut.showOCR()
                             ScreenCut.ocrThenTransRequest()
                         }
                 }

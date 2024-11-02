@@ -16,7 +16,7 @@ let kCutTypeChange = "kCutTypeChange"
 class EditCutBottomShareModel: ObservableObject {
     static let shared = EditCutBottomShareModel(cutType: .none, sizeType: .Two, lineSize: 12, selectColor: .red)
     
-    private var cancellables = Set<AnyCancellable>()
+//    private var cancellables = Set<AnyCancellable>()
 
     init(cutType: EditCutBottmType, sizeType: LineWidthType, lineSize: Int, selectColor: SelectedColorHandle) {
         self.cutType = cutType
@@ -36,11 +36,18 @@ class EditCutBottomShareModel: ObservableObject {
     
     @Published var cutType: EditCutBottmType = .none {
         didSet {
-                    // 这里会在 score 更新后立即执行
             NotificationCenter.default.post(name: Notification.Name(kCutTypeChange), object: cutType)
         }
     }
     @Published var sizeType: LineWidthType = .Two // 用来设置绘制的宽度大小，也可能是字体大小
-    @Published var lineSize: Int = 12 // 写字的颜色
-    @Published var selectColor: SelectedColorHandle = .red // 使用什么样的颜色
+    @Published var lineSize: Int = 12 { // 写字的颜色
+        didSet {
+            NotificationCenter.default.post(name: Notification.Name("text.size.font.change"), object: "")
+        }
+    }
+    @Published var selectColor: SelectedColorHandle = .red {
+        didSet {
+            NotificationCenter.default.post(name: Notification.Name("text.color.change"), object: "")
+        }
+    }
 }

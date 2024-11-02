@@ -46,7 +46,7 @@ class ScreenshotArrowOverlayView: NSView, OverlayProtocol {
         maxFrame = dirtyRect
         
         lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.value
+        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
 
         
         NSColor.red.withAlphaComponent(fillOverLayeralpha).setFill()

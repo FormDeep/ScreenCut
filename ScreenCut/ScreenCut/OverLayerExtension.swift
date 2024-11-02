@@ -17,7 +17,7 @@ enum ResizeHandle: CaseIterable {
 enum SelectedColorHandle: String, CaseIterable, Identifiable {
     case red, yellow, green, blue, gray, white
     var id: Self { self }
-    var value: NSColor {
+    var nsColor: NSColor {
            switch self {
            case .red:
                return NSColor.red

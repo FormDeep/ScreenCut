@@ -55,7 +55,7 @@ class ScreenshotRectangleOverlayView: NSView, OverlayProtocol {
         
 // 更新填充内容
         lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.value
+        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
         
         if let rect = selectionRect {
             
