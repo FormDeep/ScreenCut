@@ -33,10 +33,10 @@ def create_item(app_name, version, download_url, release_notes_url, file_path):
 
 # 示例使用
 app_name = "ScreenCut"
-version = "1.0.1"
-download_url = "https://github.com/VCBSstudio/ScreenCut/releases/download/1.0.1/ScreenCut.1.0.1.dmg"
-release_notes_url = "https://github.com/VCBSstudio/ScreenCut/releases/tag/1.0.1"
-file_path = "/Users/helinyu/workspace/GitHub/dmg_dir/ScreenCut 1.0.1.dmg"  # 替换为实际路径
+version = "1.0.2"
+download_url = "https://github.com/VCBSstudio/ScreenCut/releases/download/1.0.2/ScreenCut.1.0.2.dmg"
+release_notes_url = "https://github.com/VCBSstudio/ScreenCut/releases/tag/1.0.2"
+file_path = "/Users/helinyu/workspace/GitHub/dmg_dir/ScreenCut 1.0.2.dmg"  # 替换为实际路径
 
 item_element = create_item(app_name, version, download_url, release_notes_url, file_path)
 
