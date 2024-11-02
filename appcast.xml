@@ -11,7 +11,7 @@
             sparkle:version="1.0.1" 
             length="4620972"
             type="application/octet-stream" 
-            sparkle:dsaPublicKey="MCowBQYDK2VwAyEAQ/B4rAp6vAnlQPvk3nKVjQ4BBTUhMCDG4zO7GVqd+1k="/>
+            sparkle:dsaPublicKey="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFc5Dyu3KeSevsWTmR14ZZU1A4cZ6hdHgVihCiE08UX8 2319979647@qq.com"/>
         </item>
     </channel>
 </rss>
