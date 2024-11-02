@@ -7,6 +7,7 @@
 
 import SwiftUI
 import KeyboardShortcuts
+import Sparkle
 
 struct PreferenceSettingsView: View {
     
@@ -73,11 +74,17 @@ struct PreferenceSettingsView: View {
                                        .toggleStyle(CheckboxToggleStyle())
                     }
                 }
+                Button {
+                    NotificationCenter.default.post(name: Notification.Name("update.app.noti"), object: "")
+                } label: {
+                    Text("检查更新")
+                }
+
                 
             }.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
         
         }
-        .frame(width: 540, height: 400)
+        .background(.red)
     }
 }
 
@@ -93,7 +100,7 @@ class PreferenceSettingsViewController: NSWindowController {
         )
         
         window.center()
-        window.setFrameAutosaveName("About")
+        window.setFrameAutosaveName("偏好设置")
         window.level = .screenSaver
         window.contentView = NSHostingView(rootView: PreferenceSettingsView())
         

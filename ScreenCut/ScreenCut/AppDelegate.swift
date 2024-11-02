@@ -44,9 +44,15 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         }
         
         updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: self)
+        print("lt -- udpater controller: \(String(describing: updaterController))")
+        NotificationCenter.default.addObserver(self, selector: #selector(onCheckUpdate), name: Notification.Name("update.app.noti"), object: nil)
+
+    }
+    
+    @objc func onCheckUpdate(noti: Notification) {
+        updaterController.checkForUpdates(self)
     }
 
-    
     //     停止鼠标检测器
     static func stopGlobalMouseMonitor() {
         mousePointer.orderOut(nil)
@@ -65,9 +71,7 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         }
         return nil
     }
-    
 }
-
 
 // 有关的代理方法
 extension AppDelegate: SPUUpdaterDelegate, SPUStandardUserDriverDelegate {

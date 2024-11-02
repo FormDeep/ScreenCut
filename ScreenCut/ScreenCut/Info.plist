@@ -2,9 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>SUFeedURL</key>
 	<string>https://github.com/VCBSstudio/ScreenCut/blob/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
-	<string>MCowBQYDK2VwAyEAmgShOKeoAUN9i7uD0Re6tU9vakG+lGac595at7YszqQ=</string>
+	<string>zd7Bjskp7tfkf7TpxCdcexgCh71tsKvYwecV/Loe16Y=</string>
 </dict>
 </plist>

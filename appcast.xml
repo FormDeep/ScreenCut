@@ -11,7 +11,8 @@
             sparkle:version="1.0.1" 
             length="4620972"
             type="application/octet-stream" 
-            sparkle:dsaPublicKey="MCowBQYDK2VwAyEAmgShOKeoAUN9i7uD0Re6tU9vakG+lGac595at7YszqQ="/>
+            sparkle:dsaPublicKey="zd7Bjskp7tfkf7TpxCdcexgCh71tsKvYwecV/Loe16Y="
+            crossorigin="anonymous"/>
         </item>
     </channel>
 </rss>
