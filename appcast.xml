@@ -6,13 +6,7 @@
             <sparkle:version>1.0.1</sparkle:version>
             <sparkle:releaseNotesLink>https://github.com/VCBSstudio/ScreenCut/releases/tag/1.0.1</sparkle:releaseNotesLink>
             <pubDate>Sat, 02 Nov 2024 12:20:37 GMT</pubDate>
-            <enclosure 
-            url="https://github.com/VCBSstudio/ScreenCut/releases/download/1.0.1/ScreenCut.1.0.1.dmg" 
-            sparkle:version="1.0.1" 
-            length="4620972"
-            type="application/octet-stream" 
-            sparkle:dsaPublicKey="zd7Bjskp7tfkf7TpxCdcexgCh71tsKvYwecV/Loe16Y="
-            crossorigin="anonymous"/>
+            <enclosure url="https://github.com/VCBSstudio/ScreenCut/releases/download/1.0.1/ScreenCut.1.0.1.dmg" sparkle:version="1.0.1" length="4620972" type="application/octet-stream"  sparkle:dsaPublicKey="zd7Bjskp7tfkf7TpxCdcexgCh71tsKvYwecV/Loe16Y="crossorigin="anonymous"/>
         </item>
     </channel>
 </rss>
