@@ -32,21 +32,18 @@ extension SCDisplay {
 class AppDelegate : NSObject, NSApplicationDelegate {
     var isResizing = false
     static let shared = AppDelegate()
-    var updater: SUUpdater!
+    var updaterController: SPUStandardUpdaterController! // 更新
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         Task {
             await ScreenCut.updateScreenContent()
         }
         
-        KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[self] in
+        KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[] in
             ScreenshotWindow().makeKeyAndOrderFront(nil)
         }
         
-        updater = SUUpdater.shared()
-        updater.automaticallyChecksForUpdates = true
-        updater.updateCheckInterval = 1 // 检查间隔（小时）
-        updater.checkForUpdatesInBackground()
+        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: self)
     }
 
     
@@ -69,4 +66,25 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         return nil
     }
     
+}
+
+
+// 有关的代理方法
+extension AppDelegate: SPUUpdaterDelegate, SPUStandardUserDriverDelegate {
+    
+    func updater(_ updater: SPUUpdater, didExtractUpdate item: SUAppcastItem) {
+        
+    }
+    
+    func updater(_ updater: SPUUpdater, mayPerform updateCheck: SPUUpdateCheck) throws {
+        
+    }
+    
+    func updater(_ updater: SPUUpdater, willExtractUpdate item: SUAppcastItem) {
+        
+    }
+    
+    func updater(_ updater: SPUUpdater, didFinishUpdateCycleFor updateCheck: SPUUpdateCheck, error: (any Error)?) {
+        
+    }
 }

@@ -4,5 +4,7 @@
 <dict>
 	<key>SUFeedURL</key>
 	<string>https://github.com/VCBSstudio/ScreenCut/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>MCowBQYDK2VwAyEAQ/B4rAp6vAnlQPvk3nKVjQ4BBTUhMCDG4zO7GVqd+1k=</string>
 </dict>
 </plist>
