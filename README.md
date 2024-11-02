@@ -7,10 +7,11 @@ brew tap vcbsstudio/tap
 brew install --cask ScreenCut
 ```
 
-可以到偏好设置中设置截图的快捷键： eg : control + x 
 
 ![截图绘制的效果：](./readmeImgs/image.png)
 
+### 系统
+只是基于 `MacOS15` 开发
 
 ### 提供的功能
 1、截图 <br/>
@@ -25,3 +26,6 @@ brew install --cask ScreenCut
 #### 其中还包括：
 1、选择字体大小以及线条的大小  <br/>
 2、颜色的选择 <br/>
+
+#### 设置快捷键
+右上角图标 -> 偏好设置 -> 快捷键 ： eg： control + x
