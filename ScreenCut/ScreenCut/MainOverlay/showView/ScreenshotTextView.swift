@@ -4,19 +4,16 @@ import ScreenCaptureKit
 import AppKit
 
 // 文本内容
-class ScreenshotTextView: NSView , NSTextViewDelegate, OverlayProtocol{
+class ScreenshotTextView: ScreenshotBaseOverlayView , NSTextViewDelegate{
     var maxFrame: NSRect?
-    var size: NSSize
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
-    var editFinished = false;
     var selectedColor: NSColor = NSColor.white
     var lineWidth: CGFloat = 4.0
     var textView: NSTextView = NSTextView(frame: NSMakeRect(0, 0, 0, 0))
     var hasRelease = false
     var textIsEditing = false
     
-    init(frame: CGRect, size: NSSize) {
-        self.size = size
+    override init(frame: CGRect) {
         super.init(frame: frame)
         self.textView.backgroundColor = .clear
         self.addSubview(self.textView)
@@ -80,7 +77,6 @@ class ScreenshotTextView: NSView , NSTextViewDelegate, OverlayProtocol{
             }else {
                 if !self.hasRelease {
                     self.hasRelease = true
-                    self.addSubviewFromSuperView()
                 }
             }
             
@@ -89,12 +85,6 @@ class ScreenshotTextView: NSView , NSTextViewDelegate, OverlayProtocol{
     
     override func mouseUp(with event: NSEvent) {
         print("lt -- subview mosueup")
-    }
-    
-    func addSubviewFromSuperView() {
-        self.editFinished = true
-        let superView: ScreenshotOverlayView = self.superview as! ScreenshotOverlayView
-        superView.addCustomSubviews()
     }
 }
 

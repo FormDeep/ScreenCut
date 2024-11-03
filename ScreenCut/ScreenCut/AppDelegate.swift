@@ -36,7 +36,7 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         Task {
-            await ScreenCut.updateScreenContent()
+//            await ScreenCut.updateScreenContent()
         }
         
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[] in

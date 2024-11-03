@@ -9,7 +9,7 @@ import Foundation
 import AppKit
 import SwiftUI
 
-enum ResizeHandle: CaseIterable {
+enum RetangleResizeHandle: CaseIterable {
     case none
     case topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left
 }

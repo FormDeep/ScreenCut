@@ -1,14 +1,12 @@
 import Cocoa
 
-class ScreenshotDoodleView: NSView, OverlayProtocol {
+class ScreenshotDoodleView: ScreenshotBaseOverlayView {
     private var lines: [[NSPoint]] = [] // 存储绘制的线条
     private var currentLine: [NSPoint] = [] // 当前正在绘制的线条
-    var size: NSSize = NSSize.zero
     var selectedColor: NSColor = NSColor.white
     var lineWidth: CGFloat = 4.0
     
-    init(frame: CGRect, size: NSSize) {
-        self.size = size
+    override init(frame: CGRect) {
         super.init(frame: frame)
     }
     

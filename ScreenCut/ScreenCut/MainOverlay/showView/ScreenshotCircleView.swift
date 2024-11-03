@@ -4,24 +4,27 @@ import ScreenCaptureKit
 import AppKit
 
 //椭圆形
-class ScreenshotCircleView: NSView, OverlayProtocol {
+class ScreenshotCircleView: ScreenshotBaseOverlayView {
     
-    var selectionRect: NSRect?
+    var selectionRect: NSRect = NSRect.zero
     var initialLocation: NSPoint?
     var dragIng: Bool = false
-    var activeHandle: ResizeHandle = .none
+    var activeHandle: RetangleResizeHandle = .none
     var lastMouseLocation: NSPoint?
     var maxFrame: NSRect?
-    var size: NSSize
+//    var size: NSSize
     let controlPointDiameter: CGFloat = 8.0
     let controlPointColor: NSColor = NSColor.white
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
-    var editFinished = false;
+//    var editFinished = false;
     var selectedColor: NSColor = NSColor.white
     var lineWidth: CGFloat = 4.0
     
-    init(frame: CGRect, size: NSSize) {
-        self.size = size
+    var hasSelectionRect: Bool {
+        return (self.selectionRect.size.width > 0 && self.selectionRect.size.height > 0)
+    }
+    
+    override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
@@ -32,32 +35,30 @@ class ScreenshotCircleView: NSView, OverlayProtocol {
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         
-        let trackingArea = NSTrackingArea(rect: self.bounds,
-                                          options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeInActiveApp],
-                                          owner: self,
-                                          userInfo: nil)
-        self.addTrackingArea(trackingArea)
+//        let trackingArea = NSTrackingArea(rect: self.bounds,
+//                                          options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeInActiveApp],
+//                                          owner: self,
+//                                          userInfo: nil)
+//        self.addTrackingArea(trackingArea)
         
-        selectionRect = NSRect(x: (self.frame.width - size.width) / 2, y: (self.frame.height - size.height) / 2, width: size.width, height:size.height)
+//        selectionRect = NSRect(x: (self.frame.width - size.width) / 2, y: (self.frame.height - size.height) / 2, width: size.width, height:size.height)
     }
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         maxFrame = dirtyRect
         
-        
-        NSColor.red.withAlphaComponent(fillOverLayeralpha).setFill()
-        dirtyRect.fill()
-        
-        if (selectionRect!.size.equalTo(CGSize.zero)) {
+        if !self.hasSelectionRect {
             return
         }
+        
+        NSColor.red.withAlphaComponent(self.fillOverLayeralpha).setFill()
+        dirtyRect.fill()
         
         lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
         selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
         
-        if let rect = selectionRect {
-            // 绘制椭圆
+        let rect = self.selectionRect            // 绘制椭圆
             let path = NSBezierPath(ovalIn: rect)
             path.fill()
             selectedColor.setStroke()
@@ -66,7 +67,7 @@ class ScreenshotCircleView: NSView, OverlayProtocol {
             
             // 绘制边框中的点
             if (!editFinished) {
-                for handle in ResizeHandle.allCases {
+                for handle in RetangleResizeHandle.allCases {
                     if let point = controlPointForHandle(handle, inRect: rect) {
                         let controlPointRect = NSRect(origin: point, size: CGSize(width: controlPointDiameter, height: controlPointDiameter))
                         let controlPointPath = NSBezierPath(ovalIn: controlPointRect)
@@ -75,12 +76,12 @@ class ScreenshotCircleView: NSView, OverlayProtocol {
                     }
                 }
             }
-        }
     }
     
-    func handleForPoint(_ point: NSPoint) -> ResizeHandle {
-        guard let rect = selectionRect else { return .none }
-        for handle in ResizeHandle.allCases {
+    override func handleForPoint(_ point: NSPoint) -> RetangleResizeHandle {
+        if !self.hasSelectionRect { return .none }
+        let rect = selectionRect
+        for handle in RetangleResizeHandle.allCases {
             if let controlPoint = controlPointForHandle(handle, inRect: rect), NSRect(origin: controlPoint, size: CGSize(width: controlPointDiameter, height: controlPointDiameter)).contains(point) {
                 return handle
             }
@@ -88,7 +89,7 @@ class ScreenshotCircleView: NSView, OverlayProtocol {
         return .none
     }
     
-    func controlPointForHandle(_ handle: ResizeHandle, inRect rect: NSRect) -> NSPoint? {
+    func controlPointForHandle(_ handle: RetangleResizeHandle, inRect rect: NSRect) -> NSPoint? {
         switch handle {
         case .topLeft:
             return NSPoint(x: rect.minX - controlPointDiameter / 2 - 1, y: rect.maxY - controlPointDiameter / 2 + 1)
@@ -112,11 +113,12 @@ class ScreenshotCircleView: NSView, OverlayProtocol {
     }
     
     override func mouseDragged(with event: NSEvent) {
+        print("lt -- circle mouse drag")
         guard var initialLocation = initialLocation else { return }
         let currentLocation = convert(event.locationInWindow, from: nil)
         
         if activeHandle != .none {
-            var newRect = selectionRect ?? CGRect.zero
+            var newRect = selectionRect
             let lastLocation = lastMouseLocation ?? currentLocation
             
             let deltaX = currentLocation.x - lastLocation.x
@@ -162,12 +164,12 @@ class ScreenshotCircleView: NSView, OverlayProtocol {
                 let deltaY = currentLocation.y - initialLocation.y
                 
                 // 更新矩形位置
-                let x = self.selectionRect?.origin.x
-                let y = self.selectionRect?.origin.y
-                let w = self.selectionRect?.size.width
-                let h = self.selectionRect?.size.height
-                self.selectionRect?.origin.x = min(max(0.0, x! + deltaX), self.frame.width - w!)
-                self.selectionRect?.origin.y = min(max(0.0, y! + deltaY), self.frame.height - h!)
+                let x = self.selectionRect.origin.x
+                let y = self.selectionRect.origin.y
+                let w = self.selectionRect.size.width
+                let h = self.selectionRect.size.height
+                self.selectionRect.origin.x = min(max(0.0, x + deltaX), self.frame.width - w)
+                self.selectionRect.origin.y = min(max(0.0, y + deltaY), self.frame.height - h)
                 initialLocation = currentLocation
             } else {
                 // 创建新矩形
@@ -191,7 +193,7 @@ class ScreenshotCircleView: NSView, OverlayProtocol {
         initialLocation = location
         lastMouseLocation = location
         activeHandle = handleForPoint(location)
-        if let rect = selectionRect, NSPointInRect(location, rect) {
+        if NSPointInRect(location, self.selectionRect) {
             dragIng = true
         }
         needsDisplay = true
@@ -212,6 +214,7 @@ class ScreenshotCircleView: NSView, OverlayProtocol {
     }
     
     override func mouseMoved(with event: NSEvent) {
+        print("lt -- circle mouse moved")
         let curlocation = event.locationInWindow
         activeHandle = handleForPoint(curlocation)
         if (activeHandle != .none) {
@@ -230,13 +233,21 @@ class ScreenshotCircleView: NSView, OverlayProtocol {
             }
         }
         else {
-//            if (self.selectionRect!.contains(curlocation)) {
+//            if (self.selectionRect.contains(curlocation)) {
 //                NSCursor.closedHand.set()
 //            }
 //            else {
 //                NSCursor.crosshair.set()
 //            }
         }
+    }
+    
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        let hitView = super.hitTest(point)
+        if hitView == self {
+            return self.superview
+        }
+        return hitView
     }
 }
 

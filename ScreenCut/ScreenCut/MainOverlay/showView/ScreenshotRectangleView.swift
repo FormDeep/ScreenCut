@@ -3,25 +3,30 @@ import SwiftUI
 import ScreenCaptureKit
 import AppKit
 
-//椭圆形
-class ScreenshotArrowView: NSView, OverlayProtocol {
+let kSelectionMinWidth = 2.0
+
+//  矩形的属性
+class ScreenshotRectangleView: ScreenshotBaseOverlayView {
     
-    var selectionRect: NSRect?
+    var selectionRect: NSRect = NSRect.zero // 默认是zero
+    //     这个应该是可以只留下一个的
     var initialLocation: NSPoint?
-    var dragIng: Bool = false
-    var activeHandle: ResizeHandle = .none
     var lastMouseLocation: NSPoint?
+    
+    var dragIng: Bool = false
+    var activeHandle: RetangleResizeHandle = .none
     var maxFrame: NSRect?
-    var size: NSSize
     let controlPointDiameter: CGFloat = 8.0
     let controlPointColor: NSColor = NSColor.white
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
-    var editFinished = false;
     var selectedColor: NSColor = NSColor.white
-    var lineWidth: CGFloat = 2.0
+    var lineWidth: CGFloat = 4.0
     
-    init(frame: CGRect, size: NSSize) {
-        self.size = size
+    var hasSelectionRect: Bool {
+        return (self.selectionRect.size.width > 0 && self.selectionRect.size.height > 0)
+    }
+    
+    override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
@@ -32,82 +37,52 @@ class ScreenshotArrowView: NSView, OverlayProtocol {
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         
-        let trackingArea = NSTrackingArea(rect: self.bounds,
-                                          options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeInActiveApp],
-                                          owner: self,
-                                          userInfo: nil)
-        self.addTrackingArea(trackingArea)
-        
-        selectionRect = NSRect(x: (self.frame.width - size.width) / 2, y: (self.frame.height - size.height) / 2, width: size.width, height:size.height)
+        selectionRect = NSRect.zero
     }
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         maxFrame = dirtyRect
         
-        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
-
-        
-        NSColor.red.withAlphaComponent(fillOverLayeralpha).setFill()
+        NSColor.red.withAlphaComponent(self.fillOverLayeralpha).setFill()
         dirtyRect.fill()
         
-        if (selectionRect!.size.equalTo(CGSize.zero)) {
+        if !self.hasSelectionRect {
             return
         }
         
-        if let rect = selectionRect {
-            let mousePoint: NSPoint = lastMouseLocation!
-
-            // 设置箭头的颜色
-//            NSColor.blue.setFill()
-            NSColor.clear.setFill()
-            selectedColor.setStroke()
-            
-            // 创建箭头路径
-            let arrowPath = NSBezierPath()
-            
-            // 箭头的起点
-            let arrowStart = initialLocation!
-            arrowPath.move(to: arrowStart)
-            
-            // 箭头的主干
-            arrowPath.line(to: mousePoint)
-            
-            // 箭头的尖端
-            let arrowLength: CGFloat = 20.0
-            let angle: CGFloat = atan2(mousePoint.y - arrowStart.y, mousePoint.x - arrowStart.x)
-            
-            let arrowHead1 = NSPoint(x: mousePoint.x - arrowLength * cos(angle - .pi / 6),
-                                     y: mousePoint.y - arrowLength * sin(angle - .pi / 6))
-            let arrowHead2 = NSPoint(x: mousePoint.x - arrowLength * cos(angle + .pi / 6),
-                                     y: mousePoint.y - arrowLength * sin(angle + .pi / 6))
-            
-            arrowPath.line(to: arrowHead1)
-            arrowPath.move(to: mousePoint)
-            arrowPath.line(to: arrowHead2)
-            
-            // 完成路径
-            arrowPath.lineWidth = lineWidth
-            arrowPath.stroke()
-            
-            // 绘制边框中的点
-            if (!editFinished) {
-                for handle in ResizeHandle.allCases {
-                    if let point = controlPointForHandle(handle, inRect: rect) {
-                        let controlPointRect = NSRect(origin: point, size: CGSize(width: controlPointDiameter, height: controlPointDiameter))
-                        let controlPointPath = NSBezierPath(ovalIn: controlPointRect)
-                        controlPointColor.setFill()
-                        controlPointPath.fill()
-                    }
+        // 更新填充内容
+        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
+        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
+        
+        let rect = selectionRect
+        // 绘制边框
+        let dashedBorder = NSBezierPath(rect: rect)
+        dashedBorder.lineWidth = lineWidth
+        selectedColor.setStroke()
+        dashedBorder.stroke()
+        NSColor.init(white: 1, alpha: 0.01).setFill()
+        //            selectedColor.setFill()
+        __NSRectFill(rect)
+        // 绘制边框中的点
+        if (!self.editFinished) {
+            for handle in RetangleResizeHandle.allCases {
+                if let point = controlPointForHandle(handle, inRect: rect) {
+                    let controlPointRect = NSRect(origin: point, size: CGSize(width: controlPointDiameter, height: controlPointDiameter))
+                    let controlPointPath = NSBezierPath(ovalIn: controlPointRect)
+                    controlPointColor.setFill()
+                    controlPointPath.fill()
                 }
             }
         }
     }
     
-    func handleForPoint(_ point: NSPoint) -> ResizeHandle {
-        guard let rect = selectionRect else { return .none }
-        for handle in ResizeHandle.allCases {
+    override func handleForPoint(_ point: NSPoint) -> RetangleResizeHandle {
+        if self.selectionRect.size.width < kSelectionMinWidth {
+            return .none
+        }
+        let rect = self.selectionRect
+        for handle in RetangleResizeHandle.allCases {
             if let controlPoint = controlPointForHandle(handle, inRect: rect), NSRect(origin: controlPoint, size: CGSize(width: controlPointDiameter, height: controlPointDiameter)).contains(point) {
                 return handle
             }
@@ -115,7 +90,35 @@ class ScreenshotArrowView: NSView, OverlayProtocol {
         return .none
     }
     
-    func controlPointForHandle(_ handle: ResizeHandle, inRect rect: NSRect) -> NSPoint? {
+    override func handleborderForPoint(_ point: NSPoint) -> RetangleResizeHandle {
+        if self.selectionRect.size.width < kSelectionMinWidth {
+            return .none
+        }
+        let deta = controlPointDiameter / 2
+        let rect = self.selectionRect
+//         上
+        if (point.x > rect.minX - deta && point.x < rect.maxX + deta && point.y > rect.maxY - deta && point.y < rect.maxY + deta) {
+            return .top
+        }
+        
+//          下
+        if (point.x > rect.minX - deta && point.x < rect.maxX + deta && point.y > rect.minY - deta && point.y < rect.minY + deta) {
+            return .bottom
+        }
+            
+//        左
+        if (point.x > rect.minX - deta && point.x < rect.minX + deta && point.y > rect.minY - deta && point.y < rect.maxY + deta) {
+            return .left
+        }
+//         右
+        if (point.x > rect.maxX - deta && point.x < rect.maxX + deta && point.y > rect.minY - deta && point.y < rect.maxY + deta) {
+            return .right
+        }
+        
+        return .none
+    }
+    
+    func controlPointForHandle(_ handle: RetangleResizeHandle, inRect rect: NSRect) -> NSPoint? {
         switch handle {
         case .topLeft:
             return NSPoint(x: rect.minX - controlPointDiameter / 2 - 1, y: rect.maxY - controlPointDiameter / 2 + 1)
@@ -139,11 +142,17 @@ class ScreenshotArrowView: NSView, OverlayProtocol {
     }
     
     override func mouseDragged(with event: NSEvent) {
+//        print("lt -- inner view mouseDragged 0 : \(self) \(self.dragIng)")
+        if (self.editFinished) {
+            return
+        }
+        
+//        print("lt -- inner view mouseDragged 1 : \(self)")
         guard var initialLocation = initialLocation else { return }
         let currentLocation = convert(event.locationInWindow, from: nil)
         
         if activeHandle != .none {
-            var newRect = selectionRect ?? CGRect.zero
+            var newRect = selectionRect
             let lastLocation = lastMouseLocation ?? currentLocation
             
             let deltaX = currentLocation.x - lastLocation.x
@@ -182,19 +191,21 @@ class ScreenshotArrowView: NSView, OverlayProtocol {
             self.selectionRect = newRect
             initialLocation = currentLocation // Update initial location for continuous dragging
         } else {
-            if dragIng {
-                dragIng = true
+            if self.dragIng {
+//                print("lt -- draging : \(self.dragIng)")
                 // 计算移动偏移量
                 let deltaX = currentLocation.x - initialLocation.x
                 let deltaY = currentLocation.y - initialLocation.y
                 
                 // 更新矩形位置
-                let x = self.selectionRect?.origin.x
-                let y = self.selectionRect?.origin.y
-                let w = self.selectionRect?.size.width
-                let h = self.selectionRect?.size.height
-                self.selectionRect?.origin.x = min(max(0.0, x! + deltaX), self.frame.width - w!)
-                self.selectionRect?.origin.y = min(max(0.0, y! + deltaY), self.frame.height - h!)
+                let x = self.selectionRect.origin.x
+                let y = self.selectionRect.origin.y
+                let w = self.selectionRect.size.width
+                let h = self.selectionRect.size.height
+//                print("lt -- select rect: \(self.selectionRect)")
+                self.selectionRect.origin.x = min(max(0.0, x + deltaX), self.frame.width - w)
+                self.selectionRect.origin.y = min(max(0.0, y + deltaY), self.frame.height - h)
+//                print("lt -- select rect 1: \(self.selectionRect)")
                 initialLocation = currentLocation
             } else {
                 // 创建新矩形
@@ -214,58 +225,45 @@ class ScreenshotArrowView: NSView, OverlayProtocol {
     }
     
     override func mouseDown(with event: NSEvent) {
-        
+//        print("lt -- son inner view mouseDown 0 : \(self)")
+        if (self.editFinished) {
+            return
+        }
         let location = convert(event.locationInWindow, from: nil)
+//        print("lt -- inner view mouseDown 1: \(event.locationInWindow) \(location)")
+
         initialLocation = location
         lastMouseLocation = location
         activeHandle = handleForPoint(location)
-        if let rect = selectionRect, NSPointInRect(location, rect) {
-            dragIng = true
+        let borderHandle = self.handleborderForPoint(location)
+//        print("lt -- mousedown borderHandle : \(borderHandle)")
+        if (borderHandle != .none) {
+            self.dragIng = true
         }
-        needsDisplay = true
+        self.needsDisplay = true
     }
     
     override func mouseUp(with event: NSEvent) {
-        //        initialLocation = nil
+//        print("lt -- sone mouseup")
+        if (self.editFinished) {
+            return
+        }
+        initialLocation = nil
         activeHandle = .none
         dragIng = false
-        needsDisplay = true
-        self.addSubviewFromSuperView()
+        self.needsDisplay = true
     }
     
-    func addSubviewFromSuperView() {
-        self.editFinished = true
-        let superView: ScreenshotOverlayView = self.superview as! ScreenshotOverlayView
-        superView.addCustomSubviews()
-    }
     
-    override func mouseMoved(with event: NSEvent) {
-        let curlocation = event.locationInWindow
-        activeHandle = handleForPoint(curlocation)
-        if (activeHandle != .none) {
-            switch activeHandle {
-            case .top, .bottom:
-                NSCursor.frameResize(position: .top, directions: [.inward, .outward]).set()
-            case .left, .right:
-                NSCursor.frameResize(position: .left, directions: [.inward, .outward]).set()
-            case .topLeft, .bottomRight:
-                NSCursor.frameResize(position: .topLeft, directions: [.inward, .outward]).set()
-            case .topRight, .bottomLeft:
-                NSCursor.frameResize(position: .topRight, directions: [.inward, .outward]).set()
-            default:
-                NSCursor.resizeLeftRight.set()
-                break
-            }
+//    这样是为了让mouseDown在superView中监听到来调用子View的方法
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        let hitView = super.hitTest(point)
+        if hitView == self && hitView is ScreenshotRectangleView && hitView as? ScreenshotRectangleView !== hitView as? ScreenshotOverlayView {
+//            print("对象是 ParentClass 类型而不是 ChildClass（或其他子类）")
+//            print("lt -- 当前子类的页面传递处理")
+            return self.superview
         }
-        else {
-//            if (self.selectionRect!.contains(curlocation)) {
-//                NSCursor.closedHand.set()
-//            }
-//            else {
-//                NSCursor.crosshair.set()
-//            }
-        }
+        return hitView
     }
 }
-
 

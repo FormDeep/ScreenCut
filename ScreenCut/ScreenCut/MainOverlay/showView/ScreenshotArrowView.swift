@@ -3,25 +3,25 @@ import SwiftUI
 import ScreenCaptureKit
 import AppKit
 
-// 矩形的方块内容
-class ScreenshotRectangleView: NSView, OverlayProtocol {
+//椭圆形
+class ScreenshotArrowView: ScreenshotBaseOverlayView {
     
-    var selectionRect: NSRect?
+    var selectionRect: NSRect = NSRect.zero
     var initialLocation: NSPoint?
     var dragIng: Bool = false
-    var activeHandle: ResizeHandle = .none
+    var activeHandle: RetangleResizeHandle = .none
     var lastMouseLocation: NSPoint?
     var maxFrame: NSRect?
-    var size: NSSize
     let controlPointDiameter: CGFloat = 8.0
     let controlPointColor: NSColor = NSColor.white
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
-    var editFinished = false;
     var selectedColor: NSColor = NSColor.white
-    var lineWidth: CGFloat = 4.0
+    var lineWidth: CGFloat = 2.0
+    var hasSelectionRect: Bool {
+        return (self.selectionRect.size.width > 0 && self.selectionRect.size.height > 0)
+    }
     
-    init(frame: CGRect, size: NSSize) {
-        self.size = size
+    override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
@@ -32,45 +32,66 @@ class ScreenshotRectangleView: NSView, OverlayProtocol {
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         
-        let trackingArea = NSTrackingArea(rect: self.bounds,
-                                          options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeInActiveApp],
-                                          owner: self,
-                                          userInfo: nil)
-        self.addTrackingArea(trackingArea)
-        
-        selectionRect = NSRect(x: (self.frame.width - size.width) / 2, y: (self.frame.height - size.height) / 2, width: size.width, height:size.height)
+//        let trackingArea = NSTrackingArea(rect: self.bounds,
+//                                          options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeInActiveApp],
+//                                          owner: self,
+//                                          userInfo: nil)
+//        self.addTrackingArea(trackingArea)
     }
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         maxFrame = dirtyRect
-//        print("lt -- dirty react : \(dirtyRect)")
+        
+        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
+        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
+
         
         NSColor.red.withAlphaComponent(fillOverLayeralpha).setFill()
         dirtyRect.fill()
         
-        if (selectionRect!.size.equalTo(CGSize.zero)) {
+        if (!self.hasSelectionRect) {
             return
         }
         
-// 更新填充内容
-        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
-        
-        if let rect = selectionRect {
-            
-            // 绘制边框
-            let dashedBorder = NSBezierPath(rect: rect)
-            dashedBorder.lineWidth = lineWidth
-//            dashedBorder.setLineDash([4.0, 4.0], count: 1, phase: 0.0)// 绘制虚线
+        let rect = selectionRect
+            let mousePoint: NSPoint = lastMouseLocation!
+
+            // 设置箭头的颜色
+//            NSColor.blue.setFill()
+            NSColor.clear.setFill()
             selectedColor.setStroke()
-            dashedBorder.stroke()
-            NSColor.init(white: 1, alpha: 0.01).setFill()
-//            selectedColor.setFill()
-            __NSRectFill(rect)
+            
+            // 创建箭头路径
+            let arrowPath = NSBezierPath()
+            
+            // 箭头的起点
+            let arrowStart = initialLocation!
+            arrowPath.move(to: arrowStart)
+            
+            // 箭头的主干
+            arrowPath.line(to: mousePoint)
+            
+            // 箭头的尖端
+            let arrowLength: CGFloat = 20.0
+            let angle: CGFloat = atan2(mousePoint.y - arrowStart.y, mousePoint.x - arrowStart.x)
+            
+            let arrowHead1 = NSPoint(x: mousePoint.x - arrowLength * cos(angle - .pi / 6),
+                                     y: mousePoint.y - arrowLength * sin(angle - .pi / 6))
+            let arrowHead2 = NSPoint(x: mousePoint.x - arrowLength * cos(angle + .pi / 6),
+                                     y: mousePoint.y - arrowLength * sin(angle + .pi / 6))
+            
+            arrowPath.line(to: arrowHead1)
+            arrowPath.move(to: mousePoint)
+            arrowPath.line(to: arrowHead2)
+            
+            // 完成路径
+            arrowPath.lineWidth = lineWidth
+            arrowPath.stroke()
+            
             // 绘制边框中的点
             if (!editFinished) {
-                for handle in ResizeHandle.allCases {
+                for handle in RetangleResizeHandle.allCases {
                     if let point = controlPointForHandle(handle, inRect: rect) {
                         let controlPointRect = NSRect(origin: point, size: CGSize(width: controlPointDiameter, height: controlPointDiameter))
                         let controlPointPath = NSBezierPath(ovalIn: controlPointRect)
@@ -79,12 +100,14 @@ class ScreenshotRectangleView: NSView, OverlayProtocol {
                     }
                 }
             }
-        }
     }
     
-    func handleForPoint(_ point: NSPoint) -> ResizeHandle {
-        guard let rect = selectionRect else { return .none }
-        for handle in ResizeHandle.allCases {
+    override func handleForPoint(_ point: NSPoint) -> RetangleResizeHandle {
+        if !self.hasSelectionRect {
+            return .none
+        }
+        let rect = self.selectionRect
+        for handle in RetangleResizeHandle.allCases {
             if let controlPoint = controlPointForHandle(handle, inRect: rect), NSRect(origin: controlPoint, size: CGSize(width: controlPointDiameter, height: controlPointDiameter)).contains(point) {
                 return handle
             }
@@ -92,7 +115,7 @@ class ScreenshotRectangleView: NSView, OverlayProtocol {
         return .none
     }
     
-    func controlPointForHandle(_ handle: ResizeHandle, inRect rect: NSRect) -> NSPoint? {
+    func controlPointForHandle(_ handle: RetangleResizeHandle, inRect rect: NSRect) -> NSPoint? {
         switch handle {
         case .topLeft:
             return NSPoint(x: rect.minX - controlPointDiameter / 2 - 1, y: rect.maxY - controlPointDiameter / 2 + 1)
@@ -118,7 +141,7 @@ class ScreenshotRectangleView: NSView, OverlayProtocol {
     override func mouseDragged(with event: NSEvent) {
         guard var initialLocation = initialLocation else { return }
         let currentLocation = convert(event.locationInWindow, from: nil)
-
+        
         if activeHandle != .none {
             var newRect = selectionRect ?? CGRect.zero
             let lastLocation = lastMouseLocation ?? currentLocation
@@ -166,12 +189,12 @@ class ScreenshotRectangleView: NSView, OverlayProtocol {
                 let deltaY = currentLocation.y - initialLocation.y
                 
                 // 更新矩形位置
-                let x = self.selectionRect?.origin.x
-                let y = self.selectionRect?.origin.y
-                let w = self.selectionRect?.size.width
-                let h = self.selectionRect?.size.height
-                self.selectionRect?.origin.x = min(max(0.0, x! + deltaX), self.frame.width - w!)
-                self.selectionRect?.origin.y = min(max(0.0, y! + deltaY), self.frame.height - h!)
+                let x = self.selectionRect.origin.x
+                let y = self.selectionRect.origin.y
+                let w = self.selectionRect.size.width
+                let h = self.selectionRect.size.height
+                self.selectionRect.origin.x = min(max(0.0, x + deltaX), self.frame.width - w)
+                self.selectionRect.origin.y = min(max(0.0, y + deltaY), self.frame.height - h)
                 initialLocation = currentLocation
             } else {
                 // 创建新矩形
@@ -191,18 +214,19 @@ class ScreenshotRectangleView: NSView, OverlayProtocol {
     }
     
     override func mouseDown(with event: NSEvent) {
+        
         let location = convert(event.locationInWindow, from: nil)
         initialLocation = location
         lastMouseLocation = location
         activeHandle = handleForPoint(location)
-        if let rect = selectionRect, NSPointInRect(location, rect) {
-            dragIng = true
+        if NSPointInRect(location, self.selectionRect) {
+            self.dragIng = true
         }
         needsDisplay = true
     }
     
     override func mouseUp(with event: NSEvent) {
-        initialLocation = nil
+        //        initialLocation = nil
         activeHandle = .none
         dragIng = false
         needsDisplay = true
@@ -216,31 +240,31 @@ class ScreenshotRectangleView: NSView, OverlayProtocol {
     }
     
     override func mouseMoved(with event: NSEvent) {
-        let curlocation = event.locationInWindow
-        activeHandle = handleForPoint(curlocation)
-        if (activeHandle != .none) {
-            switch activeHandle {
-            case .top, .bottom:
-                NSCursor.frameResize(position: .top, directions: [.inward, .outward]).set()
-            case .left, .right:
-                NSCursor.frameResize(position: .left, directions: [.inward, .outward]).set()
-            case .topLeft, .bottomRight:
-                NSCursor.frameResize(position: .topLeft, directions: [.inward, .outward]).set()
-            case .topRight, .bottomLeft:
-                NSCursor.frameResize(position: .topRight, directions: [.inward, .outward]).set()
-            default:
-                NSCursor.resizeLeftRight.set()
-                break
-            }
-        }
-        else {
-//            if (self.selectionRect!.contains(curlocation)) {
-//                NSCursor.closedHand.set()
+//        let curlocation = event.locationInWindow
+//        activeHandle = handleForPoint(curlocation)
+//        if (activeHandle != .none) {
+//            switch activeHandle {
+//            case .top, .bottom:
+//                NSCursor.frameResize(position: .top, directions: [.inward, .outward]).set()
+//            case .left, .right:
+//                NSCursor.frameResize(position: .left, directions: [.inward, .outward]).set()
+//            case .topLeft, .bottomRight:
+//                NSCursor.frameResize(position: .topLeft, directions: [.inward, .outward]).set()
+//            case .topRight, .bottomLeft:
+//                NSCursor.frameResize(position: .topRight, directions: [.inward, .outward]).set()
+//            default:
+//                NSCursor.resizeLeftRight.set()
+//                break
 //            }
-//            else {
-//                NSCursor.crosshair.set()
-//            }
-        }
+//        }
+//        else {
+////            if (self.selectionRect.contains(curlocation)) {
+////                NSCursor.closedHand.set()
+////            }
+////            else {
+////                NSCursor.crosshair.set()
+////            }
+//        }
     }
 }
 

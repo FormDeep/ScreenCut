@@ -83,3 +83,16 @@ class UI {
     }
 }
 
+
+extension NSPoint {
+    func isOnEllipse(inRect rect: NSRect) -> Bool {
+        let centerX = rect.origin.x + rect.width / 2
+        let centerY = rect.origin.y + rect.height / 2
+        let radiusX = rect.width / 2
+        let radiusY = rect.height / 2
+        let a = pow(self.x - centerX, 2) / pow(radiusX, 2)
+        let b = pow(self.y - centerY, 2) / pow(radiusY, 2)
+        return a + b == 1
+    }
+}
+
