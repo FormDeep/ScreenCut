@@ -3,8 +3,8 @@ import SwiftUI
 import ScreenCaptureKit
 import AppKit
 
-//椭圆形
-class ScreenshotArrowOverlayView: NSView, OverlayProtocol {
+// 矩形的方块内容
+class ScreenshotRectangleView: NSView, OverlayProtocol {
     
     var selectionRect: NSRect?
     var initialLocation: NSPoint?
@@ -18,7 +18,7 @@ class ScreenshotArrowOverlayView: NSView, OverlayProtocol {
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
     var editFinished = false;
     var selectedColor: NSColor = NSColor.white
-    var lineWidth: CGFloat = 2.0
+    var lineWidth: CGFloat = 4.0
     
     init(frame: CGRect, size: NSSize) {
         self.size = size
@@ -44,10 +44,7 @@ class ScreenshotArrowOverlayView: NSView, OverlayProtocol {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         maxFrame = dirtyRect
-        
-        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
-
+//        print("lt -- dirty react : \(dirtyRect)")
         
         NSColor.red.withAlphaComponent(fillOverLayeralpha).setFill()
         dirtyRect.fill()
@@ -56,41 +53,21 @@ class ScreenshotArrowOverlayView: NSView, OverlayProtocol {
             return
         }
         
+// 更新填充内容
+        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
+        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
+        
         if let rect = selectionRect {
-            let mousePoint: NSPoint = lastMouseLocation!
-
-            // 设置箭头的颜色
-//            NSColor.blue.setFill()
-            NSColor.clear.setFill()
+            
+            // 绘制边框
+            let dashedBorder = NSBezierPath(rect: rect)
+            dashedBorder.lineWidth = lineWidth
+//            dashedBorder.setLineDash([4.0, 4.0], count: 1, phase: 0.0)// 绘制虚线
             selectedColor.setStroke()
-            
-            // 创建箭头路径
-            let arrowPath = NSBezierPath()
-            
-            // 箭头的起点
-            let arrowStart = initialLocation!
-            arrowPath.move(to: arrowStart)
-            
-            // 箭头的主干
-            arrowPath.line(to: mousePoint)
-            
-            // 箭头的尖端
-            let arrowLength: CGFloat = 20.0
-            let angle: CGFloat = atan2(mousePoint.y - arrowStart.y, mousePoint.x - arrowStart.x)
-            
-            let arrowHead1 = NSPoint(x: mousePoint.x - arrowLength * cos(angle - .pi / 6),
-                                     y: mousePoint.y - arrowLength * sin(angle - .pi / 6))
-            let arrowHead2 = NSPoint(x: mousePoint.x - arrowLength * cos(angle + .pi / 6),
-                                     y: mousePoint.y - arrowLength * sin(angle + .pi / 6))
-            
-            arrowPath.line(to: arrowHead1)
-            arrowPath.move(to: mousePoint)
-            arrowPath.line(to: arrowHead2)
-            
-            // 完成路径
-            arrowPath.lineWidth = lineWidth
-            arrowPath.stroke()
-            
+            dashedBorder.stroke()
+            NSColor.init(white: 1, alpha: 0.01).setFill()
+//            selectedColor.setFill()
+            __NSRectFill(rect)
             // 绘制边框中的点
             if (!editFinished) {
                 for handle in ResizeHandle.allCases {
@@ -141,7 +118,7 @@ class ScreenshotArrowOverlayView: NSView, OverlayProtocol {
     override func mouseDragged(with event: NSEvent) {
         guard var initialLocation = initialLocation else { return }
         let currentLocation = convert(event.locationInWindow, from: nil)
-        
+
         if activeHandle != .none {
             var newRect = selectionRect ?? CGRect.zero
             let lastLocation = lastMouseLocation ?? currentLocation
@@ -214,7 +191,6 @@ class ScreenshotArrowOverlayView: NSView, OverlayProtocol {
     }
     
     override func mouseDown(with event: NSEvent) {
-        
         let location = convert(event.locationInWindow, from: nil)
         initialLocation = location
         lastMouseLocation = location
@@ -226,7 +202,7 @@ class ScreenshotArrowOverlayView: NSView, OverlayProtocol {
     }
     
     override func mouseUp(with event: NSEvent) {
-        //        initialLocation = nil
+        initialLocation = nil
         activeHandle = .none
         dragIng = false
         needsDisplay = true

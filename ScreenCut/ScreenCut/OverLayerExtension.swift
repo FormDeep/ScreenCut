@@ -79,6 +79,31 @@ enum EditCutBottmType: CaseIterable,Identifiable {
     }
 }
 
+enum EditActionBottmType: CaseIterable,Identifiable {
+    
+    case none
+    case ocr, translate, cancel, download
+    
+    static var allCases: [EditActionBottmType] = [ocr, translate, cancel, download]
+    
+    var id: Self { self }
+
+    var imgName: String {
+        switch self {
+        case .ocr:
+            return "text.document"
+        case .translate:
+            return "translate"
+        case .cancel:
+            return "xmark"
+        case .download:
+            return "square.and.arrow.down"
+        default:
+            return ""
+        }
+    }
+}
+
 enum LineWidthType: Int, CaseIterable, Identifiable {
     
     case Two = 2

@@ -4,7 +4,7 @@ import ScreenCaptureKit
 import AppKit
 
 //椭圆形
-class ScreenshotCircleOverlayView: NSView, OverlayProtocol {
+class ScreenshotArrowView: NSView, OverlayProtocol {
     
     var selectionRect: NSRect?
     var initialLocation: NSPoint?
@@ -18,7 +18,7 @@ class ScreenshotCircleOverlayView: NSView, OverlayProtocol {
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
     var editFinished = false;
     var selectedColor: NSColor = NSColor.white
-    var lineWidth: CGFloat = 4.0
+    var lineWidth: CGFloat = 2.0
     
     init(frame: CGRect, size: NSSize) {
         self.size = size
@@ -45,6 +45,9 @@ class ScreenshotCircleOverlayView: NSView, OverlayProtocol {
         super.draw(dirtyRect)
         maxFrame = dirtyRect
         
+        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
+        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
+
         
         NSColor.red.withAlphaComponent(fillOverLayeralpha).setFill()
         dirtyRect.fill()
@@ -53,16 +56,40 @@ class ScreenshotCircleOverlayView: NSView, OverlayProtocol {
             return
         }
         
-        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
-        
         if let rect = selectionRect {
-            // 绘制椭圆
-            let path = NSBezierPath(ovalIn: rect)
-            path.fill()
+            let mousePoint: NSPoint = lastMouseLocation!
+
+            // 设置箭头的颜色
+//            NSColor.blue.setFill()
+            NSColor.clear.setFill()
             selectedColor.setStroke()
-            path.lineWidth = lineWidth
-            path.stroke()
+            
+            // 创建箭头路径
+            let arrowPath = NSBezierPath()
+            
+            // 箭头的起点
+            let arrowStart = initialLocation!
+            arrowPath.move(to: arrowStart)
+            
+            // 箭头的主干
+            arrowPath.line(to: mousePoint)
+            
+            // 箭头的尖端
+            let arrowLength: CGFloat = 20.0
+            let angle: CGFloat = atan2(mousePoint.y - arrowStart.y, mousePoint.x - arrowStart.x)
+            
+            let arrowHead1 = NSPoint(x: mousePoint.x - arrowLength * cos(angle - .pi / 6),
+                                     y: mousePoint.y - arrowLength * sin(angle - .pi / 6))
+            let arrowHead2 = NSPoint(x: mousePoint.x - arrowLength * cos(angle + .pi / 6),
+                                     y: mousePoint.y - arrowLength * sin(angle + .pi / 6))
+            
+            arrowPath.line(to: arrowHead1)
+            arrowPath.move(to: mousePoint)
+            arrowPath.line(to: arrowHead2)
+            
+            // 完成路径
+            arrowPath.lineWidth = lineWidth
+            arrowPath.stroke()
             
             // 绘制边框中的点
             if (!editFinished) {
@@ -187,6 +214,7 @@ class ScreenshotCircleOverlayView: NSView, OverlayProtocol {
     }
     
     override func mouseDown(with event: NSEvent) {
+        
         let location = convert(event.locationInWindow, from: nil)
         initialLocation = location
         lastMouseLocation = location
@@ -198,7 +226,7 @@ class ScreenshotCircleOverlayView: NSView, OverlayProtocol {
     }
     
     override func mouseUp(with event: NSEvent) {
-        initialLocation = nil
+        //        initialLocation = nil
         activeHandle = .none
         dragIng = false
         needsDisplay = true

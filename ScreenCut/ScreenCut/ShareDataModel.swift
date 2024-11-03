@@ -51,3 +51,26 @@ class EditCutBottomShareModel: ObservableObject {
         }
     }
 }
+
+class EditActionShareModel: ObservableObject {
+    static let shared = EditActionShareModel()
+    
+    @Published var actionType: EditActionBottmType = .none {
+        didSet {
+            switch actionType {
+            case .ocr:
+                ScreenCut.showOCR()
+            case .translate:
+                ScreenCut.ocrThenTransRequest()
+            case .cancel, .download:
+                if actionType == .download {
+                    ScreenCut.cutImage()
+                }
+                for w in NSApplication.shared.windows.filter({ $0.title == kAreaSelector || $0.title == kEditImageText}) { w.close() }
+                AppDelegate.stopGlobalMouseMonitor()
+            case .none:
+                break
+            }
+        }
+    }
+}

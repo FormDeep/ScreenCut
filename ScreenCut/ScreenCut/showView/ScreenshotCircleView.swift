@@ -3,8 +3,8 @@ import SwiftUI
 import ScreenCaptureKit
 import AppKit
 
-// 矩形的方块内容
-class ScreenshotRectangleOverlayView: NSView, OverlayProtocol {
+//椭圆形
+class ScreenshotCircleView: NSView, OverlayProtocol {
     
     var selectionRect: NSRect?
     var initialLocation: NSPoint?
@@ -44,7 +44,7 @@ class ScreenshotRectangleOverlayView: NSView, OverlayProtocol {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         maxFrame = dirtyRect
-//        print("lt -- dirty react : \(dirtyRect)")
+        
         
         NSColor.red.withAlphaComponent(fillOverLayeralpha).setFill()
         dirtyRect.fill()
@@ -53,21 +53,17 @@ class ScreenshotRectangleOverlayView: NSView, OverlayProtocol {
             return
         }
         
-// 更新填充内容
         lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
         selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
         
         if let rect = selectionRect {
-            
-            // 绘制边框
-            let dashedBorder = NSBezierPath(rect: rect)
-            dashedBorder.lineWidth = lineWidth
-//            dashedBorder.setLineDash([4.0, 4.0], count: 1, phase: 0.0)// 绘制虚线
+            // 绘制椭圆
+            let path = NSBezierPath(ovalIn: rect)
+            path.fill()
             selectedColor.setStroke()
-            dashedBorder.stroke()
-            NSColor.init(white: 1, alpha: 0.01).setFill()
-//            selectedColor.setFill()
-            __NSRectFill(rect)
+            path.lineWidth = lineWidth
+            path.stroke()
+            
             // 绘制边框中的点
             if (!editFinished) {
                 for handle in ResizeHandle.allCases {
@@ -118,7 +114,7 @@ class ScreenshotRectangleOverlayView: NSView, OverlayProtocol {
     override func mouseDragged(with event: NSEvent) {
         guard var initialLocation = initialLocation else { return }
         let currentLocation = convert(event.locationInWindow, from: nil)
-
+        
         if activeHandle != .none {
             var newRect = selectionRect ?? CGRect.zero
             let lastLocation = lastMouseLocation ?? currentLocation

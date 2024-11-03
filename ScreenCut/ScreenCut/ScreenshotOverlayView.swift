@@ -4,7 +4,6 @@ import ScreenCaptureKit
 import AppKit
 
 
-// 使用NSPanel报错，会出现不弹出来的问题，以后少用子类处理
 class ScreenshotWindow: NSWindow {
     
     var parentView:ScreenshotOverlayView?
@@ -19,7 +18,6 @@ class ScreenshotWindow: NSWindow {
         self.backgroundColor = NSColor.clear
         self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         self.isReleasedWhenClosed = false
-//        self.contentView = overlayView
         self.contentView?.addSubview(overlayView)
         parentView = overlayView
     }
@@ -28,9 +26,7 @@ class ScreenshotWindow: NSWindow {
         fatalError("init(coder:) has not been implemented")
     }
     
-//     这个地方编程了key之后，这个window应该是捕获了。
     override var canBecomeKey: Bool {
-//        print("lt -- window can become key")
        return true
     }
 }
@@ -41,7 +37,6 @@ class OverlayWindow: NSWindow {
     }
 }
 
-// 这个是没有覆盖屏幕上方的菜单栏
 class ScreenshotOverlayWindowController: NSWindowController {
     
     convenience init() {
@@ -120,8 +115,6 @@ class ScreenshotOverlayView: NSView {
         var subView:OverlayProtocol = view as! OverlayProtocol
         subView.selectedColor = self.bottomEditItem.selectColor.nsColor
         subView.lineWidth = CGFloat(self.bottomEditItem.sizeType.rawValue)
-//        print("lt --  configSubViewAttr subview : \(String(describing: subView)), cutType:\(self.bottomEditItem.cutType), \(EditCutBottomShareModel.shared.cutType)")
-//        print("lt -- color : \(self.bottomEditItem.selectColor) ,  lineWidth: \(self.bottomEditItem.sizeType)")
     }
     
     func addCustomSubviews() {
@@ -129,11 +122,11 @@ class ScreenshotOverlayView: NSView {
         var subView: OverlayProtocol?
         switch self.bottomEditItem.cutType {
         case .square:
-            subView = ScreenshotRectangleOverlayView(frame: self.selectionRect!, size:NSSize.zero)
+            subView = ScreenshotRectangleView(frame: self.selectionRect!, size:NSSize.zero)
         case .circle:
-            subView = ScreenshotCircleOverlayView(frame: self.selectionRect!, size:NSSize.zero)
+            subView = ScreenshotCircleView(frame: self.selectionRect!, size:NSSize.zero)
         case .arrow:
-            subView = ScreenshotArrowOverlayView(frame: self.selectionRect!, size:NSSize.zero)
+            subView = ScreenshotArrowView(frame: self.selectionRect!, size:NSSize.zero)
         case .doodle:
             subView = ScreenshotDoodleView(frame: self.selectionRect!, size:NSSize.zero)
         case .text:
@@ -144,9 +137,7 @@ class ScreenshotOverlayView: NSView {
         guard subView != nil else {
             return
         }
-        
-//        print("lt -- add subview : \(String(describing: subView)), cutType:\(self.bottomEditItem.cutType), \(EditCutBottomShareModel.shared.cutType)")
-
+    
         let curView:NSView = subView as! NSView
         self.addSubview(curView)
         curView.wantsLayer = true;
@@ -296,7 +287,6 @@ class ScreenshotOverlayView: NSView {
             initialLocation = currentLocation // Update initial location for continuous dragging
         } else {
             if dragIng {
-                dragIng = true
                 // 计算移动偏移量
                 let deltaX = currentLocation.x - initialLocation.x
                 let deltaY = currentLocation.y - initialLocation.y
@@ -433,7 +423,7 @@ class ScreenshotOverlayView: NSView {
             areaPanel.collectionBehavior = [.canJoinAllSpaces]
             areaPanel.setFrame(contentView.frame, display: true)
             areaPanel.level = .screenSaver
-            areaPanel.title = "编辑图片"
+            areaPanel.title = kEditImageText
             areaPanel.contentView = contentView
             areaPanel.backgroundColor = .clear
             areaPanel.titleVisibility = .hidden

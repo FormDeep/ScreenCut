@@ -8,6 +8,7 @@
 import SwiftUI
 
 let kAreaSelector: String = "Area Selector"
+let kEditImageText: String = "编辑图片"
 
 class EditCutBottomPanel: NSWindow {
 
@@ -27,6 +28,7 @@ let FirstIconPadding: CGFloat = 5
 struct EditCutBottomView: View {
     
     @StateObject private var bottomEditItem = EditCutBottomShareModel.shared
+    @StateObject private var actionItem = EditActionShareModel.shared
 
     private func createShapeImageView(for type: EditCutBottmType) -> some View {
         Image(nsImage: NSImage(systemSymbolName: type.imgName, accessibilityDescription: nil) ?? NSImage())
@@ -38,6 +40,15 @@ struct EditCutBottomView: View {
             .padding(FirstIconPadding)
             .cornerRadius(3)
             .tag(type.imgName)
+    }
+    
+    private func createActionImageView(for type: EditActionBottmType) -> some View {
+        Image(nsImage: NSImage(systemSymbolName: type.imgName, accessibilityDescription: nil) ?? NSImage())
+            .resizable()
+            .scaledToFit()
+            .frame(width: FirstIconLength, height: FirstIconLength)
+            .foregroundColor(.white)
+            .padding(FirstIconPadding)
     }
     
     var body: some View {
@@ -52,55 +63,13 @@ struct EditCutBottomView: View {
                 Divider()
                     .frame(width: 2, height: 30)  // 设置分割线的高度
                     .background(Color.black.opacity(0.3))  // 设置分割线的颜色
-                if let xImg = NSImage(systemSymbolName: "xmark", accessibilityDescription: nil) {
-                    Image(nsImage: xImg)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: FirstIconLength, height: FirstIconLength)
-                        .foregroundColor(.white)
-                        .padding(FirstIconPadding)
-                        .onTapGesture {
-                            for w in NSApplication.shared.windows.filter({ $0.title == kAreaSelector || $0.title == "Start Recording" || $0.title == "编辑图片"}) { w.close() }
-                                                        AppDelegate.stopGlobalMouseMonitor()
-                        }
-                }
-                if let downloadImg = NSImage(systemSymbolName: "square.and.arrow.down", accessibilityDescription: nil) {
-                    Image(nsImage: downloadImg)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: FirstIconLength, height: FirstIconLength)
-                        .foregroundColor(.white)
-                        .padding(FirstIconPadding)
-                        .onTapGesture {
-                            ScreenCut.cutImage()
-                            for w in NSApplication.shared.windows.filter({ $0.title == kAreaSelector || $0.title == "Start Recording" || $0.title == "编辑图片"}) { w.close() }
-                                                        AppDelegate.stopGlobalMouseMonitor()
-                        }
-                }
                 
-                if let translateImg = NSImage(systemSymbolName: "text.document", accessibilityDescription: nil) {
-                    Image(nsImage: translateImg)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: FirstIconLength, height: FirstIconLength)
-                        .foregroundColor(.white)
-                        .padding(FirstIconPadding)
+                ForEach(EditActionBottmType.allCases) { type in
+                    createActionImageView(for: type)
                         .onTapGesture {
-                            ScreenCut.showOCR()
+                            actionItem.actionType = type
                         }
                 }
-                if let translateImg = NSImage(systemSymbolName: "translate", accessibilityDescription: nil) {
-                    Image(nsImage: translateImg)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: FirstIconLength, height: FirstIconLength)
-                        .foregroundColor(.white)
-                        .padding(FirstIconPadding)
-                        .onTapGesture {
-                            ScreenCut.ocrThenTransRequest()
-                        }
-                }
-                
             }.frame(height: 40.0)
             if bottomEditItem.cutType != .none {
                 SecondEditView()
