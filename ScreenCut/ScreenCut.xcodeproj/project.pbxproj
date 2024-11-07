@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		4A32AC922CD642BF00986037 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 4A32AC912CD642BF00986037 /* Sparkle */; };
+		4A63E74B2CD9D87B003FD425 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4A63E74A2CD9D87B003FD425 /* CombineMoya */; };
+		4A63E74D2CD9D87B003FD425 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 4A63E74C2CD9D87B003FD425 /* Moya */; };
+		4A63E74F2CD9D87B003FD425 /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4A63E74E2CD9D87B003FD425 /* ReactiveMoya */; };
+		4A63E7512CD9D87B003FD425 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4A63E7502CD9D87B003FD425 /* RxMoya */; };
 		4A898D7E2CCFF20C00CFB857 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */; };
 		4A898D812CD0027300CFB857 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 4A898D802CD0027300CFB857 /* KeyboardShortcuts */; };
 		4AFAF2722CCBE4FA005E7DA7 /* FileKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4AFAF2712CCBE4FA005E7DA7 /* FileKit */; };
@@ -43,9 +47,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A63E74F2CD9D87B003FD425 /* ReactiveMoya in Frameworks */,
 				4A898D7E2CCFF20C00CFB857 /* ComposableArchitecture in Frameworks */,
 				4A32AC922CD642BF00986037 /* Sparkle in Frameworks */,
+				4A63E74D2CD9D87B003FD425 /* Moya in Frameworks */,
 				4AFAF2722CCBE4FA005E7DA7 /* FileKit in Frameworks */,
+				4A63E74B2CD9D87B003FD425 /* CombineMoya in Frameworks */,
+				4A63E7512CD9D87B003FD425 /* RxMoya in Frameworks */,
 				4A898D812CD0027300CFB857 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,6 +101,10 @@
 				4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */,
 				4A898D802CD0027300CFB857 /* KeyboardShortcuts */,
 				4A32AC912CD642BF00986037 /* Sparkle */,
+				4A63E74A2CD9D87B003FD425 /* CombineMoya */,
+				4A63E74C2CD9D87B003FD425 /* Moya */,
+				4A63E74E2CD9D87B003FD425 /* ReactiveMoya */,
+				4A63E7502CD9D87B003FD425 /* RxMoya */,
 			);
 			productName = ScreenCut;
 			productReference = 4AFAF2542CCBE4C5005E7DA7 /* ScreenCut.app */;
@@ -127,6 +139,7 @@
 				4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				4A898D7F2CD0027300CFB857 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				4A32AC902CD642BF00986037 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4AFAF2552CCBE4C5005E7DA7 /* Products */;
@@ -367,6 +380,14 @@
 				minimumVersion = 2.6.4;
 			};
 		};
+		4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
 		4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
@@ -398,6 +419,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4A32AC902CD642BF00986037 /* XCRemoteSwiftPackageReference "Sparkle" */;
 			productName = Sparkle;
+		};
+		4A63E74A2CD9D87B003FD425 /* CombineMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = CombineMoya;
+		};
+		4A63E74C2CD9D87B003FD425 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		4A63E74E2CD9D87B003FD425 /* ReactiveMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = ReactiveMoya;
+		};
+		4A63E7502CD9D87B003FD425 /* RxMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = RxMoya;
 		};
 		4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;

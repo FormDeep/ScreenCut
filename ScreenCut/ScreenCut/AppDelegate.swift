@@ -37,6 +37,23 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         Task {
 //            await ScreenCut.updateScreenContent()
+//            ScreenCut.transforRequest("How are you") { result, flag in
+//                let text = flag ? result: "翻译失败"
+//                print("lt -- 翻译内容 \n \(String(describing: text))")
+//            }
+            moyaRequestPublisher(LocalNetworkAPI.translate(text: "How are you"), responseType: Dictionary<String, String>.self)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .finished:
+                        print("请求完成")
+                    case .failure(let error):
+                        print("请求失败：\(error)")
+                    }
+                }, receiveValue: { trans in
+                    let text = trans["translated_text"]
+                    print("翻译内容: \(String(describing: text))")
+                })
+                .store(in: &networkcancellables)
         }
         
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[] in
@@ -44,7 +61,7 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         }
         
         updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: self)
-        print("lt -- udpater controller: \(String(describing: updaterController))")
+//        print("lt -- udpater controller: \(String(describing: updaterController))")
         NotificationCenter.default.addObserver(self, selector: #selector(onCheckUpdate), name: Notification.Name("update.app.noti"), object: nil)
 
     }

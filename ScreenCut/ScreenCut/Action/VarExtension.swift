@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import FileKit
 import ScreenCaptureKit
+import Combine
 
 class VarExtension {
     
