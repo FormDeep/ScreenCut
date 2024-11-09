@@ -44,7 +44,9 @@ class ScreenshotRectangleView: ScreenshotBaseOverlayView {
         super.draw(dirtyRect)
         maxFrame = dirtyRect
         
-        NSColor.red.withAlphaComponent(self.fillOverLayeralpha).setFill()
+//        暂时先这样吧
+        NSColor.clear.withAlphaComponent(self.fillOverLayeralpha).setFill()
+        
         dirtyRect.fill()
         
         if !self.hasSelectionRect {

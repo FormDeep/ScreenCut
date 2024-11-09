@@ -34,16 +34,10 @@ class ScreenshotDoodleView: ScreenshotBaseOverlayView {
             lines.append(currentLine)
             currentLine = []
             needsDisplay = true
-            self.addSubviewFromSuperView()
         }
         
     }
-
-    func addSubviewFromSuperView() {
-        let superView: ScreenshotOverlayView = self.superview as! ScreenshotOverlayView
-        superView.addCustomSubviews()
-    }
-    
+ 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 
@@ -76,6 +70,14 @@ class ScreenshotDoodleView: ScreenshotBaseOverlayView {
             }
             path.stroke()
         }
+    }
+    
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        let hitView = super.hitTest(point)
+        if hitView == self {
+            return self.superview
+        }
+        return hitView
     }
 }
 

@@ -95,6 +95,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     }
     
     override func draw(_ dirtyRect: NSRect) {
+        NSColor.gray.withAlphaComponent(0.3).setFill()
         super.draw(dirtyRect)
     }
     
@@ -120,6 +121,9 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                 for element in self.subviews.reversed() {
                     //                1、 在顶点上
                     //                2、 在边上
+                    if !element.isKind(of: ScreenshotBaseOverlayView.self) {
+                        return
+                    }
                     let view: ScreenshotBaseOverlayView = element as! ScreenshotBaseOverlayView
 //                    let borerHande = view.handleborderForPoint(convert(event.locationInWindow, to: view))
                     let isOnBorder = view.isOnBorderAt(convert(event.locationInWindow, to: view))
@@ -151,7 +155,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                 self.operView?.mouseDown(with: event)
             }
             else {
-//                print("lt -- add subviews outer ")
+                print("lt -- add subviews outer ")
                 self.isFindForDown = false
                 self.operView?.editFinished = true
                 self.addCustomSubviews()
@@ -172,7 +176,45 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             pannel.setIsVisible(false)
         }
     }
-    //
+    
+    override func becomeFirstResponder() -> Bool {
+        return true
+    }
+
+    override var acceptsFirstResponder: Bool {
+        return true
+    }
+    
+    override func keyDown(with event: NSEvent) {
+        print("lt -- 这个键盘按键：\(event)")
+        switch event.keyCode {
+        case 51:
+//             删除按键
+            guard let curView = self.operView else {
+                Toast(message: "目前没有选中要删除的页面").show(in: self)
+                return
+            }
+            curView.removeFromSuperview()
+            self.operViews.remove(at: self.operViews.firstIndex(of: curView)!)
+            self.operView = nil
+        case 6:
+//            command + z
+//            直接从views的最后一个开始删除
+            let lastView = self.operViews.last
+            guard let curView = lastView else {
+                Toast(message: "没有操作可回退了").show(in: self)
+                return
+            }
+            curView.removeFromSuperview()
+            let index = self.operViews.firstIndex(of: curView)
+            print("lt -- index:\(String(describing: index)) curView:\(curView)")
+            self.operViews.remove(at: index!)
+            self.operView = nil
+        default:
+            print("nothing aim at")
+        }
+    }
+    
     override func mouseUp(with event: NSEvent) {
         print("lt -- super mouseup")
 
@@ -212,6 +254,9 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                 for element in self.subviews.reversed() {
                     //                1、 在顶点上
                     //                2、 在边上
+                    if !element.isKind(of: ScreenshotBaseOverlayView.self) {
+                        return
+                    }
                     let view: ScreenshotBaseOverlayView = element as! ScreenshotBaseOverlayView
                     
                     // 在顶点上

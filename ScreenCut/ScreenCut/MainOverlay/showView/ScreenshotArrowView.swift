@@ -266,6 +266,13 @@ class ScreenshotArrowView: ScreenshotBaseOverlayView {
 ////            }
 //        }
     }
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        let hitView = super.hitTest(point)
+        if hitView == self {
+            return self.superview
+        }
+        return hitView
+    }
 }
 
 
