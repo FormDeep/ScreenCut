@@ -12,11 +12,9 @@ class ScreenshotCircleView: ScreenshotBaseOverlayView {
     var activeHandle: RetangleResizeHandle = .none
     var lastMouseLocation: NSPoint?
     var maxFrame: NSRect?
-//    var size: NSSize
     let controlPointDiameter: CGFloat = 8.0
     let controlPointColor: NSColor = NSColor.white
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
-//    var editFinished = false;
     var selectedColor: NSColor = NSColor.white
     var lineWidth: CGFloat = 4.0
     
@@ -76,6 +74,12 @@ class ScreenshotCircleView: ScreenshotBaseOverlayView {
                     }
                 }
             }
+    }
+    
+    override func isOnBorderAt(_ point: NSPoint) -> Bool {
+//        print("lt -- circle point:\(point) selectionRect:\(self.selectionRect)")
+//        return point.isOnEllipse(inRect: self.selectionRect)
+        return NSPoint.isPointOnEllipseBorderInRect(rect: self.selectionRect, pointToCheck: point, tolerance: 0.1)
     }
     
     override func handleForPoint(_ point: NSPoint) -> RetangleResizeHandle {
@@ -204,42 +208,6 @@ class ScreenshotCircleView: ScreenshotBaseOverlayView {
         activeHandle = .none
         dragIng = false
         needsDisplay = true
-        self.addSubviewFromSuperView()
-    }
-    
-    func addSubviewFromSuperView() {
-        self.editFinished = true
-        let superView: ScreenshotOverlayView = self.superview as! ScreenshotOverlayView
-        superView.addCustomSubviews()
-    }
-    
-    override func mouseMoved(with event: NSEvent) {
-        print("lt -- circle mouse moved")
-        let curlocation = event.locationInWindow
-        activeHandle = handleForPoint(curlocation)
-        if (activeHandle != .none) {
-            switch activeHandle {
-            case .top, .bottom:
-                NSCursor.frameResize(position: .top, directions: [.inward, .outward]).set()
-            case .left, .right:
-                NSCursor.frameResize(position: .left, directions: [.inward, .outward]).set()
-            case .topLeft, .bottomRight:
-                NSCursor.frameResize(position: .topLeft, directions: [.inward, .outward]).set()
-            case .topRight, .bottomLeft:
-                NSCursor.frameResize(position: .topRight, directions: [.inward, .outward]).set()
-            default:
-                NSCursor.resizeLeftRight.set()
-                break
-            }
-        }
-        else {
-//            if (self.selectionRect.contains(curlocation)) {
-//                NSCursor.closedHand.set()
-//            }
-//            else {
-//                NSCursor.crosshair.set()
-//            }
-        }
     }
     
     override func hitTest(_ point: NSPoint) -> NSView? {

@@ -31,7 +31,6 @@ class ScreenshotArrowView: ScreenshotBaseOverlayView {
     
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-        
 //        let trackingArea = NSTrackingArea(rect: self.bounds,
 //                                          options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeInActiveApp],
 //                                          owner: self,
@@ -58,7 +57,6 @@ class ScreenshotArrowView: ScreenshotBaseOverlayView {
             let mousePoint: NSPoint = lastMouseLocation!
 
             // 设置箭头的颜色
-//            NSColor.blue.setFill()
             NSColor.clear.setFill()
             selectedColor.setStroke()
             
@@ -102,6 +100,15 @@ class ScreenshotArrowView: ScreenshotBaseOverlayView {
             }
     }
     
+    override func isOnBorderAt(_ point: NSPoint) -> Bool {
+        guard let line1 = initialLocation, let line2 = lastMouseLocation else {
+            print("线条点没有获取到")
+            return false
+        }
+        let flag = NSPoint.isPointOnLine(linePoint1: line1, linePoint2: line2, pointToCheck: point)
+        return flag
+    }
+    
     override func handleForPoint(_ point: NSPoint) -> RetangleResizeHandle {
         if !self.hasSelectionRect {
             return .none
@@ -143,7 +150,7 @@ class ScreenshotArrowView: ScreenshotBaseOverlayView {
         let currentLocation = convert(event.locationInWindow, from: nil)
         
         if activeHandle != .none {
-            var newRect = selectionRect ?? CGRect.zero
+            var newRect = selectionRect
             let lastLocation = lastMouseLocation ?? currentLocation
             
             let deltaX = currentLocation.x - lastLocation.x
@@ -214,14 +221,16 @@ class ScreenshotArrowView: ScreenshotBaseOverlayView {
     }
     
     override func mouseDown(with event: NSEvent) {
-        
         let location = convert(event.locationInWindow, from: nil)
-        initialLocation = location
-        lastMouseLocation = location
-        activeHandle = handleForPoint(location)
-        if NSPointInRect(location, self.selectionRect) {
+        if self.isOnBorderAt(location) {
             self.dragIng = true
         }
+        else {
+            initialLocation = location
+            lastMouseLocation = location
+            activeHandle = handleForPoint(location)
+        }
+       
         needsDisplay = true
     }
     
@@ -230,42 +239,9 @@ class ScreenshotArrowView: ScreenshotBaseOverlayView {
         activeHandle = .none
         dragIng = false
         needsDisplay = true
-        self.addSubviewFromSuperView()
+        print("lt arrow mouse up, \(String(describing: self.initialLocation)) \(String(describing: self.lastMouseLocation))")
     }
-    
-    func addSubviewFromSuperView() {
-        self.editFinished = true
-        let superView: ScreenshotOverlayView = self.superview as! ScreenshotOverlayView
-        superView.addCustomSubviews()
-    }
-    
-    override func mouseMoved(with event: NSEvent) {
-//        let curlocation = event.locationInWindow
-//        activeHandle = handleForPoint(curlocation)
-//        if (activeHandle != .none) {
-//            switch activeHandle {
-//            case .top, .bottom:
-//                NSCursor.frameResize(position: .top, directions: [.inward, .outward]).set()
-//            case .left, .right:
-//                NSCursor.frameResize(position: .left, directions: [.inward, .outward]).set()
-//            case .topLeft, .bottomRight:
-//                NSCursor.frameResize(position: .topLeft, directions: [.inward, .outward]).set()
-//            case .topRight, .bottomLeft:
-//                NSCursor.frameResize(position: .topRight, directions: [.inward, .outward]).set()
-//            default:
-//                NSCursor.resizeLeftRight.set()
-//                break
-//            }
-//        }
-//        else {
-////            if (self.selectionRect.contains(curlocation)) {
-////                NSCursor.closedHand.set()
-////            }
-////            else {
-////                NSCursor.crosshair.set()
-////            }
-//        }
-    }
+
     override func hitTest(_ point: NSPoint) -> NSView? {
         let hitView = super.hitTest(point)
         if hitView == self {

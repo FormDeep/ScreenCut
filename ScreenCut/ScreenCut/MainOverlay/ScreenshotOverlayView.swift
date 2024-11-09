@@ -39,7 +39,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     
     func addCustomSubviews() {
         let subView = self.getSubView()
-        print("lt -- add suview : \(String(describing: subView))")
+//        print("lt -- add suview : \(String(describing: subView))")
         guard subView != nil else {
             return
         }
@@ -125,14 +125,12 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                         return
                     }
                     let view: ScreenshotBaseOverlayView = element as! ScreenshotBaseOverlayView
-//                    let borerHande = view.handleborderForPoint(convert(event.locationInWindow, to: view))
                     let isOnBorder = view.isOnBorderAt(convert(event.locationInWindow, to: view))
                     if isOnBorder {
                         findView = view
                         break
                     }
                 }
-                
                
                 if let view = findView {
                     print("ltl -- mouse down find: \(view)")
@@ -142,6 +140,9 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                         self.operView = view
                     }
                     self.isFindForDown = true // 按下的时候找到了这个内容
+                    self.operView?.editFinished = false
+                    self.operView?.needsDisplay = true
+                    self.operView?.mouseDown(with: event)
                 }
                 else {
                     print("lt -- add subviews inner ")
@@ -149,10 +150,9 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                     self.operView?.editFinished = true
                     self.operView?.needsDisplay = true // 刷新这个View
                     self.addCustomSubviews()
-                    
+                    self.operView?.editFinished = false
+                    self.operView?.mouseDown(with: event)
                 }
-                self.operView?.editFinished = false
-                self.operView?.mouseDown(with: event)
             }
             else {
                 print("lt -- add subviews outer ")
@@ -244,7 +244,6 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
         self.showEditCutBottomView()
     }
     
-    
     //    添加在这个上面的View就不要实现这个方法了
     //    主要鼠标
     override func mouseMoved(with event: NSEvent) {
@@ -296,7 +295,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             else {
                 NSCursor.arrow.set()
             }
-            
+
             return
         }
         
@@ -336,9 +335,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             return kBottomEditRowHeight
         }
     }
-    
-    
-    
+
     func showEditCutBottomView() {
         if (bottomAreaWindow == nil) {
             let contentView = NSHostingView(rootView: EditCutBottomView())
@@ -373,5 +370,4 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
         }
         return NSMakePoint(originX, originY)
     }
-    
 }

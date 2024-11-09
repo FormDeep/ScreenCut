@@ -13,10 +13,6 @@ class ScreenshotBaseOverlayView: NSView {
     
     var editFinished = false;
     
-//    override var canBecomeKeyView: Bool {
-//        return true
-//    }
-    
     func handleborderForPoint(_ point: NSPoint) -> RetangleResizeHandle {
         return .none
     }
