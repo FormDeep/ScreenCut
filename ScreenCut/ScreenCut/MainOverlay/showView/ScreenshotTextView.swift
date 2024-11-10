@@ -8,8 +8,7 @@ import Combine
 class ScreenshotTextView: ScreenshotBaseOverlayView , NSTextViewDelegate{
     var maxFrame: NSRect?
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
-    var selectedColor: NSColor = NSColor.white
-    var lineWidth: CGFloat = 4.0
+    var textSize: CGFloat = 12.0
     var textView: NSTextView = NSTextView(frame: NSMakeRect(0, 0, 0, 0))
     var textIsEditing = false
     var dragIng: Bool = false
@@ -24,38 +23,17 @@ class ScreenshotTextView: ScreenshotBaseOverlayView , NSTextViewDelegate{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.lineWidth = 2.0
         self.textView.backgroundColor = .clear
         self.textView.isVerticallyResizable = true
         self.textView.textContainer?.widthTracksTextView = true  // 让宽度自动跟踪 textView 的宽度
         self.addSubview(self.textView)
-        self.observeTextViewSizeChanges()
-        NotificationCenter.default.addObserver(self, selector: #selector(onChangeFont), name: Notification.Name("text.size.font.change"), object: "")
-        NotificationCenter.default.addObserver(self, selector: #selector(onChangeColor), name: Notification.Name("text.color.change"), object: "")
     }
     
-    private func observeTextViewSizeChanges() {
-//
-//        self.textView.publisher(for: \.textContainer)
-//            .map { $0!.size }
-//               .removeDuplicates()
-//               .sink(receiveValue: { newSize in
-//                   print("textiew size Change: \(newSize)")
-//                   self.needsDisplay = true
-//               })
-//               .store(in: &textCancellables)
-       }
-    
-    @objc func onChangeFont(noti: Notification) {
-        if (textIsEditing) {
-            self.textView.font = .systemFont(ofSize: CGFloat(EditCutBottomShareModel.shared.lineSize))
-            self.textView.frame.size = CGSizeMake(CGFloat(EditCutBottomShareModel.shared.lineSize) * 6, CGFloat(EditCutBottomShareModel.shared.lineSize) + 6)
-        }
-    }
-    
-    @objc func onChangeColor(noti: Notification) {
-        if (textIsEditing) {
-            self.textView.textColor = EditCutBottomShareModel.shared.selectColor.nsColor
-        }
+    func update() {
+        self.textView.textColor = self.selectedColor
+        self.textView.font = .systemFont(ofSize: self.textSize)
+        self.needsLayout = true
     }
     
     required init?(coder: NSCoder) {
@@ -83,14 +61,19 @@ class ScreenshotTextView: ScreenshotBaseOverlayView , NSTextViewDelegate{
         self.needsDisplay = true
     }
     
+    func isEmptyText() -> Bool {
+         let curString: String = self.textView.string.trimmingCharacters(in: .whitespacesAndNewlines)
+        return curString.count == 0
+    }
+    
     override func mouseDown(with event: NSEvent) {
         let location = convert(event.locationInWindow, from: nil)
         if (self.textView.frame.size.width <= 1.0) {
-            self.textView.frame = NSMakeRect(location.x, location.y, CGFloat(EditCutBottomShareModel.shared.lineSize) * 6, CGFloat(EditCutBottomShareModel.shared.lineSize) + 6)
+            self.textView.frame = NSMakeRect(location.x, location.y, self.textSize * 6, self.textSize + 6)
             self.textView.delegate = self;
             self.window?.makeFirstResponder(self.textView)
-            self.textView.font = .systemFont(ofSize: CGFloat(EditCutBottomShareModel.shared.lineSize))
-            self.textView.textColor = EditCutBottomShareModel.shared.selectColor.nsColor
+            self.textView.font = .systemFont(ofSize: self.textSize)
+            self.textView.textColor = self.selectedColor
             self.textView.layer?.cornerRadius = 4.0
             self.textView.wantsLayer = true
             self.textView.layer?.borderWidth = 2.0
@@ -99,9 +82,7 @@ class ScreenshotTextView: ScreenshotBaseOverlayView , NSTextViewDelegate{
         }
         else {
             self.window?.makeFirstResponder(nil)
-
             self.activeHandle = handleForPoint(location)
-
             if self.isOnBorderAt(location) {
                 self.dragIng = true
                 self.lastMouseLoc = convert(event.locationInWindow, from: nil)
@@ -192,10 +173,6 @@ class ScreenshotTextView: ScreenshotBaseOverlayView , NSTextViewDelegate{
         if !self.hasSelectionRect {
             return
         }
-        
-        // 更新填充内容
-        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-//        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
         
         let rect = self.textView.frame
         // 绘制边框

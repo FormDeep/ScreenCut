@@ -120,8 +120,6 @@ enum LineWidthType: Int, CaseIterable, Identifiable {
             return "circlebadge.fill"
         case .Six:
             return "circlebadge.fill"
-        default:
-            return ""
         }
     }
     

@@ -11,6 +11,15 @@ import FileKit
 import ScreenCaptureKit
 import Combine
 
+
+// 通知的类型
+extension Notification.Name {
+    static let kCutTypeChange = Notification.Name("kCutTypeChange")
+    static let kSelectColorTypeChange = Notification.Name("kSelectColorTypeChange")
+    static let kDrawSizeTypeChange = Notification.Name("kDrawSizeTypeChange")
+    static let kTextSizeTypeChange = Notification.Name("kTextSizeTypeChange")
+}
+
 class VarExtension {
     
     static func getTargetName() -> String {
@@ -136,9 +145,11 @@ extension NSPoint {
         for index in 0..<doodlePoints.count - 1 {
             let p1 = doodlePoints[index]
             let p2 = doodlePoints[index + 1]
-            if isPointOnLine(linePoint1: p1, linePoint2: p2, pointToCheck: pointToCheck) {
-                return true
-            }
+                let centerX = (p1.x + p2.x) / 2.0
+                let centerY = (p1.y + p2.y) / 2.0
+                if (abs(pointToCheck.x - centerX) < 4 && abs(pointToCheck.y - centerY) < 4) {
+                    return true
+                }
         }
         return false
     }

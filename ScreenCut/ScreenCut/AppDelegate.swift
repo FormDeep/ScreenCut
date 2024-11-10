@@ -57,7 +57,10 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         }
         
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[] in
-            ScreenshotWindow().makeKeyAndOrderFront(nil)
+            print("lt -- 设置鼠标样式 快捷键")
+            NSCursor.crosshair.set()
+            ScreenshotWindow().orderFrontRegardless()
+//            ScreenshotWindow().makeKeyAndOrderFront(nil)
         }
         
         updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: self)

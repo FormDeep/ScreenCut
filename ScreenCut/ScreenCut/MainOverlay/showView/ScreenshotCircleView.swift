@@ -15,8 +15,6 @@ class ScreenshotCircleView: ScreenshotBaseOverlayView {
     let controlPointDiameter: CGFloat = 8.0
     let controlPointColor: NSColor = NSColor.white
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
-    var selectedColor: NSColor = NSColor.white
-    var lineWidth: CGFloat = 4.0
     
     var hasSelectionRect: Bool {
         return (self.selectionRect.size.width > 0 && self.selectionRect.size.height > 0)
@@ -53,8 +51,8 @@ class ScreenshotCircleView: ScreenshotBaseOverlayView {
         NSColor.red.withAlphaComponent(self.fillOverLayeralpha).setFill()
         dirtyRect.fill()
         
-        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
+//        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
+//        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
         
         let rect = self.selectionRect            // 绘制椭圆
             let path = NSBezierPath(ovalIn: rect)

@@ -2,10 +2,7 @@ import Foundation
 import SwiftUI
 import ScreenCaptureKit
 import AppKit
-
-
-let kBottomEditRowHeight: CGFloat = 45.0
-let kBottomEditRowWidth: CGFloat = 340
+import Combine
 
 // 蒙层页面
 class ScreenshotOverlayView: ScreenshotRectangleView {
@@ -19,32 +16,77 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     var operViews = Array<NSView>() // 存储所有的子View
     var operView: ScreenshotBaseOverlayView? // 当前操作的View
     var isFindForDown = false  // 在mousedown中是不是查找的方式
-    
+    var cancellable: AnyCancellable?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.fillOverLayeralpha = 0.5
-        NotificationCenter.default.addObserver(self, selector: #selector(cutTypeChange), name: Notification.Name(kCutTypeChange), object: nil)
+        self.lineWidth = 2.0
+        self.selectedColor = NSColor.white
+        
+        let cutTypePublisher = NotificationCenter.default.publisher(for: .kCutTypeChange)
+        let selectColorPublisher = NotificationCenter.default.publisher(for: .kSelectColorTypeChange)
+        let drawSizedPublisher = NotificationCenter.default.publisher(for: .kDrawSizeTypeChange)
+        let textSizePublisher = NotificationCenter.default.publisher(for: .kTextSizeTypeChange)
+        
+        cancellable = cutTypePublisher
+            .merge(with: selectColorPublisher, drawSizedPublisher, textSizePublisher)
+            .sink { notification in
+                switch notification.name {
+                case .kCutTypeChange:
+                    self.editFinished = true
+                case .kSelectColorTypeChange, .kDrawSizeTypeChange,.kTextSizeTypeChange:
+                    if self.operView != nil &&  self.operView!.isKind(of: ScreenshotTextView.self) {
+                        self.operView!.editFinished = false // 重新设置内容
+                        self.operView!.needsDisplay = true
+                    }
+                default:
+                    break
+                }
+                self.updateOperView()
+            }
     }
     
-    @objc func cutTypeChange(_ notification: Notification) {
-        self.editFinished = true
-        needsDisplay = true
+    func updateOperView() {
+        if self.operView == nil {
+            return
+        }
+        
+        if !self.operView!.editFinished {
+            self.configSubViewAttr(self.operView!)
+            self.operView!.needsDisplay = true
+        }
     }
     
     func configSubViewAttr(_ view: NSView) {
         var subView:OverlayProtocol = view as! OverlayProtocol
         subView.selectedColor = self.bottomEditItem.selectColor.nsColor
-        subView.lineWidth = CGFloat(self.bottomEditItem.sizeType.rawValue)
+        if view.isKind(of: ScreenshotTextView.self) {
+            (subView as! ScreenshotTextView).textSize = CGFloat(self.bottomEditItem.textSize)
+            (subView as! ScreenshotTextView).update()
+        }
+        else {
+            subView.lineWidth = CGFloat(self.bottomEditItem.sizeType.rawValue)
+        }
     }
     
     func addCustomSubviews() {
         let subView = self.getSubView()
-//        print("lt -- add suview : \(String(describing: subView))")
         guard subView != nil else {
             return
         }
         
+//        删除空的页面
+        if self.operView != nil && self.operView!.isKind(of: ScreenshotTextView.self) {
+            let view:ScreenshotTextView = self.operView as! ScreenshotTextView
+            if (view.isEmptyText()) {
+                view.removeFromSuperview()
+                self.operViews.remove(at: self.operViews.firstIndex(of: view)!)
+            }
+        }
+        
         let curView:ScreenshotBaseOverlayView = subView!
+        self.configSubViewAttr(curView)
         self.addSubview(curView)
         curView.wantsLayer = true;
         curView.layer?.masksToBounds = true
@@ -87,6 +129,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             ScreenCut.screenArea = self.selectionRect
             self.fillOverLayeralpha = 0.5
             self.selectedColor = .white
+            self.becomeFirstResponder()
         } else {
             self.bottomEditItem.cutType = .none
             self.bottomEditItem.selectColor = .red
@@ -216,7 +259,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     }
     
     override func mouseUp(with event: NSEvent) {
-        print("lt -- super mouseup")
+//        print("lt -- super mouseup")
 
         if self.editFinished {
             guard let subView = self.operView else {
@@ -231,7 +274,6 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             }
             self.operView?.needsDisplay = true
             self.operView?.mouseUp(with: event)
-//            print("lt -- 当前绘制的页面： \(subView) \(subView.editFinished) \(self.isFindForDown)")
             return
         }
         
@@ -261,7 +303,6 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                     // 在顶点上
                     if (!view.editFinished) { //在编辑中，就显示这种
                         let handle = view.handleForPoint(convert(event.locationInWindow, to: view))
-//                        print("lt -- handle : \(handle)")
                         if (handle != .none) {
                             switch handle {
                             case .top, .bottom:
@@ -281,7 +322,6 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                     
                     // 2、在边线上
                     let isOnBorder = view.isOnBorderAt(convert(event.locationInWindow, to: view))
-//                    print("lt -- borerHande : \(isOnBorder)")
                     if isOnBorder {
                         NSCursor.openHand.set()
                         return

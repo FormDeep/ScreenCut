@@ -9,6 +9,8 @@ import SwiftUI
 
 let kAreaSelector: String = "Area Selector"
 let kEditImageText: String = "编辑图片"
+let kBottomEditRowHeight: CGFloat = 45.0
+let kBottomEditRowWidth: CGFloat = 340
 
 class EditCutBottomPanel: NSWindow {
 
@@ -22,7 +24,7 @@ class EditCutBottomPanel: NSWindow {
     }
 }
 
-let FirstIconLength: CGFloat = 15
+let FirstIconLength: CGFloat = 20
 let FirstIconPadding: CGFloat = 5
 
 struct EditCutBottomView: View {
@@ -54,6 +56,7 @@ struct EditCutBottomView: View {
     var body: some View {
         VStack {
             HStack {
+                Spacer()
                 ForEach(EditCutBottmType.allCases) { type in
                     createShapeImageView(for: type)
                         .onTapGesture {
@@ -61,8 +64,8 @@ struct EditCutBottomView: View {
                         }
                 }
                 Divider()
-                    .frame(width: 2, height: 30)  // 设置分割线的高度
-                    .background(Color.black.opacity(0.3))  // 设置分割线的颜色
+                    .frame(width: 2, height: 25)  // 设置分割线的高度
+                    .background(Color.white.opacity(0.3))  // 设置分割线的颜色
                 
                 ForEach(EditActionBottmType.allCases) { type in
                     createActionImageView(for: type)
@@ -70,13 +73,14 @@ struct EditCutBottomView: View {
                             actionItem.actionType = type
                         }
                 }
+                Spacer()
             }.frame(height: 40.0)
             if bottomEditItem.cutType != .none {
                 SecondEditView()
             }
         }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .background(Color.black.opacity(0.7))
-            .frame(width: 350.0)
+            .frame(width: kBottomEditRowWidth)
             .frame(maxWidth: .infinity)
     }
 }
@@ -109,7 +113,7 @@ struct SecondEditView: View {
         HStack {
             if bottomEditItem.cutType == .text {
                 HStack {
-                    Picker("  文字:", selection: $bottomEditItem.lineSize) {
+                    Picker("  文字:", selection: $bottomEditItem.textSize) {
                         ForEach(12...100, id: \.self) { value in
                             Text("\(value)").tag(value)
                         }
@@ -120,7 +124,7 @@ struct SecondEditView: View {
                     .cornerRadius(5)
                     .foregroundColor(.white)
                     .padding()
-                }.frame(width: 140.0)
+                }.frame(width: 120.0)
             }
             else {
                 HStack {
@@ -130,8 +134,11 @@ struct SecondEditView: View {
                                 self.bottomEditItem.sizeType = type
                             }
                     }
-                }.frame(width: 150.0)
+                }.frame(width: 120.0)
             }
+            Divider()
+                .frame(width: 2, height: 25) 
+                .background(Color.white.opacity(0.3))
             
             HStack {
                 ForEach(SelectedColorHandle.allCases) { type in
@@ -143,7 +150,7 @@ struct SecondEditView: View {
             }.frame(width: 200.0)
         }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .background(Color.black.opacity(0.7))
-            .frame(width: 350.0 ,height: 40)
+            .frame(width: kBottomEditRowWidth ,height: 40)
             .frame(maxWidth: .infinity)
     }
 }

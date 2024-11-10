@@ -187,7 +187,6 @@ class ScreenCut {
         let flippedY = CGFloat(display.height) - ScreenCut.screenArea!.origin.y - ScreenCut.screenArea!.size.height
         configuration.sourceRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
         
-        print("获取图片")
         SCScreenshotManager.captureImage(contentFilter: contentFilter, configuration: configuration) { image, error in
             print("lt -- image : eror : %@", error.debugDescription)
             guard let cgImage = image else {

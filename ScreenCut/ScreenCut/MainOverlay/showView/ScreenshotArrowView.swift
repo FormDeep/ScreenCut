@@ -15,8 +15,8 @@ class ScreenshotArrowView: ScreenshotBaseOverlayView {
     let controlPointDiameter: CGFloat = 8.0
     let controlPointColor: NSColor = NSColor.white
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
-    var selectedColor: NSColor = NSColor.white
-    var lineWidth: CGFloat = 2.0
+//    var selectedColor: NSColor = NSColor.white
+//    var lineWidth: CGFloat = 2.0
     var hasSelectionRect: Bool {
         return (self.selectionRect.size.width > 0 && self.selectionRect.size.height > 0)
     }
@@ -31,20 +31,11 @@ class ScreenshotArrowView: ScreenshotBaseOverlayView {
     
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-//        let trackingArea = NSTrackingArea(rect: self.bounds,
-//                                          options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeInActiveApp],
-//                                          owner: self,
-//                                          userInfo: nil)
-//        self.addTrackingArea(trackingArea)
     }
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         maxFrame = dirtyRect
-        
-        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
-
         
         NSColor.red.withAlphaComponent(fillOverLayeralpha).setFill()
         dirtyRect.fill()

@@ -9,8 +9,9 @@ import Foundation
 import AppKit
 
 
-class ScreenshotBaseOverlayView: NSView {
-    
+class ScreenshotBaseOverlayView: NSView, OverlayProtocol {
+    var selectedColor: NSColor = .white
+    var lineWidth: CGFloat = 2.0
     var editFinished = false;
     
     func handleborderForPoint(_ point: NSPoint) -> RetangleResizeHandle {

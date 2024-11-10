@@ -19,8 +19,8 @@ class ScreenshotRectangleView: ScreenshotBaseOverlayView {
     let controlPointDiameter: CGFloat = 8.0
     let controlPointColor: NSColor = NSColor.white
     var fillOverLayeralpha: CGFloat = 0.0 // 默认值
-    var selectedColor: NSColor = NSColor.white
-    var lineWidth: CGFloat = 4.0
+//    var selectedColor: NSColor = NSColor.white
+//    var lineWidth: CGFloat = 4.0
     
     var hasSelectionRect: Bool {
         return (self.selectionRect.size.width > 0 && self.selectionRect.size.height > 0)
@@ -54,8 +54,8 @@ class ScreenshotRectangleView: ScreenshotBaseOverlayView {
         }
         
         // 更新填充内容
-        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
+//        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
+//        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
         
         let rect = selectionRect
         // 绘制边框

@@ -14,24 +14,13 @@ import Combine
 let kCutTypeChange = "kCutTypeChange"
 
 class EditCutBottomShareModel: ObservableObject {
-    static let shared = EditCutBottomShareModel(cutType: .none, sizeType: .Two, lineSize: 12, selectColor: .red)
-    
-//    private var cancellables = Set<AnyCancellable>()
+    static let shared = EditCutBottomShareModel(cutType: .none, sizeType: .Two, textSize: 12, selectColor: .red)
 
-    init(cutType: EditCutBottmType, sizeType: LineWidthType, lineSize: Int, selectColor: SelectedColorHandle) {
+    init(cutType: EditCutBottmType, sizeType: LineWidthType, textSize: Int, selectColor: SelectedColorHandle) {
         self.cutType = cutType
         self.sizeType = sizeType
-        self.lineSize = lineSize
+        self.textSize = textSize
         self.selectColor = selectColor
-        
-//            $cutType
-//                .sink { newValue in
-////                    EditCutBottomShareModel.shared.cutType = newValue
-////                    self.cutType = newValue
-//                    print("lt -- new value : \(newValue)")
-//                    NotificationCenter.default.post(name: Notification.Name(kCutTypeChange), object: newValue)
-//                }
-//                .store(in: &cancellables)
     }
     
     @Published var cutType: EditCutBottmType = .none {
@@ -39,15 +28,21 @@ class EditCutBottomShareModel: ObservableObject {
             NotificationCenter.default.post(name: Notification.Name(kCutTypeChange), object: cutType)
         }
     }
-    @Published var sizeType: LineWidthType = .Two // 用来设置绘制的宽度大小，也可能是字体大小
-    @Published var lineSize: Int = 12 { // 写字的颜色
+    
+    @Published var sizeType: LineWidthType = .Two { // 用来设置绘制的宽度大小，也可能是字体大小
         didSet {
-            NotificationCenter.default.post(name: Notification.Name("text.size.font.change"), object: "")
+            NotificationCenter.default.post(name: .kDrawSizeTypeChange, object: sizeType)
+        }
+    }
+    
+    @Published var textSize: Int = 12 { // 写字的颜色
+        didSet {
+            NotificationCenter.default.post(name: .kTextSizeTypeChange, object: textSize)
         }
     }
     @Published var selectColor: SelectedColorHandle = .red {
         didSet {
-            NotificationCenter.default.post(name: Notification.Name("text.color.change"), object: "")
+            NotificationCenter.default.post(name: .kSelectColorTypeChange, object: selectColor)
         }
     }
 }

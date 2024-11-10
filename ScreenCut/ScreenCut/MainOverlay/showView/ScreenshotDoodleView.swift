@@ -3,8 +3,8 @@ import Cocoa
 class ScreenshotDoodleView: ScreenshotBaseOverlayView {
 //    private var lines: [[NSPoint]] = [] // 存储绘制的线条
     private var currentLine: [NSPoint] = [] // 当前正在绘制的线条
-    var selectedColor: NSColor = NSColor.white
-    var lineWidth: CGFloat = 4.0
+//    var selectedColor: NSColor = NSColor.white
+//    var lineWidth: CGFloat = 4.0
     var dragIng: Bool = false
     var dragLastLoc: NSPoint?
     let controlPointColor: NSColor = NSColor.white
@@ -77,8 +77,8 @@ class ScreenshotDoodleView: ScreenshotBaseOverlayView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
-        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
+//        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
+//        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
         
         // 设置绘制颜色
         selectedColor.setStroke()
