@@ -265,7 +265,10 @@ class ScreenCut {
             if UserDefaults.standard.bool(forKey: konlySaveInPasteBoard) {
                 ScreenCut.copyImageToPasteboard(cgImage)
             }
-            ScreenCut.saveImageToFile(cgImage)
+            else {
+                ScreenCut.saveImageToFile(cgImage)
+                ScreenCut.copyImageToPasteboard(cgImage)
+            }
         }
     }
 }
