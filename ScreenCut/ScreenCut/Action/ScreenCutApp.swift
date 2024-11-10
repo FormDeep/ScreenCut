@@ -14,7 +14,6 @@ extension KeyboardShortcuts.Name {
     static let fullScreenCut = Self("fullScreenCut")
 }
 
-
 @main
 struct ScreenCutApp: App {
     
@@ -35,7 +34,8 @@ struct ScreenCutApp: App {
             Button("选择截屏") {
                 print("lt -- 设置鼠标样式 按钮样式")
                 NSCursor.crosshair.set()
-                ScreenshotWindow().makeKeyAndOrderFront(nil)
+                let rootW = ScreenshotWindow()
+                rootW.makeKeyAndOrderFront(nil)
             }
             Divider()
             Button("偏好设置") {

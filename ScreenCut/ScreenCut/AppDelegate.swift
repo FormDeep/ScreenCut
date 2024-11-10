@@ -36,7 +36,7 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         Task {
-//            await ScreenCut.updateScreenContent()
+            await ScreenCut.updateScreenContent()
 //            ScreenCut.transforRequest("How are you") { result, flag in
 //                let text = flag ? result: "翻译失败"
 //                print("lt -- 翻译内容 \n \(String(describing: text))")
@@ -59,8 +59,7 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[] in
             print("lt -- 设置鼠标样式 快捷键")
             NSCursor.crosshair.set()
-            ScreenshotWindow().orderFrontRegardless()
-//            ScreenshotWindow().makeKeyAndOrderFront(nil)
+            ScreenshotWindow().makeKeyAndOrderFront(nil)
         }
         
         updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: self)
@@ -77,19 +76,6 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     static func stopGlobalMouseMonitor() {
         mousePointer.orderOut(nil)
         if let monitor = mouseMonitor { NSEvent.removeMonitor(monitor); mouseMonitor = nil }
-    }
-    
-    static func getSCDisplayWithMouse() -> SCDisplay? {
-        if let displays = ScreenCut.availableContent?.displays {
-            for display in displays {
-                if let currentDisplayID = ScreenCut.getScreenWithMouse()?.displayID {
-                    if display.displayID == currentDisplayID {
-                        return display
-                    }
-                }
-            }
-        }
-        return nil
     }
 }
 

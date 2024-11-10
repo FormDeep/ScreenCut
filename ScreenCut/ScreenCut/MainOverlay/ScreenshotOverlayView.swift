@@ -35,6 +35,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                 switch notification.name {
                 case .kCutTypeChange:
                     self.editFinished = true
+                    self.needsDisplay = true
                 case .kSelectColorTypeChange, .kDrawSizeTypeChange,.kTextSizeTypeChange:
                     if self.operView != nil &&  self.operView!.isKind(of: ScreenshotTextView.self) {
                         self.operView!.editFinished = false // 重新设置内容

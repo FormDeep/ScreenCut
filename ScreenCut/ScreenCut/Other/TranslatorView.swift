@@ -10,10 +10,9 @@ import SwiftUI
 class TranslatorViewWindowController : NSWindowController {
     
     convenience init(transText: String?) {
-        let originX = NSScreen.main!.frame.size.width/2 - 270
-        let originY = NSScreen.main!.frame.size.height/2 - 200
+       
         let window = NSWindow(
-            contentRect: NSRect(x: originX, y: originY, width: 540, height: 400),
+            contentRect: NSScreen.main!.frame,
             styleMask: [.titled, .closable, .resizable],
             backing: .buffered,
             defer: false
@@ -23,7 +22,7 @@ class TranslatorViewWindowController : NSWindowController {
         window.setFrameAutosaveName("翻译")
         window.title = "翻译"
         window.level = .screenSaver
-        window.contentView = NSHostingView(rootView: OCRView(resultText: transText))
+        window.contentView = NSHostingView(rootView: TranslatorView(resultText: transText))
         
         self.init(window: window)
     }
@@ -36,7 +35,17 @@ class TranslatorViewWindowController : NSWindowController {
 struct TranslatorView: View {
     var resultText: String?
     var body: some View {
-        Text(resultText ?? "没有文字内容")
+        VStack {
+            Button("拷贝") {
+                let paste = NSPasteboard.general
+                paste.clearContents()
+                paste.setString(resultText ?? "", forType: .string)
+                ToastWindow(message:"拷贝成功").showToast()
+
+            }
+            Text(resultText ?? "没有文字内容")
+                .padding(EdgeInsets(top: 40, leading: 40, bottom: 40, trailing: 40))
+        }
     }
 }
 

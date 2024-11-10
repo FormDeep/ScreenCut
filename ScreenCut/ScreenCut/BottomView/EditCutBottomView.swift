@@ -137,7 +137,7 @@ struct SecondEditView: View {
                 }.frame(width: 120.0)
             }
             Divider()
-                .frame(width: 2, height: 25) 
+                .frame(width: 2, height: 25)
                 .background(Color.white.opacity(0.3))
             
             HStack {
