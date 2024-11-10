@@ -52,8 +52,7 @@ class ScreenCut {
                 print(" : %@", error.debugDescription)
                 return
             }
-            copyImageToPasteboard(img)
-            ScreenCut.saveImageToFile(img)
+            self.onlyPasteboardOfSameTime(img)
         }
     }
     
@@ -253,15 +252,20 @@ class ScreenCut {
                     print("Error occurred: \(error)")
                 }
         } receiveValue: { cgImage in
-            DispatchQueue.main.async {
-                ScreenCut.copyImageToPasteboard(cgImage)
-                ScreenCut.saveImageToFile(cgImage)
-            }
+            self.onlyPasteboardOfSameTime(cgImage)
         }.store(in: &cancellables)
     }
     
+    static func onlyPasteboardOfSameTime(_ cgImage: CGImage) {
+        DispatchQueue.main.async {
+            if UserDefaults.standard.bool(forKey: kplayAudioOfFinished) {
+                print("lt -- 播放音效")
+                NSSound(named: "Ping")?.play()
+            }
+            if UserDefaults.standard.bool(forKey: konlySaveInPasteBoard) {
+                ScreenCut.copyImageToPasteboard(cgImage)
+            }
+            ScreenCut.saveImageToFile(cgImage)
+        }
+    }
 }
-
-
-
-

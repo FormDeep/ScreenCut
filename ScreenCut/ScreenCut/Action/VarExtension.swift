@@ -10,7 +10,7 @@ import SwiftUI
 import FileKit
 import ScreenCaptureKit
 import Combine
-
+import FileKit
 
 // 通知的类型
 extension Notification.Name {
@@ -19,6 +19,15 @@ extension Notification.Name {
     static let kDrawSizeTypeChange = Notification.Name("kDrawSizeTypeChange")
     static let kTextSizeTypeChange = Notification.Name("kTextSizeTypeChange")
 }
+
+let kplayAudioOfFinished = "playAudioOfFinished"
+let ksavePasteboardSameTime = "savePasteboardSameTime"
+let konlySaveInPasteBoard = "onlySaveInPasteBoard"
+let kautoUpdate = "autoUpdate"
+let kautoLaunchByComputer = "autoLaunchByComputer"
+let kSelectedSavePath = "kSelectedSavePath1"
+
+
 
 class VarExtension {
     

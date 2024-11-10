@@ -118,7 +118,7 @@ struct SecondEditView: View {
                             Text("\(value)").tag(value)
                         }
                     }
-                    .pickerStyle(MenuPickerStyle()) // 使用下拉菜单样式
+                    .pickerStyle(DefaultPickerStyle()) // 使用下拉菜单样式
                     .frame(width: 120)
                     .background(.clear)
                     .cornerRadius(5)

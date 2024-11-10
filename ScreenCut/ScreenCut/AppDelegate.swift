@@ -13,6 +13,8 @@ import AppKit
 import KeyboardShortcuts
 import Sparkle
 
+var defaultSavepath:String = "";
+
 let mousePointer = NSWindow(contentRect: NSRect(x: -70, y: -70, width: 70, height: 70), styleMask: [.borderless], backing: .buffered, defer: false)
 var keyMonitor: Any? // key监视器
 var mouseMonitor: Any? // 鼠标监视器
@@ -34,27 +36,19 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     static let shared = AppDelegate()
     var updaterController: SPUStandardUpdaterController! // 更新
     
+    @AppStorage(kSelectedSavePath) private var selectedPath: String = defaultSavepath
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
         Task {
-            await ScreenCut.updateScreenContent()
-//            ScreenCut.transforRequest("How are you") { result, flag in
-//                let text = flag ? result: "翻译失败"
-//                print("lt -- 翻译内容 \n \(String(describing: text))")
-//            }
-//            LocalRequestPublisher(LocalNetworkAPI.translate(text: "How are you"), responseType: Dictionary<String, String>.self)
-//                .sink(receiveCompletion: { completion in
-//                    switch completion {
-//                    case .finished:
-//                        print("请求完成")
-//                    case .failure(let error):
-//                        print("请求失败：\(error)")
-//                    }
-//                }, receiveValue: { trans in
-//                    let text = trans["translated_text"]
-//                    print("翻译内容: \(String(describing: text))")
-//                })
-//                .store(in: &networkcancellables)
+//            await ScreenCut.updateScreenContent()
+            
         }
+        
+        defaultSavepath = VarExtension.createTargetDirIfNotExit() // 先创建目录
+        if (self.selectedPath.count == 0) {
+            self.selectedPath = defaultSavepath
+        }
+        print("lt --- selctePath: \(self.selectedPath)")
         
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[] in
             print("lt -- 设置鼠标样式 快捷键")

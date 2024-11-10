@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-//struct AboutView: View {
-//    var body: some View {
-//        Text("Hello word!")
-//    }
-//}
-
 struct AboutView: View {
     var body: some View {
         VStack(alignment: .leading) {
@@ -22,7 +16,7 @@ struct AboutView: View {
                     Text("ScreenCut")
                         .fontWeight(.bold)
                         .font(.title)
-                    Text("版本 1.0")
+                    Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
                         .font(.system(size: 14))
                 }
                 Spacer()
