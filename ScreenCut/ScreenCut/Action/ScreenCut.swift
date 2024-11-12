@@ -228,9 +228,15 @@ class ScreenCut {
             // 翻转 Y 坐标
             let flippedY = CGFloat(display.height) - ScreenCut.screenArea!.origin.y - ScreenCut.screenArea!.size.height
             configuration.sourceRect = CGRectMake( ScreenCut.screenArea!.origin.x, flippedY, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
+            configuration.destinationRect = CGRectMake( 0, 0, ScreenCut.screenArea!.size.width, ScreenCut.screenArea!.size.height)
+            configuration.scalesToFit = true
+            configuration.width = Int(ScreenCut.screenArea!.size.width)
+            configuration.height = Int(ScreenCut.screenArea!.size.height)
+            configuration.preservesAspectRatio = true
+//            print("lt -- source \(configuration.sourceRect) desc:\(configuration.destinationRect)")
             
             SCScreenshotManager.captureImage(contentFilter: contentFilter, configuration: configuration) { image, error in
-                print("lt -- image : eror : %@", error.debugDescription)
+//                print("lt -- image \(String(describing: image)): eror : %@", error.debugDescription)
                 
                 if error == nil && image != nil {
                     promise(.success(image!))
@@ -259,7 +265,7 @@ class ScreenCut {
     static func onlyPasteboardOfSameTime(_ cgImage: CGImage) {
         DispatchQueue.main.async {
             if UserDefaults.standard.bool(forKey: kplayAudioOfFinished) {
-                print("lt -- 播放音效")
+//                print("lt -- 播放音效")
                 NSSound(named: "Ping")?.play()
             }
             if UserDefaults.standard.bool(forKey: konlySaveInPasteBoard) {

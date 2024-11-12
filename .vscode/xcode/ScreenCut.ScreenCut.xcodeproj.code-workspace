@@ -1,0 +1,44 @@
+{
+    "folders": [
+        {
+            "name": "ScreenCut/ScreenCut/ScreenCut.xcodeproj",
+            "path": "../.."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "test_appcast.xml": true,
+            "readmeImgs": true,
+            "backend": true,
+            "appcast_create.py": true,
+            "appcast.xml": true,
+            "README.md": true,
+            "LICENSE": true,
+            ".genaiscript": true,
+            ".vscode/xcode/fifo": true,
+            ".vscode/xcode/bundles": true
+        },
+        "search.exclude": {
+            "test_appcast.xml": true,
+            "readmeImgs": true,
+            "backend": true,
+            "appcast_create.py": true,
+            "appcast.xml": true,
+            "README.md": true,
+            "LICENSE": true,
+            ".genaiscript": true,
+            ".vscode/xcode/fifo": true,
+            ".vscode/xcode/bundles": true
+        },
+        "swift.autoGenerateLaunchConfigurations": false,
+        "swift.disableAutoResolve": true,
+        "swift.sourcekit-lsp.disable": true,
+        "swift.disableSwiftPackageManagerIntegration": true,
+        "swift.searchSubfoldersForPackages": false
+    },
+    "extensions": {
+        "unwantedRecommendations": [
+            "sswg.swift-lang"
+        ]
+    }
+}

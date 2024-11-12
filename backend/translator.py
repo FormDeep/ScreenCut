@@ -13,6 +13,5 @@ def translate(text):
     # 生成翻译
     with torch.no_grad():
         outputs = model.generate(input_ids=inputs['input_ids'], attention_mask=inputs['attention_mask'])
-    
     # 解码输出文本
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
