@@ -58,11 +58,16 @@ class EditActionShareModel: ObservableObject {
             case .translate:
                 ScreenCut.ocrThenTransRequest()
             case .cancel, .download:
-                if actionType == .download {
-                    ScreenCut.cutImage()
+                DispatchQueue.main.async { [self] in
+                    if actionType == .download {
+                        NotificationCenter.default.post(name:.kDownloadClick, object: nil)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            ScreenCut.cutImage()
+                        }
+                    }
+                    for w in NSApplication.shared.windows.filter({ $0.title == kAreaSelector || $0.title == kEditImageText}) { w.close() }
                 }
-                for w in NSApplication.shared.windows.filter({ $0.title == kAreaSelector || $0.title == kEditImageText}) { w.close() }
-                AppDelegate.stopGlobalMouseMonitor()
+                
             case .none:
                 break
             }

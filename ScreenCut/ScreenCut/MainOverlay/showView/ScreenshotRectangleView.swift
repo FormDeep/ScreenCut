@@ -53,10 +53,6 @@ class ScreenshotRectangleView: ScreenshotBaseOverlayView {
             return
         }
         
-        // 更新填充内容
-//        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-//        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
-        
         let rect = selectionRect
         // 绘制边框
         let dashedBorder = NSBezierPath(rect: rect)

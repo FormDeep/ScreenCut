@@ -77,9 +77,6 @@ class ScreenshotDoodleView: ScreenshotBaseOverlayView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
-//        lineWidth = CGFloat(EditCutBottomShareModel.shared.sizeType.rawValue)
-//        selectedColor = EditCutBottomShareModel.shared.selectColor.nsColor
-        
         // 设置绘制颜色
         selectedColor.setStroke()
         

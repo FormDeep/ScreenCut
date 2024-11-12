@@ -18,6 +18,7 @@ extension Notification.Name {
     static let kSelectColorTypeChange = Notification.Name("kSelectColorTypeChange")
     static let kDrawSizeTypeChange = Notification.Name("kDrawSizeTypeChange")
     static let kTextSizeTypeChange = Notification.Name("kTextSizeTypeChange")
+    static let kDownloadClick = Notification.Name("kDownloadClick")
 }
 
 let kplayAudioOfFinished = "playAudioOfFinished"

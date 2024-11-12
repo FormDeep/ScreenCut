@@ -15,10 +15,6 @@ import Sparkle
 
 var defaultSavepath:String = "";
 
-let mousePointer = NSWindow(contentRect: NSRect(x: -70, y: -70, width: 70, height: 70), styleMask: [.borderless], backing: .buffered, defer: false)
-var keyMonitor: Any? // key监视器
-var mouseMonitor: Any? // 鼠标监视器
-
 extension NSScreen {
     var displayID: CGDirectDisplayID? {
         return deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as? CGDirectDisplayID
@@ -63,12 +59,6 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     
     @objc func onCheckUpdate(noti: Notification) {
         updaterController.checkForUpdates(self)
-    }
-
-    //     停止鼠标检测器
-    static func stopGlobalMouseMonitor() {
-        mousePointer.orderOut(nil)
-        if let monitor = mouseMonitor { NSEvent.removeMonitor(monitor); mouseMonitor = nil }
     }
 }
 

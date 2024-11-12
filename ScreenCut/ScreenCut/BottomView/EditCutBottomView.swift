@@ -29,8 +29,9 @@ let FirstIconPadding: CGFloat = 5
 
 struct EditCutBottomView: View {
     
+//     这个看是否需要修噶 EditCutBottomShareModel.shared ，将它修改为observer类型
     @StateObject private var bottomEditItem = EditCutBottomShareModel.shared
-    @StateObject private var actionItem = EditActionShareModel.shared
+    @ObservedObject private var actionItem = EditActionShareModel.shared
 
     private func createShapeImageView(for type: EditCutBottmType) -> some View {
         Image(nsImage: NSImage(systemSymbolName: type.imgName, accessibilityDescription: nil) ?? NSImage())

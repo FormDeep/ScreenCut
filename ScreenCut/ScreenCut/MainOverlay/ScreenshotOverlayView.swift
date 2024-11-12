@@ -17,6 +17,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     var operView: ScreenshotBaseOverlayView? // 当前操作的View
     var isFindForDown = false  // 在mousedown中是不是查找的方式
     var cancellable: AnyCancellable?
+    @ObservedObject private var actionItem = EditActionShareModel.shared
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,7 +29,8 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
         let selectColorPublisher = NotificationCenter.default.publisher(for: .kSelectColorTypeChange)
         let drawSizedPublisher = NotificationCenter.default.publisher(for: .kDrawSizeTypeChange)
         let textSizePublisher = NotificationCenter.default.publisher(for: .kTextSizeTypeChange)
-        
+        let downloadPublisher = NotificationCenter.default.publisher(for: .kDownloadClick)
+
         cancellable = cutTypePublisher
             .merge(with: selectColorPublisher, drawSizedPublisher, textSizePublisher)
             .sink { notification in
@@ -46,6 +48,13 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                 }
                 self.updateOperView()
             }
+        
+        _ = downloadPublisher.sink { notification in
+            if !self.editFinished {
+                self.editFinished = true
+                self.needsDisplay = true
+            }
+        }
     }
     
     func updateOperView() {
@@ -232,6 +241,8 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     override func keyDown(with event: NSEvent) {
         print("lt -- 这个键盘按键：\(event)")
         switch event.keyCode {
+        case 36: // 回车键盘
+            actionItem.actionType = .download
         case 51:
 //             删除按键
             guard let curView = self.operView else {
