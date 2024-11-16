@@ -4,7 +4,7 @@
 PROJECT_PATH="./ScreenCut" # 替换为你的项目路径
 SCHEME="ScreenCut"                    # 替换为你的项目 Scheme 名称
 CONFIGURATION="Release"           # 构建配置，如 Debug 或 Release
-OUTPUT_DIR="./ScreenCut/Builds"     # 打包输出目录
+OUTPUT_DIR="./Builds"     # 打包输出目录
 DMG_NAME="$OUTPUT_DIR/$SCHEME.dmg" # DMG 文件路径
 ZIP_NAME="$OUTPUT_DIR/$SCHEME.zip" # ZIP 文件路径
 
@@ -15,8 +15,8 @@ echo "开始打包 macOS 项目..."
 cd $PROJECT_PATH || { echo "无法进入项目目录 $PROJECT_PATH"; exit 1; }
 
 # 清理项目
-# echo "清理项目..."
-# xcodebuild clean -scheme $SCHEME -configuration $CONFIGURATION || { echo "清理失败"; exit 1; }
+echo "清理项目..."
+xcodebuild clean -scheme $SCHEME -configuration $CONFIGURATION || { echo "清理失败"; exit 1; }
 
 # 构建项目
 echo "构建项目..."
