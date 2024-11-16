@@ -1,5 +1,10 @@
 {
     "files.watcherExclude": {
         "**/target": true
+    },
+    "editor.quickSuggestions": {
+        "comments": "off",
+        "strings": "off",
+        "other": "off"
     }
 }

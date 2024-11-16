@@ -34,7 +34,12 @@
         "swift.disableAutoResolve": true,
         "swift.sourcekit-lsp.disable": true,
         "swift.disableSwiftPackageManagerIntegration": true,
-        "swift.searchSubfoldersForPackages": false
+        "swift.searchSubfoldersForPackages": false,
+        "editor.quickSuggestions": {
+            "comments": "off",
+            "strings": "off",
+            "other": "off"
+        }
     },
     "extensions": {
         "unwantedRecommendations": [
