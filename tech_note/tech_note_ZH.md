@@ -4,4 +4,5 @@
 3. 更新 Tag 版本号，并执行以下命令：   <br/>
    ```bash
    ./build_local.sh && ./create_release.sh
-   ```
+   ``` <br/>
+4. 更新信息到brew库，执行 `./brew.sh`

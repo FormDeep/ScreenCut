@@ -4,4 +4,5 @@
 3. Update the tag version and execute the following command:  <br/>
    ```bash
    ./build_local.sh &&  ./create_release.sh
-   ```
+   ``` <br/>
+4. Update information to the brew repository, execute ./brew.sh
