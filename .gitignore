@@ -68,3 +68,8 @@ fastlane/test_output
 .vscode/
 
 ./ScreenCut/Server/__pycache__
+
+.env
+
+./ScreenCut/Builds/*
+./ScreenCut/build/*
