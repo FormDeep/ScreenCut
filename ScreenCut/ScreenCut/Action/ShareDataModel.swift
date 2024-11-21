@@ -6,6 +6,9 @@
 //
 //  Created by helinyu on 2024/10/26.
 //
+
+//底部操作栏：1、选中类型、粗细、颜色等属性；2、具体选中时的操作
+
 import Foundation
 import AppKit
 import Combine
