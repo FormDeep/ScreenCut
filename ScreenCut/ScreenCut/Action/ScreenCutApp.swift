@@ -32,10 +32,8 @@ struct ScreenCutApp: App {
             }
             .padding()
             Button("选择截屏") {
-//                print("lt -- 设置鼠标样式 按钮样式")
                 NSCursor.crosshair.set()
-                let rootW = ScreenshotWindow()
-                rootW.makeKeyAndOrderFront(nil)
+                ScreenshotWindow().makeKeyAndOrderFront(nil)
             }
             Divider()
             Button("偏好设置") {

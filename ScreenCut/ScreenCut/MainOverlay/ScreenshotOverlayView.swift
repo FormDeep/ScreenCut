@@ -301,7 +301,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     //    添加在这个上面的View就不要实现这个方法了
     //    主要鼠标
     override func mouseMoved(with event: NSEvent) {
-//        print("lt -- moved: \(event)")
+        print("lt -- moved: \(self.editFinished)")
         if (self.editFinished) {
             if (self.subviews.count > 0) {
                 for element in self.subviews.reversed() {
@@ -354,6 +354,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
         
         let curlocation = convert(event.locationInWindow, from: nil)
         activeHandle = self.handleForPoint(curlocation)
+        print("lt -- active handle \(activeHandle)")
         if (activeHandle != .none) {
             switch activeHandle {
             case .top, .bottom:
