@@ -8,6 +8,7 @@
 import SwiftUI
 import KeyboardShortcuts
 import Sparkle
+import ServiceManagement
 
 let kLeftTextWidth = 120.0
 let kRightFirstSpaceWidth = 20.0
@@ -23,7 +24,6 @@ struct PreferenceSettingsView: View {
     enum PathSelectionThpe: String, CaseIterable {
         case defaultS, desktopS, documentS, imageS
         var id: Self { self }
-        //        static var allCases: [PathSelectionThpe] = [defaultS, desktopS, documentS, imageS]
         
         var path: String {
             switch self {
@@ -156,6 +156,19 @@ struct PreferenceSettingsView: View {
                             Spacer().frame(width: kRightFirstSpaceWidth)
                             Toggle("开机自动启动", isOn: $autoLaunchByComputer)
                                 .toggleStyle(CheckboxToggleStyle())
+                        }
+                        .onChange(of: autoLaunchByComputer) { oldValue, newValue in
+                            print("lt -- new value : \(newValue)")
+                            // 切换主应用启动设置
+                            do {
+                                if newValue {
+                                    try SMAppService.mainApp.register()
+                                } else {
+                                    try SMAppService.mainApp.unregister()
+                                }
+                            } catch {
+                                print("Failed to update launch at login setting: \(error)")
+                            }
                         }
                         HStack {
                             Spacer().frame(width: kLeftTextWidth)
