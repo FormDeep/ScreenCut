@@ -6,3 +6,10 @@
    ./build_local.sh && ./create_release.sh
    ``` <br/>
 4. 更新信息到brew库，执行 `./brew.sh`
+
+
+
+
+# 项目依赖本地
+路径 : Third_lib/xxx  <br/>
+[依赖库的图片显示](./2024-11-30 12.38.59.png)
