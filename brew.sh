@@ -11,7 +11,7 @@ fi
 
 # 设置变量
 REPO_URL="git@github.com:VCBSstudio/homebrew-Tap.git"
-LOCAL_DIR="../homebrew-Tap/"
+LOCAL_DIR="./../homebrew-Tap"
 CASK_FILE="Casks/ScreenCut.rb" # 目标文件路径
 NEW_VERSION="$TAG"  # 新版本号      
 NEW_URL="https://github.com/VCBSstudio/ScreenCut/releases/download/$NEW_VERSION/ScreenCut.dmg" # 新版本的下载链接
@@ -47,13 +47,14 @@ if [ ! -d "$LOCAL_DIR" ]; then
   git clone "$REPO_URL" "$LOCAL_DIR"
 else
   echo "Repository already cloned. Pulling latest changes..."
-  cd "$LOCAL_DIR" && git pull && cd ..
+  cd "$LOCAL_DIR" && git pull && cd $OLDPWD
 fi
 
 # 修改 cask 文件
 echo "Modifying ScreenCut.rb..."
-cd "$(dirname "$0")"
+echo "$(dirname "$0")"
 cd "$LOCAL_DIR" || exit
+
 
 echo "Current directory: $(pwd)"
 echo "new version : $NEW_VERSION"
@@ -63,18 +64,18 @@ ls -l "$CASK_FILE"
 
 
 # 更新版本号
-sed -i '' "s/^    version \".*\"/  version \"$NEW_VERSION\"/" "$CASK_FILE"
-# sed -i '' "s/version \".*\"/version \"$NEW_VERSION\"/" "$CASK_FILE"
+sed -i '' "s/version \".*\"/version \"$NEW_VERSION\"/" "$CASK_FILE"
+# sed -i '' "s/^    version \".*\"/  version \"$NEW_VERSION\"/" "$CASK_FILE"
 
 
 # 更新 SHA256
-# sed -i '' "s/sha256 \".*\"/sha256 \"$NEW_SHA256\"/" "$CASK_FILE"
-
-sed -i '' "s/^    sha256 \".*\"/  sha256 \"$NEW_SHA256\"/" "$CASK_FILE"
+sed -i '' "s/sha256 \".*\"/sha256 \"$NEW_SHA256\"/" "$CASK_FILE"
+# sed -i '' "s/^    sha256 \".*\"/  sha256 \"$NEW_SHA256\"/" "$CASK_FILE"
 
 # 更新下载链接
 # sed -i '' "s/url \".*\"/url \"$NEW_URL\"/" "$CASK_FILE"
-sed -i '' "s|^    url \".*\"|  url \"$NEW_URL\"|" "$CASK_FILE"
+# sed -i '' "s|^    url \".*\"|  url \"$NEW_URL\"|" "$CASK_FILE"
+sed -i "" "s|url \"[^\"]*\"|url \"$NEW_URL\"|" $CASK_FILE
 
 # 检查修改
 if git diff --quiet; then
