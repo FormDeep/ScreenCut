@@ -46,13 +46,11 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         print("lt --- selctePath: \(self.selectedPath)")
         
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[] in
-            print("lt -- 设置鼠标样式 快捷键")
             NSCursor.crosshair.set()
             ScreenshotWindow().makeKeyAndOrderFront(nil)
         }
         
         updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: self)
-//        print("lt -- udpater controller: \(String(describing: updaterController))")
         NotificationCenter.default.addObserver(self, selector: #selector(onCheckUpdate), name: Notification.Name("update.app.noti"), object: nil)
 
     }

@@ -11,7 +11,7 @@ import AppKit
 import Combine
 
 
-let kCutTypeChange = "kCutTypeChange"
+//let kCutTypeChange = "kCutTypeChange"
 
 class EditCutBottomShareModel: ObservableObject {
     static let shared = EditCutBottomShareModel(cutType: .none, sizeType: .Two, textSize: 12, selectColor: .red)
@@ -25,7 +25,7 @@ class EditCutBottomShareModel: ObservableObject {
     
     @Published var cutType: EditCutBottmType = .none {
         didSet {
-            NotificationCenter.default.post(name: Notification.Name(kCutTypeChange), object: cutType)
+            NotificationCenter.default.post(name: .kCutTypeChange, object: cutType)
         }
     }
     

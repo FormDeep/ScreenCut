@@ -17,6 +17,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     var operView: ScreenshotBaseOverlayView? // 当前操作的View
     var isFindForDown = false  // 在mousedown中是不是查找的方式
     var cancellable: AnyCancellable?
+    var downCancelble: AnyCancellable?
     @ObservedObject private var actionItem = EditActionShareModel.shared
 
     override init(frame: CGRect) {
@@ -34,6 +35,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
         cancellable = cutTypePublisher
             .merge(with: selectColorPublisher, drawSizedPublisher, textSizePublisher)
             .sink { notification in
+                print("其他的点击内容 \(notification)")
                 switch notification.name {
                 case .kCutTypeChange:
                     self.editFinished = true
@@ -49,11 +51,13 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                 self.updateOperView()
             }
         
-        _ = downloadPublisher.sink { notification in
+        downCancelble = downloadPublisher.sink { notification in
             if !self.editFinished {
                 self.editFinished = true
                 self.needsDisplay = true
             }
+            
+            self.dismissBottomView()
         }
     }
     
@@ -413,6 +417,12 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             self.bottomAreaWindow!.orderFront(self)
         }
         self.bottomAreaWindow!.setIsVisible(true)
+    }
+    
+    func dismissBottomView() {
+        if (self.bottomAreaWindow != nil) && self.bottomAreaWindow!.isVisible {
+            self.bottomAreaWindow?.setIsVisible(false)
+        }
     }
     
     func getBottomFrameOrigin() -> NSPoint {
