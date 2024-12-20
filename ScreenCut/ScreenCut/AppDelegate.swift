@@ -28,6 +28,10 @@ extension SCDisplay {
 }
 
 class AppDelegate : NSObject, NSApplicationDelegate {
+    
+    
+    var screentId: CGDirectDisplayID?
+    
     var isResizing = false
     static let shared = AppDelegate()
     var updaterController: SPUStandardUpdaterController! // 更新
@@ -35,6 +39,7 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     @AppStorage(kSelectedSavePath) private var selectedPath: String = defaultSavepath
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        
         Task {
             await ScreenCut.updateScreenContent()
         }

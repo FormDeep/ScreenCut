@@ -9,6 +9,16 @@ import Combine
 var cancellables = Set<AnyCancellable>()
 
 
+func findCurrentScreen(id: CGDirectDisplayID, displays:[SCDisplay]) -> SCDisplay? {
+    for display in displays {
+        if (id == display.displayID) {
+            return display
+        }
+    }
+    return nil
+}
+
+
 class ScreenCut {
     
     static var availableContent: SCShareableContent?
@@ -41,7 +51,11 @@ class ScreenCut {
         guard let displays = content?.displays else {
             return
         }
-        let display: SCDisplay = displays.first!
+//        let display: SCDisplay = displays.first! // 如何判断当前选择的是是哪个屏幕
+        let display: SCDisplay = findCurrentScreen(
+            id: AppDelegate.shared.screentId!,
+            displays: displays
+        )!
         let contentFilter = SCContentFilter(display: display, excludingWindows: [])
         let configuration = SCStreamConfiguration()
         configuration.width = display.width
@@ -221,7 +235,11 @@ class ScreenCut {
                 promise(.failure(NSError(domain: "display error", code: -1, userInfo: [NSLocalizedDescriptionKey: "没有获取设备"])))
                 return
             }
-            let display: SCDisplay = displays.first!
+            let display: SCDisplay = findCurrentScreen(
+                id: AppDelegate.shared.screentId!,
+                displays: displays
+            )!
+            print("lt -- displays : \(displays)")
             let contentFilter = SCContentFilter(display: display, excludingWindows: [])
             let configuration = SCStreamConfiguration()
             
