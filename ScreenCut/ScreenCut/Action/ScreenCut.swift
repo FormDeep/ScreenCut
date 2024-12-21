@@ -18,6 +18,16 @@ func findCurrentScreen(id: CGDirectDisplayID, displays:[SCDisplay]) -> SCDisplay
     return nil
 }
 
+// 这个是查找Screen的内容
+func findCurrentScreen(id: CGDirectDisplayID, screens:[NSScreen]) -> NSScreen? {
+    for screen in screens {
+        if (id == screen.displayID) {
+            return screen
+        }
+    }
+    return nil
+}
+
 
 class ScreenCut {
     

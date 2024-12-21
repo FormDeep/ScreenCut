@@ -392,6 +392,29 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             return kBottomEditRowHeight
         }
     }
+    
+    func moveWindowToScreen(window: NSWindow, targetScreenId: CGDirectDisplayID) {
+        // 获取所有屏幕
+        let screens = NSScreen.screens
+        
+        let display: NSScreen = findCurrentScreen(
+            id: AppDelegate.shared.screentId!,
+            screens: NSScreen.screens
+        )!
+
+        let screenFrame = display.frame
+        let windowSize = window.frame.size
+        print("lt -- screen frame : \(screenFrame)")
+        print("lt -- window size: \(windowSize)")
+        
+        let newOrigin = CGPoint(
+            x: screenFrame.origin.x + (screenFrame.size.width - windowSize.width) / 2,
+            y: screenFrame.origin.y + (screenFrame.size.height - windowSize.height) / 2
+        )
+        
+        window.setFrameOrigin(newOrigin)
+
+    }
 
     func showEditCutBottomView() {
         if (bottomAreaWindow == nil) {
@@ -411,9 +434,14 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             areaPanel.isMovableByWindowBackground = true
             areaPanel.orderFront(nil)
             self.bottomAreaWindow =  areaPanel
+            moveWindowToScreen(window: areaPanel, targetScreenId: AppDelegate.shared.screentId!)
         }
         else {
             self.bottomAreaWindow!.setFrameOrigin(self.getBottomFrameOrigin())
+            moveWindowToScreen(
+                window: self.bottomAreaWindow!,
+                targetScreenId: AppDelegate.shared.screentId!
+            )
             self.bottomAreaWindow!.orderFront(self)
         }
         self.bottomAreaWindow!.setIsVisible(true)

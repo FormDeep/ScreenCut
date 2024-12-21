@@ -41,7 +41,7 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         
         Task {
-            await ScreenCut.updateScreenContent()
+//            await ScreenCut.updateScreenContent()
         }
         
         defaultSavepath = VarExtension.createTargetDirIfNotExit() // 先创建目录
