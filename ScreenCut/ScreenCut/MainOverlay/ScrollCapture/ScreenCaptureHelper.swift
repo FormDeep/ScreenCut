@@ -36,14 +36,16 @@ class ScreenCaptureHelper: NSObject, SCStreamDelegate, SCStreamOutput {
         guard let displays = content?.displays else {
             return
         }
-        let display: SCDisplay = findCurrentScreen(
-            id: AppDelegate.shared.screentId!,
-            displays: displays
-        )!
-        let contentFilter = SCContentFilter(display: display, excludingWindows: [])
+        
+//        let display: SCDisplay = findCurrentScreen(
+//            id: AppDelegate.shared.screentId!,
+//            displays: displays
+//        )!
+        let display = content?.displays.first!
+        let contentFilter = SCContentFilter(display: display!, excludingWindows: [])
         let configuration = SCStreamConfiguration()
-        configuration.width = display.width
-        configuration.height = display.height
+        configuration.width = display!.width
+        configuration.height = display!.height
         
         captureStream = SCStream(
             filter: contentFilter,
@@ -53,7 +55,7 @@ class ScreenCaptureHelper: NSObject, SCStreamDelegate, SCStreamOutput {
         
         // 启动捕获
         do {
-//            try captureStream?.start()
+            try captureStream?.addStreamOutput(self, type: .screen, sampleHandlerQueue: DispatchQueue.main)
             try captureStream?.startCapture()
             print("Started screen capture")
         } catch {
@@ -62,8 +64,32 @@ class ScreenCaptureHelper: NSObject, SCStreamDelegate, SCStreamOutput {
     }
     
     // MARK: - SCStreamDelegate
+    func stream(_ stream: SCStream, didStopWithError error: any Error) {
+        print("lt -- didStopWithError")
+    }
+
+    /**
+     @abstract outputVideoEffectDidStartForStream:
+     @param stream the SCStream object
+     @discussion notifies the delegate that the stream's overlay video effect has started.
+    */
+    @available(macOS 14.0, *)
+    func outputVideoEffectDidStart(for stream: SCStream) {
+        print("lt -- outputVideoEffectDidStart")
+    }
+
+    /**
+     @abstract stream:outputVideoEffectDidStart:
+     @param stream the SCStream object
+     @discussion notifies the delegate that the stream's overlay video  effect has stopped.
+    */
+    func outputVideoEffectDidStop(for stream: SCStream) {
+        print("lt -- outputVideoEffectDidStop")
+    }
     
-    func stream(_ stream: SCStream, didOutputSampleBuffer sampleBuffer: CMSampleBuffer) {
+    //     protocol
+    func stream(_ stream: SCStream, didOutputSampleBuffer sampleBuffer: CMSampleBuffer, of type: SCStreamOutputType) {
+        print("lt -- didOutputSampleBuffer")
         // 将 sampleBuffer 转换为 NSImage
         if let capturedImageRef = imageFromSampleBuffer(sampleBuffer) {
             let capturedImage = NSImage(cgImage: capturedImageRef, size: .zero)
