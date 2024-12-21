@@ -8,7 +8,9 @@
 import Cocoa
 import ScreenCaptureKit
 
-class ScreenCaptureHelper: NSObject, SCStreamDelegate {
+// 
+
+class ScreenCaptureHelper: NSObject, SCStreamDelegate, SCStreamOutput {
     
     private var captureStream: SCStream?
     private var capturedImages: [NSImage] = []
@@ -89,16 +91,16 @@ class ScreenCaptureHelper: NSObject, SCStreamDelegate {
     
     private func scrollDown() {
         // 使用 CGEvent 模拟滚动
-//        let scrollEvent = CGEvent.init(
-//            scrollWheelEvent2Source: .scrollWheel,
-//            units: .line,
-//            wheelCount: 1,
-//            wheel1: <#T##Int32#>,
-//            wheel2: <#T##Int32#>,
-//            wheel3: <#T##Int32#>
-//        )
-//        let scrollEvent = CGEvent.scrollWheelEvent(with: .scrollWheel, location: .zero, units: .line, wheelCount: 1, scrollEventDelta1: 0, scrollEventDelta2: -3)
-//        scrollEvent?.post(tap: .cghidEventTap)
+        if let scrollEvent = CGEvent.init(
+            scrollWheelEvent2Source: nil,
+            units: .line,
+            wheelCount: 1,
+            wheel1: -2,
+            wheel2: 0,
+            wheel3: 0
+        ) {
+            scrollEvent.post(tap: .cghidEventTap)
+        }
     }
     
     private func createFinalImage() {

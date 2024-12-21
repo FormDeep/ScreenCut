@@ -57,7 +57,10 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         
         updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: self)
         NotificationCenter.default.addObserver(self, selector: #selector(onCheckUpdate), name: Notification.Name("update.app.noti"), object: nil)
-
+        
+        // 这里测试
+        let captureHelper = ScreenCaptureHelper()
+        captureHelper.startCapturing(scrollHeight: 600, screenWidth: 1400, screenHeight: 3000)
     }
     
     @objc func onCheckUpdate(noti: Notification) {
