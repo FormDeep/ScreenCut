@@ -1,5 +1,5 @@
-git@github.com:RxSwift/RxSwift.git
-git@github.com:ReactiveSwift/ReactiveSwift.git
+git@github.com:ReactiveCocoa/ReactiveSwift.git
+git@github.com:ReactiveX/RxSwift.git
 git@github.com:Alamofire/Alamofire.git
 git@github.com:nvzqz/FileKit.git
 git@github.com:sparkle-project/Sparkle.git
