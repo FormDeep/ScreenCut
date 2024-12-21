@@ -87,7 +87,7 @@ class ScreenCut {
         let destinationURL: CFURL = URL(string: curPath)! as CFURL
         let destination = CGImageDestinationCreateWithURL(destinationURL, kUTTypePNG, 1, nil)
         guard let destination = destination else {
-            print("保存路径没有创建成功")
+//            print("保存路径没有创建成功")
             return
         }
         CGImageDestinationAddImage(destination, image, nil)

@@ -41,14 +41,14 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         
         Task {
-//            await ScreenCut.updateScreenContent()
+            await ScreenCut.updateScreenContent()
         }
         
         defaultSavepath = VarExtension.createTargetDirIfNotExit() // 先创建目录
         if (self.selectedPath.count == 0) {
             self.selectedPath = defaultSavepath
         }
-        print("lt --- selctePath: \(self.selectedPath)")
+//        print("lt --- selctePath: \(self.selectedPath)")
         
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[] in
             NSCursor.crosshair.set()
