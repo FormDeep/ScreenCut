@@ -61,7 +61,6 @@ class ScreenCut {
         guard let displays = content?.displays else {
             return
         }
-//        let display: SCDisplay = displays.first! // 如何判断当前选择的是是哪个屏幕
         let display: SCDisplay = findCurrentScreen(
             id: AppDelegate.shared.screentId!,
             displays: displays
@@ -249,7 +248,7 @@ class ScreenCut {
                 id: AppDelegate.shared.screentId!,
                 displays: displays
             )!
-            print("lt -- displays : \(displays)")
+//            print("lt -- displays : \(displays)")
             let contentFilter = SCContentFilter(display: display, excludingWindows: [])
             let configuration = SCStreamConfiguration()
             
