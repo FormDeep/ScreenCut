@@ -8,8 +8,6 @@
 import Cocoa
 import ScreenCaptureKit
 
-// 
-
 class ScreenCaptureHelper: NSObject, SCStreamDelegate, SCStreamOutput {
     
     private var captureStream: SCStream?
@@ -29,60 +27,90 @@ class ScreenCaptureHelper: NSObject, SCStreamDelegate, SCStreamOutput {
         captureScreen()
     }
     
-    private func captureScreen() {
-        
+    
+    func captureScreen() {
+        checkScreenRecordingPermission()
         
         let content = ScreenCut.availableContent
-        guard let displays = content?.displays else {
+        guard let displays = content?.displays, let display = displays.first else {
+            print("No available displays")
             return
         }
         
-//        let display: SCDisplay = findCurrentScreen(
-//            id: AppDelegate.shared.screentId!,
-//            displays: displays
-//        )!
-        let display = content?.displays.first!
-        let contentFilter = SCContentFilter(display: display!, excludingWindows: [])
-        let configuration = SCStreamConfiguration()
-        configuration.width = display!.width
-        configuration.height = display!.height
+        let contentFilter = SCContentFilter(display: display, excludingWindows: [])
+        let config = SCStreamConfiguration()
+        config.width = display.width
+        config.height = display.height
+        config.pixelFormat = kCVPixelFormatType_32BGRA
+        config.minimumFrameInterval = CMTimeMake(value: 1, timescale: 30) // 30 FPS
         
-        captureStream = SCStream(
-            filter: contentFilter,
-            configuration: configuration,
-            delegate: self
-        )
-        
-        // 启动捕获
         do {
-            try captureStream?.addStreamOutput(self, type: .screen, sampleHandlerQueue: DispatchQueue.main)
-            try captureStream?.startCapture()
-            print("Started screen capture")
+            captureStream = SCStream(filter: contentFilter, configuration: config, delegate: self)
+            print("Capture stream initialized successfully")
         } catch {
-            print("Failed to start screen capture: \(error.localizedDescription)")
+            print("Failed to initialize capture stream: \(error.localizedDescription)")
         }
     }
+    
+    
+    func checkScreenRecordingPermission() {
+        let isTrusted = CGPreflightScreenCaptureAccess()
+        if !isTrusted {
+            print("Screen recording permission is not granted. Please enable it in System Preferences.")
+        }
+    }
+    
+    
+    //    private func captureScreen() {
+    //        let content = ScreenCut.availableContent
+    //        guard let displays = content?.displays, let display = displays.first else {
+    //            print("No available displays")
+    //            return
+    //        }
+    //        let contentFilter = SCContentFilter(display: display, excludingWindows: [])
+    //
+    //        let configuration = SCStreamConfiguration()
+    //
+    //        configuration.width = display.width
+    //        configuration.height = display.height
+    //
+    //        configuration.pixelFormat = kCVPixelFormatType_32BGRA
+    //        configuration.minimumFrameInterval = CMTimeMake(value: 1, timescale: 30) // 设置帧率
+    //
+    //        captureStream = SCStream(filter: contentFilter, configuration: configuration, delegate: self)
+    //
+    //        do {
+    //            let sampleHandlerQueue = DispatchQueue(label: "com.example.videoFrameHandlerQueue")
+    ////            try captureStream?.addStreamOutput(self, type: .screen, sampleHandlerQueue: sampleHandlerQueue)
+    ////            DispatchQueue.main.async {
+    ////                self.captureStream?.startCapture()
+    ////                print("Started screen capture")
+    ////            }
+    //        } catch {
+    //            print("Failed to start screen capture: \(error.localizedDescription)")
+    //        }
+    //    }
     
     // MARK: - SCStreamDelegate
     func stream(_ stream: SCStream, didStopWithError error: any Error) {
         print("lt -- didStopWithError")
     }
-
+    
     /**
      @abstract outputVideoEffectDidStartForStream:
      @param stream the SCStream object
      @discussion notifies the delegate that the stream's overlay video effect has started.
-    */
+     */
     @available(macOS 14.0, *)
     func outputVideoEffectDidStart(for stream: SCStream) {
         print("lt -- outputVideoEffectDidStart")
     }
-
+    
     /**
      @abstract stream:outputVideoEffectDidStart:
      @param stream the SCStream object
      @discussion notifies the delegate that the stream's overlay video  effect has stopped.
-    */
+     */
     func outputVideoEffectDidStop(for stream: SCStream) {
         print("lt -- outputVideoEffectDidStop")
     }
