@@ -19,3 +19,6 @@
 [submodule "third_lib/RxSwift"]
 	path = third_lib/RxSwift
 	url = git@github.com:ReactiveX/RxSwift.git
+[submodule "third_lib/swift-composable-architecture"]
+	path = third_lib/swift-composable-architecture
+	url = git@github.com:pointfreeco/swift-composable-architecture.git
