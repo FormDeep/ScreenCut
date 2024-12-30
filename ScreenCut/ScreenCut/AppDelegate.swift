@@ -59,21 +59,22 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(onCheckUpdate), name: Notification.Name("update.app.noti"), object: nil)
         
         
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-    //            let captureHelper = ScreenCaptureHelper()
-    //            captureHelper.startCapturing(scrollHeight: 600, screenWidth: 1400, screenHeight: 3000)
-                
-              
-                Task {
-                    let desktopURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!
-                    let outputURL = desktopURL.appendingPathComponent("ScreenRecording.mov")
-                    let capture = ScreenRecorder()
-                    await capture.startRecording(outputURL: outputURL)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        capture.stopRecording()
-                    }
-                }                
-       }
+//        这个暂时先不处理
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//            //            let captureHelper = ScreenCaptureHelper()
+//            //            captureHelper.startCapturing(scrollHeight: 600, screenWidth: 1400, screenHeight: 3000)
+//            
+//            
+//            Task {
+//                let desktopURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!
+//                let outputURL = desktopURL.appendingPathComponent("ScreenRecording.mov")
+//                let capture = ScreenRecorder()
+//                await capture.startRecording(outputURL: outputURL)
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                    capture.stopRecording()
+//                }
+//            }                
+//        }
       
        
     }
