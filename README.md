@@ -1,3 +1,5 @@
+[中文文档](./README_ZH.md)
+
 ScreenCut is a screenshot and annotation tool developed for the Mac platform, providing rich screenshot and drawing functions for quick operation and sharing. Here are its main features and how to use it:
 ---
 ### Installation
@@ -29,8 +31,8 @@ This tool is based on **macOS 15**, compatibility with other macOS versions may 
 5. **Translation Function**  
    - Currently supports **Chinese to English translation**.  
    - Translation is realized based on a large language model, which needs to be configured by yourself.  
-     - Configuration tutorial: [reference link](https://hly-tech.gitbook.io/front-end/front-end/apple/library/coreml/zhi-xing-python-jiao-ben-diao-yong-ai/shi-yong- rest-api)  
-     - Configuration code: [translate.py](. /backend/translate.py)  
+     - Configuration tutorial:[reference link](https://hly-tech.gitbook.io/front-end/front-end/apple/library/coreml/zhi-xing-python-jiao-ben-diao-yong-ai/shi-yong-rest-api)  
+     - Configuration code: [translate.py](./backend/translate.py)  
 6. **Style customization  
    - Selectable font size and line thickness.  
    - Customizable colors.  
@@ -41,12 +43,12 @@ Enter “Preferences” through the menu bar icon in the upper right corner to c
 **Control + X**: Trigger the translate to English function.
 ### Preview of screenshot drawing effect
 The following picture shows the effect of ScreenCut's screenshot and drawing functions:
-! [Screenshot drawing effect](. /readmeImgs/image.png)
+![Screenshot drawing effect](./readmeImgs/image.png)
 ----
 This is a simple and practical tool for developers, designers, and user groups who need to quickly annotate.
 ---
 # developer
-[Steps for packaging and uploading Releases] (. /tech_note/tech_note_ZH.md)
+[Steps for packaging and uploading Releases](./tech_note/tech_note_ZH.md)
 
 
 Translated with DeepL.com (free version)
