@@ -17,6 +17,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     var operView: ScreenshotBaseOverlayView? // 当前操作的View
     var isFindForDown = false  // 在mousedown中是不是查找的方式
     var cancellable: AnyCancellable?
+    var downCancelble: AnyCancellable?
     @ObservedObject private var actionItem = EditActionShareModel.shared
 
     override init(frame: CGRect) {
@@ -34,6 +35,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
         cancellable = cutTypePublisher
             .merge(with: selectColorPublisher, drawSizedPublisher, textSizePublisher)
             .sink { notification in
+//                print("其他的点击内容 \(notification)")
                 switch notification.name {
                 case .kCutTypeChange:
                     self.editFinished = true
@@ -49,11 +51,13 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                 self.updateOperView()
             }
         
-        _ = downloadPublisher.sink { notification in
+        downCancelble = downloadPublisher.sink { notification in
             if !self.editFinished {
                 self.editFinished = true
                 self.needsDisplay = true
             }
+            
+            self.dismissBottomView()
         }
     }
     
@@ -162,7 +166,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     }
     
     override func mouseDown(with event: NSEvent) {
-        print("lt -- super mouse down")
+//        print("lt -- super mouse down")
         
         if (self.editFinished) {
 //            0 是否有ziviews，如果没有，就添加，如果有就进行1处理
@@ -198,7 +202,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                     self.operView?.mouseDown(with: event)
                 }
                 else {
-                    print("lt -- add subviews inner ")
+//                    print("lt -- add subviews inner ")
                     self.isFindForDown = false
                     self.operView?.editFinished = true
                     self.operView?.needsDisplay = true // 刷新这个View
@@ -208,7 +212,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
                 }
             }
             else {
-                print("lt -- add subviews outer ")
+//                print("lt -- add subviews outer ")
                 self.isFindForDown = false
                 self.operView?.editFinished = true
                 self.addCustomSubviews()
@@ -239,7 +243,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     }
     
     override func keyDown(with event: NSEvent) {
-        print("lt -- 这个键盘按键：\(event)")
+//        print("lt -- 这个键盘按键：\(event)")
         switch event.keyCode {
         case 36: // 回车键盘
             actionItem.actionType = .download
@@ -262,7 +266,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             }
             curView.removeFromSuperview()
             let index = self.operViews.firstIndex(of: curView)
-            print("lt -- index:\(String(describing: index)) curView:\(curView)")
+//            print("lt -- index:\(String(describing: index)) curView:\(curView)")
             self.operViews.remove(at: index!)
             self.operView = nil
         default:
@@ -275,7 +279,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
 
         if self.editFinished {
             guard let subView = self.operView else {
-                print("lt -- subview is nil")
+//                print("lt -- subview is nil")
                 return
             }
             if (self.isFindForDown) {
@@ -301,7 +305,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
     //    添加在这个上面的View就不要实现这个方法了
     //    主要鼠标
     override func mouseMoved(with event: NSEvent) {
-//        print("lt -- moved: \(event)")
+//        print("lt -- moved: \(self.editFinished)")
         if (self.editFinished) {
             if (self.subviews.count > 0) {
                 for element in self.subviews.reversed() {
@@ -354,6 +358,7 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
         
         let curlocation = convert(event.locationInWindow, from: nil)
         activeHandle = self.handleForPoint(curlocation)
+//        print("lt -- active handle \(activeHandle)")
         if (activeHandle != .none) {
             switch activeHandle {
             case .top, .bottom:
@@ -387,6 +392,30 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             return kBottomEditRowHeight
         }
     }
+    
+    func moveWindowToScreen(window: NSWindow, targetScreenId: CGDirectDisplayID) {
+        guard NSScreen.screens.count > 1 else {
+            return
+        }
+        
+        let display: NSScreen = findCurrentScreen(
+            id: AppDelegate.shared.screentId!,
+            screens: NSScreen.screens
+        )!
+
+        let screenFrame = display.frame
+        let windowFrame = window.frame
+        print("lt -- screen frame : \(screenFrame)")
+        print("lt -- window size: \(windowFrame)")
+        
+        let originPoint = getBottomFrameOrigin()
+        let newOrigin = NSMakePoint(
+            originPoint.x + screenFrame.origin.x,
+            originPoint.y + screenFrame.origin.y
+        )
+        print("lt -- selectionArea: \(self.selectionRect) \(newOrigin)")
+        window.setFrameOrigin(newOrigin)
+    }
 
     func showEditCutBottomView() {
         if (bottomAreaWindow == nil) {
@@ -406,12 +435,23 @@ class ScreenshotOverlayView: ScreenshotRectangleView {
             areaPanel.isMovableByWindowBackground = true
             areaPanel.orderFront(nil)
             self.bottomAreaWindow =  areaPanel
+            moveWindowToScreen(window: areaPanel, targetScreenId: AppDelegate.shared.screentId!)
         }
         else {
             self.bottomAreaWindow!.setFrameOrigin(self.getBottomFrameOrigin())
+            moveWindowToScreen(
+                window: self.bottomAreaWindow!,
+                targetScreenId: AppDelegate.shared.screentId!
+            )
             self.bottomAreaWindow!.orderFront(self)
         }
         self.bottomAreaWindow!.setIsVisible(true)
+    }
+    
+    func dismissBottomView() {
+        if (self.bottomAreaWindow != nil) && self.bottomAreaWindow!.isVisible {
+            self.bottomAreaWindow?.setIsVisible(false)
+        }
     }
     
     func getBottomFrameOrigin() -> NSPoint {

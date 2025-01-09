@@ -28,6 +28,10 @@ extension SCDisplay {
 }
 
 class AppDelegate : NSObject, NSApplicationDelegate {
+    
+    
+    var screentId: CGDirectDisplayID?
+    
     var isResizing = false
     static let shared = AppDelegate()
     var updaterController: SPUStandardUpdaterController! // 更新
@@ -35,6 +39,7 @@ class AppDelegate : NSObject, NSApplicationDelegate {
     @AppStorage(kSelectedSavePath) private var selectedPath: String = defaultSavepath
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        
         Task {
             await ScreenCut.updateScreenContent()
         }
@@ -43,18 +48,35 @@ class AppDelegate : NSObject, NSApplicationDelegate {
         if (self.selectedPath.count == 0) {
             self.selectedPath = defaultSavepath
         }
-        print("lt --- selctePath: \(self.selectedPath)")
+//        print("lt --- selctePath: \(self.selectedPath)")
         
         KeyboardShortcuts.onKeyDown(for: .selectedAreaCut) {[] in
-            print("lt -- 设置鼠标样式 快捷键")
             NSCursor.crosshair.set()
             ScreenshotWindow().makeKeyAndOrderFront(nil)
         }
         
         updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: self)
-//        print("lt -- udpater controller: \(String(describing: updaterController))")
         NotificationCenter.default.addObserver(self, selector: #selector(onCheckUpdate), name: Notification.Name("update.app.noti"), object: nil)
-
+        
+        
+//        这个暂时先不处理
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//            //            let captureHelper = ScreenCaptureHelper()
+//            //            captureHelper.startCapturing(scrollHeight: 600, screenWidth: 1400, screenHeight: 3000)
+//            
+//            
+//            Task {
+//                let desktopURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!
+//                let outputURL = desktopURL.appendingPathComponent("ScreenRecording.mov")
+//                let capture = ScreenRecorder()
+//                await capture.startRecording(outputURL: outputURL)
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                    capture.stopRecording()
+//                }
+//            }                
+//        }
+      
+       
     }
     
     @objc func onCheckUpdate(noti: Notification) {

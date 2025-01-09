@@ -8,13 +8,31 @@
 import Foundation
 import AppKit
 
+func findCurrentScreen() -> CGDirectDisplayID? {
+    let mouseLocation = NSEvent.mouseLocation
+    let screens = NSScreen.screens
+    for screen in screens {
+        let screenFrame = screen.frame
+        if screenFrame.contains(mouseLocation) {
+            let description = screen.deviceDescription
+            print("Mouse is on screen with ID: \(description)")
+            return screen.displayID
+        }
+    }
+    return nil
+}
+
+
 class ScreenshotWindow: NSWindow {
     
     var parentView:ScreenshotOverlayView?
     
     init(_ contentRect: NSRect = NSScreen.main!.frame, backing bufferingType: NSWindow.BackingStoreType = .buffered, defer flag: Bool = false, size: NSSize = NSSize.zero) {
-        super.init(contentRect: contentRect, styleMask: [  .closable, .borderless,.resizable], backing: bufferingType, defer: flag)
-        let overlayView = ScreenshotOverlayView(frame: contentRect)
+        super.init(contentRect: contentRect, styleMask: [  .closable, .borderless], backing: bufferingType, defer: flag)
+        let rect = NSRect(x: 0, y: 0, width: contentRect.size.width, height: contentRect.size.height)
+        print("lt --- content Rect : \(contentRect) --- rect : \(rect)")
+        AppDelegate.shared.screentId = findCurrentScreen()
+        let overlayView = ScreenshotOverlayView(frame: rect)
         self.isOpaque = false
         self.hasShadow = false
         self.level = .screenSaver - 1
@@ -22,9 +40,6 @@ class ScreenshotWindow: NSWindow {
         self.backgroundColor = NSColor.clear
         self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         self.isReleasedWhenClosed = false
-//        self.contentView?.addSubview(overlayView)
-//        print("lt -- content view: \(String(describing: self.contentView))")
-//        self.contentView = overlayView
         self.contentView?.addSubview(overlayView)
         parentView = overlayView
     }
@@ -37,44 +52,3 @@ class ScreenshotWindow: NSWindow {
        return true
     }
 }
-
-//class OverlayWindow: NSWindow {
-//    override var canBecomeKey: Bool {
-//       return true
-//    }
-//}
-//
-//class ScreenshotOverlayWindowController: NSWindowController {
-//    
-//    convenience init() {
-//    
-//        let windowFrame = CGRectMake(0, 0, NSScreen.main!.frame.size.width, NSScreen.main!.frame.size.height + 100)
-//        let window = OverlayWindow()
-//        window.setFrame(windowFrame, display: true)
-//        window.styleMask = [.borderless];
-//
-//        let overlayView = ScreenshotOverlayView(frame: windowFrame)
-//        
-//        window.center()
-//        window.backgroundColor = NSColor.clear
-//        window.setFrameAutosaveName("overlay")
-//        window.title = kAreaSelector
-//        window.level = .screenSaver - 1
-//        window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-//        window.isOpaque = true
-////        window.contentView = overlayView
-//        window.contentView?.addSubview(overlayView)
-//        
-//        self.init(window: window)
-//    }
-//
-//    override func showWindow(_ sender: Any?) {
-//        super.showWindow(sender)
-//    }
-//    
-//    override func windowDidLoad() {
-//        super.windowDidLoad()
-//        
-//        self.window!.toggleFullScreen(nil)
-//    }
-//}

@@ -1,81 +1,57 @@
-# ScreenCut: Screenshot Tool for Mac
-
-ScreenCut is a screenshot and annotation tool for macOS, offering various features for quick operations and sharing. Below are its key functionalities and usage instructions:
-
----
-
 [中文文档](./README_ZH.md)
 
+ScreenCut is a screenshot and annotation tool developed for the Mac platform, providing rich screenshot and drawing functions for quick operation and sharing. Here are its main features and how to use it:
 ---
-
 ### Installation
-
 Install ScreenCut using [Homebrew](https://brew.sh/):
-
 ```bash
-brew tap vcbsstudio/tap
+brew tap vcbsstudio/tap 
 brew install --cask ScreenCut
 ```
-
 ---
-
-### Supported System
-
-Developed specifically for **macOS 15**. Compatibility with other macOS versions may require additional testing.
-
----
-
+### System
+This tool is based on **macOS 15**, compatibility with other macOS versions may require further testing.
+`` --- ### Functionality
 ### Features
-
-1. **Screenshot**  
-   Capture the current screen or a selected area.
-
+1. **Screenshot Function**  
+   Directly take a screenshot of the current screen or selected area.
+   
 2. **Drawing Tools**  
    - Rectangle drawing  
    - Ellipse drawing  
    - Arrow drawing  
    - Freehand drawing  
-
-3. **Text Features**  
-   - Add text  
-   - Adjust font size  
-
+   
+3. **Text Function**  
+   - Adding text  
+   - Adjusting font size  
+   
 4. **Text Recognition (OCR)**  
-   Automatically extract text from a selected area.
-
-5. **Translation**  
-   - Currently supports **Chinese to English** translation.  
-   - Based on large language models, requires manual configuration.  
-     - Configuration guide: [Reference Link](https://hly-tech.gitbook.io/front-end/front-end/apple/library/coreml/zhi-xing-python-jiao-ben-diao-yong-ai/shi-yong-rest-api)  
+   The text in the checkbox area is automatically recognized, making it easy to extract text information.  
+5. **Translation Function**  
+   - Currently supports **Chinese to English translation**.  
+   - Translation is realized based on a large language model, which needs to be configured by yourself.  
+     - Configuration tutorial:[reference link](https://hly-tech.gitbook.io/front-end/front-end/apple/library/coreml/zhi-xing-python-jiao-ben-diao-yong-ai/shi-yong-rest-api)  
      - Configuration code: [translate.py](./backend/translate.py)  
-
-6. **Custom Styling**  
-   - Choose font size and line thickness.  
-   - Customize colors.  
-
+6. **Style customization  
+   - Selectable font size and line thickness.  
+   - Customizable colors.  
 ---
-
 ### Shortcut Settings
-
-Set up shortcuts via the menu bar icon → Preferences → Shortcut Keys. Example:  
-- **Control + X**: Trigger the translation feature to translate text to English.
-
+Enter “Preferences” through the menu bar icon in the upper right corner to configure shortcut keys, for example:
+- **Control + X**: Trigger translate to English.  
+**Control + X**: Trigger the translate to English function.
+### Preview of screenshot drawing effect
+The following picture shows the effect of ScreenCut's screenshot and drawing functions:
+![Screenshot drawing effect](./readmeImgs/image.png)
+----
+This is a simple and practical tool for developers, designers, and user groups who need to quickly annotate.
 ---
+# developer
+[Steps for packaging and uploading Releases](./tech_note/tech_note_ZH.md)
 
-### Screenshot and Annotation Preview
 
-Below is an example showcasing the screenshot and drawing features of ScreenCut:
-
-![Screenshot and Drawing Example](./readmeImgs/image.png)
-
----
-
-This is a simple yet powerful tool suitable for developers, designers, and anyone needing quick annotations. For further questions or feedback, refer to its documentation or contact the developer community.
-
----
-
-# Developer
-[Steps for Packaging and Uploading a Release ](./tech_note/tech_note.md)
+Translated with DeepL.com (free version)
 
 ---
 

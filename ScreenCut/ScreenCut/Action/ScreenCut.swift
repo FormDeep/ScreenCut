@@ -6,7 +6,28 @@ import Vision
 import Moya
 import Combine
 
+
 var cancellables = Set<AnyCancellable>()
+
+
+func findCurrentScreen(id: CGDirectDisplayID, displays:[SCDisplay]) -> SCDisplay? {
+    for display in displays {
+        if (id == display.displayID) {
+            return display
+        }
+    }
+    return nil
+}
+
+// 这个是查找Screen的内容
+func findCurrentScreen(id: CGDirectDisplayID, screens:[NSScreen]) -> NSScreen? {
+    for screen in screens {
+        if (id == screen.displayID) {
+            return screen
+        }
+    }
+    return nil
+}
 
 
 class ScreenCut {
@@ -41,7 +62,10 @@ class ScreenCut {
         guard let displays = content?.displays else {
             return
         }
-        let display: SCDisplay = displays.first!
+        let display: SCDisplay = findCurrentScreen(
+            id: AppDelegate.shared.screentId!,
+            displays: displays
+        )!
         let contentFilter = SCContentFilter(display: display, excludingWindows: [])
         let configuration = SCStreamConfiguration()
         configuration.width = display.width
@@ -63,7 +87,7 @@ class ScreenCut {
         let destinationURL: CFURL = URL(string: curPath)! as CFURL
         let destination = CGImageDestinationCreateWithURL(destinationURL, kUTTypePNG, 1, nil)
         guard let destination = destination else {
-            print("保存路径没有创建成功")
+//            print("保存路径没有创建成功")
             return
         }
         CGImageDestinationAddImage(destination, image, nil)
@@ -221,7 +245,11 @@ class ScreenCut {
                 promise(.failure(NSError(domain: "display error", code: -1, userInfo: [NSLocalizedDescriptionKey: "没有获取设备"])))
                 return
             }
-            let display: SCDisplay = displays.first!
+            let display: SCDisplay = findCurrentScreen(
+                id: AppDelegate.shared.screentId!,
+                displays: displays
+            )!
+//            print("lt -- displays : \(displays)")
             let contentFilter = SCContentFilter(display: display, excludingWindows: [])
             let configuration = SCStreamConfiguration()
             

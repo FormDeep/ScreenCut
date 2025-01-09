@@ -7,17 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A32AC922CD642BF00986037 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 4A32AC912CD642BF00986037 /* Sparkle */; };
-		4A63E74B2CD9D87B003FD425 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4A63E74A2CD9D87B003FD425 /* CombineMoya */; };
-		4A63E74D2CD9D87B003FD425 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 4A63E74C2CD9D87B003FD425 /* Moya */; };
-		4A63E74F2CD9D87B003FD425 /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4A63E74E2CD9D87B003FD425 /* ReactiveMoya */; };
-		4A63E7512CD9D87B003FD425 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4A63E7502CD9D87B003FD425 /* RxMoya */; };
-		4A898D7E2CCFF20C00CFB857 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */; };
-		4A898D812CD0027300CFB857 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 4A898D802CD0027300CFB857 /* KeyboardShortcuts */; };
-		4AFAF2722CCBE4FA005E7DA7 /* FileKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4AFAF2712CCBE4FA005E7DA7 /* FileKit */; };
+		1D1520752D18037E007C8538 /* ScreenCaptureKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D1520742D18037E007C8538 /* ScreenCaptureKit.framework */; };
+		4AAF97242CFACB390097EC38 /* FileKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF97232CFACB380097EC38 /* FileKit */; };
+		4AAF97272CFACB7C0097EC38 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF97262CFACB7C0097EC38 /* Alamofire */; };
+		4AAF972A2CFACB910097EC38 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF97292CFACB910097EC38 /* KeyboardShortcuts */; };
+		4AAF972D2CFACBB10097EC38 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF972C2CFACBB10097EC38 /* RxBlocking */; };
+		4AAF972F2CFACBB10097EC38 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF972E2CFACBB10097EC38 /* RxCocoa */; };
+		4AAF97312CFACBB10097EC38 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF97302CFACBB10097EC38 /* RxRelay */; };
+		4AAF97332CFACBB10097EC38 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF97322CFACBB10097EC38 /* RxSwift */; };
+		4AAF97382CFACBC50097EC38 /* ReactiveSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF97372CFACBC50097EC38 /* ReactiveSwift */; };
+		4AAF973B2CFACBE60097EC38 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF973A2CFACBE60097EC38 /* Sparkle */; };
+		4AAF973F2CFACDA60097EC38 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF973E2CFACDA60097EC38 /* CombineMoya */; };
+		4AAF97412CFACDA60097EC38 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF97402CFACDA60097EC38 /* Moya */; };
+		4AAF97432CFACDA60097EC38 /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF97422CFACDA60097EC38 /* ReactiveMoya */; };
+		4AAF97452CFACDA60097EC38 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4AAF97442CFACDA60097EC38 /* RxMoya */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D1520742D18037E007C8538 /* ScreenCaptureKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenCaptureKit.framework; path = System/Library/Frameworks/ScreenCaptureKit.framework; sourceTree = SDKROOT; };
 		4AFAF2542CCBE4C5005E7DA7 /* ScreenCut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenCut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -47,24 +54,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A63E74F2CD9D87B003FD425 /* ReactiveMoya in Frameworks */,
-				4A898D7E2CCFF20C00CFB857 /* ComposableArchitecture in Frameworks */,
-				4A32AC922CD642BF00986037 /* Sparkle in Frameworks */,
-				4A63E74D2CD9D87B003FD425 /* Moya in Frameworks */,
-				4AFAF2722CCBE4FA005E7DA7 /* FileKit in Frameworks */,
-				4A63E74B2CD9D87B003FD425 /* CombineMoya in Frameworks */,
-				4A63E7512CD9D87B003FD425 /* RxMoya in Frameworks */,
-				4A898D812CD0027300CFB857 /* KeyboardShortcuts in Frameworks */,
+				1D1520752D18037E007C8538 /* ScreenCaptureKit.framework in Frameworks */,
+				4AAF97382CFACBC50097EC38 /* ReactiveSwift in Frameworks */,
+				4AAF97412CFACDA60097EC38 /* Moya in Frameworks */,
+				4AAF97312CFACBB10097EC38 /* RxRelay in Frameworks */,
+				4AAF97452CFACDA60097EC38 /* RxMoya in Frameworks */,
+				4AAF97242CFACB390097EC38 /* FileKit in Frameworks */,
+				4AAF972D2CFACBB10097EC38 /* RxBlocking in Frameworks */,
+				4AAF973F2CFACDA60097EC38 /* CombineMoya in Frameworks */,
+				4AAF973B2CFACBE60097EC38 /* Sparkle in Frameworks */,
+				4AAF972F2CFACBB10097EC38 /* RxCocoa in Frameworks */,
+				4AAF97272CFACB7C0097EC38 /* Alamofire in Frameworks */,
+				4AAF97432CFACDA60097EC38 /* ReactiveMoya in Frameworks */,
+				4AAF972A2CFACB910097EC38 /* KeyboardShortcuts in Frameworks */,
+				4AAF97332CFACBB10097EC38 /* RxSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1D1520732D18037E007C8538 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1D1520742D18037E007C8538 /* ScreenCaptureKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4AFAF24B2CCBE4C5005E7DA7 = {
 			isa = PBXGroup;
 			children = (
 				4AFAF2562CCBE4C5005E7DA7 /* ScreenCut */,
+				1D1520732D18037E007C8538 /* Frameworks */,
 				4AFAF2552CCBE4C5005E7DA7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,14 +119,19 @@
 			);
 			name = ScreenCut;
 			packageProductDependencies = (
-				4AFAF2712CCBE4FA005E7DA7 /* FileKit */,
-				4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */,
-				4A898D802CD0027300CFB857 /* KeyboardShortcuts */,
-				4A32AC912CD642BF00986037 /* Sparkle */,
-				4A63E74A2CD9D87B003FD425 /* CombineMoya */,
-				4A63E74C2CD9D87B003FD425 /* Moya */,
-				4A63E74E2CD9D87B003FD425 /* ReactiveMoya */,
-				4A63E7502CD9D87B003FD425 /* RxMoya */,
+				4AAF97232CFACB380097EC38 /* FileKit */,
+				4AAF97262CFACB7C0097EC38 /* Alamofire */,
+				4AAF97292CFACB910097EC38 /* KeyboardShortcuts */,
+				4AAF972C2CFACBB10097EC38 /* RxBlocking */,
+				4AAF972E2CFACBB10097EC38 /* RxCocoa */,
+				4AAF97302CFACBB10097EC38 /* RxRelay */,
+				4AAF97322CFACBB10097EC38 /* RxSwift */,
+				4AAF97372CFACBC50097EC38 /* ReactiveSwift */,
+				4AAF973A2CFACBE60097EC38 /* Sparkle */,
+				4AAF973E2CFACDA60097EC38 /* CombineMoya */,
+				4AAF97402CFACDA60097EC38 /* Moya */,
+				4AAF97422CFACDA60097EC38 /* ReactiveMoya */,
+				4AAF97442CFACDA60097EC38 /* RxMoya */,
 			);
 			productName = ScreenCut;
 			productReference = 4AFAF2542CCBE4C5005E7DA7 /* ScreenCut.app */;
@@ -135,11 +162,14 @@
 			mainGroup = 4AFAF24B2CCBE4C5005E7DA7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				4AFAF2702CCBE4FA005E7DA7 /* XCRemoteSwiftPackageReference "FileKit" */,
-				4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				4A898D7F2CD0027300CFB857 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
-				4A32AC902CD642BF00986037 /* XCRemoteSwiftPackageReference "Sparkle" */,
-				4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */,
+				4AAF97222CFACB380097EC38 /* XCLocalSwiftPackageReference "../third_lib/FileKit" */,
+				4AAF97252CFACB7C0097EC38 /* XCLocalSwiftPackageReference "../third_lib/Alamofire" */,
+				4AAF97282CFACB910097EC38 /* XCLocalSwiftPackageReference "../third_lib/KeyboardShortcuts" */,
+				4AAF972B2CFACBB10097EC38 /* XCLocalSwiftPackageReference "../third_lib/RxSwift" */,
+				4AAF97362CFACBC50097EC38 /* XCLocalSwiftPackageReference "../third_lib/ReactiveSwift" */,
+				4AAF97392CFACBE60097EC38 /* XCLocalSwiftPackageReference "../third_lib/Sparkle" */,
+				4AAF973C2CFACC780097EC38 /* XCLocalSwiftPackageReference "../third_lib/swift-composable-architecture" */,
+				4AAF973D2CFACDA60097EC38 /* XCLocalSwiftPackageReference "../third_lib/Moya" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4AFAF2552CCBE4C5005E7DA7 /* Products */;
@@ -298,20 +328,22 @@
 				CODE_SIGN_ENTITLEMENTS = ScreenCut/ScreenCut.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 114;
 				DEVELOPMENT_ASSET_PATHS = "\"ScreenCut/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ScreenCut/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要相机权限用于捕获视频";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "需要麦克风权限用于捕获音频";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.helinyu.ScreenCut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -327,20 +359,22 @@
 				CODE_SIGN_ENTITLEMENTS = ScreenCut/ScreenCut.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 114;
 				DEVELOPMENT_ASSET_PATHS = "\"ScreenCut/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ScreenCut/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要相机权限用于捕获视频";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "需要麦克风权限用于捕获音频";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.helinyu.ScreenCut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -371,89 +405,93 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		4A32AC902CD642BF00986037 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sparkle-project/Sparkle.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.6.4;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		4AAF97222CFACB380097EC38 /* XCLocalSwiftPackageReference "../third_lib/FileKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../third_lib/FileKit;
 		};
-		4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Moya/Moya";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 15.0.3;
-			};
+		4AAF97252CFACB7C0097EC38 /* XCLocalSwiftPackageReference "../third_lib/Alamofire" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../third_lib/Alamofire;
 		};
-		4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.15.2;
-			};
+		4AAF97282CFACB910097EC38 /* XCLocalSwiftPackageReference "../third_lib/KeyboardShortcuts" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../third_lib/KeyboardShortcuts;
 		};
-		4A898D7F2CD0027300CFB857 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.2.1;
-			};
+		4AAF972B2CFACBB10097EC38 /* XCLocalSwiftPackageReference "../third_lib/RxSwift" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../third_lib/RxSwift;
 		};
-		4AFAF2702CCBE4FA005E7DA7 /* XCRemoteSwiftPackageReference "FileKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/nvzqz/FileKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.1.0;
-			};
+		4AAF97362CFACBC50097EC38 /* XCLocalSwiftPackageReference "../third_lib/ReactiveSwift" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../third_lib/ReactiveSwift;
 		};
-/* End XCRemoteSwiftPackageReference section */
+		4AAF97392CFACBE60097EC38 /* XCLocalSwiftPackageReference "../third_lib/Sparkle" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../third_lib/Sparkle;
+		};
+		4AAF973C2CFACC780097EC38 /* XCLocalSwiftPackageReference "../third_lib/swift-composable-architecture" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../third_lib/swift-composable-architecture";
+		};
+		4AAF973D2CFACDA60097EC38 /* XCLocalSwiftPackageReference "../third_lib/Moya" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../third_lib/Moya;
+		};
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4A32AC912CD642BF00986037 /* Sparkle */ = {
+		4AAF97232CFACB380097EC38 /* FileKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4A32AC902CD642BF00986037 /* XCRemoteSwiftPackageReference "Sparkle" */;
-			productName = Sparkle;
+			productName = FileKit;
 		};
-		4A63E74A2CD9D87B003FD425 /* CombineMoya */ = {
+		4AAF97262CFACB7C0097EC38 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */;
-			productName = CombineMoya;
+			productName = Alamofire;
 		};
-		4A63E74C2CD9D87B003FD425 /* Moya */ = {
+		4AAF97292CFACB910097EC38 /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */;
-			productName = Moya;
-		};
-		4A63E74E2CD9D87B003FD425 /* ReactiveMoya */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */;
-			productName = ReactiveMoya;
-		};
-		4A63E7502CD9D87B003FD425 /* RxMoya */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4A63E7492CD9D87B003FD425 /* XCRemoteSwiftPackageReference "Moya" */;
-			productName = RxMoya;
-		};
-		4A898D7D2CCFF20C00CFB857 /* ComposableArchitecture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4A898D7C2CCFF20C00CFB857 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
-		};
-		4A898D802CD0027300CFB857 /* KeyboardShortcuts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4A898D7F2CD0027300CFB857 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
 		};
-		4AFAF2712CCBE4FA005E7DA7 /* FileKit */ = {
+		4AAF972C2CFACBB10097EC38 /* RxBlocking */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4AFAF2702CCBE4FA005E7DA7 /* XCRemoteSwiftPackageReference "FileKit" */;
-			productName = FileKit;
+			productName = RxBlocking;
+		};
+		4AAF972E2CFACBB10097EC38 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RxCocoa;
+		};
+		4AAF97302CFACBB10097EC38 /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RxRelay;
+		};
+		4AAF97322CFACBB10097EC38 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RxSwift;
+		};
+		4AAF97372CFACBC50097EC38 /* ReactiveSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ReactiveSwift;
+		};
+		4AAF973A2CFACBE60097EC38 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Sparkle;
+		};
+		4AAF973E2CFACDA60097EC38 /* CombineMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CombineMoya;
+		};
+		4AAF97402CFACDA60097EC38 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Moya;
+		};
+		4AAF97422CFACDA60097EC38 /* ReactiveMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ReactiveMoya;
+		};
+		4AAF97442CFACDA60097EC38 /* RxMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RxMoya;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

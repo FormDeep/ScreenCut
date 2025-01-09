@@ -1,0 +1,8 @@
+git@github.com:RxSwift/RxSwift.git
+git@github.com:ReactiveSwift/ReactiveSwift.git
+git@github.com:Alamofire/Alamofire.git
+git@github.com:nvzqz/FileKit.git
+git@github.com:sparkle-project/Sparkle.git
+git@github.com:sindresorhus/KeyboardShortcuts.git
+git@github.com:Moya/Moya.git
+git@github.com:pointfreeco/swift-composable-architecture.git
